@@ -1,0 +1,21 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.3.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer  # Newline at the end of file
+      - id: check-added-large-files  # Disallow adding large files
+        args: ['--maxkb=20048']
+      - id: mixed-line-ending  # No mix of \n and \r\n
+      - id: check-merge-conflict  # No merge conflict markers
+
+  - repo: local
+    hooks:
+      - id: format_frontend
+        name: Format frontend
+        language: system
+        entry: npx prettier --write
+        files: "^src/"
+        types_or: [ "ts", "tsx", "javascript" ]

@@ -1,0 +1,27 @@
+{
+  "name": "fast-sorting",
+  "private": true,
+  "version": "0.0.0",
+  "workspaces": [
+    "motion-canvas/packages/*"
+  ],
+  "scripts": {
+    "start": "vite",
+    "serve": "vite",
+    "build": "tsc && vite build"
+  },
+  "dependencies": {
+    "@motion-canvas/2d": "file:./motion-canvas/packages/2d",
+    "@motion-canvas/core": "file:./motion-canvas/packages/core",
+    "@motion-canvas/ffmpeg": "file:./motion-canvas/packages/ffmpeg",
+    "diff": "^7.0.0"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.2",
+    "@motion-canvas/ui": "file:./motion-canvas/packages/ui",
+    "@motion-canvas/vite-plugin": "file:./motion-canvas/packages/vite-plugin",
+    "@types/diff": "^7.0.2",
+    "typescript": "^5.2.2",
+    "vite": "^5.4.0"
+  }
+}

@@ -1,0 +1,21 @@
+# Generated files
+node_modules
+output
+dist
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+*.meta
+
+# Motion Canvas build from source + venv stuff
+motion-canvas/
+venv/
