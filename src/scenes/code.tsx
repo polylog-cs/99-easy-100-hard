@@ -26,23 +26,7 @@ export default makeScene2D(function* (view) {
   // Start with a basic function
   yield* code().code(
     `\
-    import { insert } from '@motion-canvas/2d';
-    import { Code } from '@motion-canvas/2d/lib/components';
-    import { makeScene2D } from '@motion-canvas/2d/lib/scenes';
-    import { createRef } from '@motion-canvas/core';
-    import { waitFor } from '@motion-canvas/core/lib/flow';
-
-    // Custom components
-    import { ShikiHighlighter } from '../components/Shiki';
-    import { Solarized } from '../utilities/color';
-
-    // Code highlighter for JavaScript
-    const jsHighlighter = new ShikiHighlighter({
-      highlighter: {
-        lang: 'typescript',
-        theme: 'solarized-light',
-      },
-    });
+function greet() {
 }`,
     1,
   );
@@ -62,13 +46,10 @@ function greet() {
   yield* waitFor(0.5);
 
   // Add a parameter
-  yield* code().code(
-    `\
-function greet(name) {
+  yield* code().code.edit(1)`\
+function greet(${insert('name')}) {
   console.log("Hello!");
-}`,
-    1,
-  );
+}`;
 
   yield* waitFor(0.5);
 
