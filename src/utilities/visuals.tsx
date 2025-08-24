@@ -18,9 +18,9 @@ export function createShadow(
   const {
     blur = 20,
     opacity = 0.15,
-    offsetY = 0,
-    widthRatio = 4 / 5,
-    heightRatio = 1 / 3,
+    offsetY = 10,
+    widthRatio = 5 / 5,
+    heightRatio = 1 / 4,
     fill = Solarized.base03,
   } = options || {};
 
@@ -31,14 +31,15 @@ export function createShadow(
       ref={shadow}
       width={() => target().width() * widthRatio}
       height={() => target().height() * heightRatio}
-      position={() =>
+      absolutePosition={() =>
         target()
-          .position()
+          .absolutePosition()
           .addY(target().height() / 2 + offsetY)
       }
       fill={fill}
       scale={() => target().scale().mul(target().opacity())}
       opacity={opacity}
+      zIndex={-1}
     />
   );
 

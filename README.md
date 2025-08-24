@@ -1,4 +1,4 @@
-# Polylog Video Template
+# 99% is easy, 100% is hard
 
 Run `./setup.sh` to set up the project. This script will:
 - Install Motion Canvas from source (needed because audio support is not yet in the npm package)
