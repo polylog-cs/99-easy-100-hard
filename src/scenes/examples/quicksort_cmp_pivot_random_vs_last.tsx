@@ -1,0 +1,250 @@
+import { Circle, Layout, Line, makeScene2D, Txt } from '@motion-canvas/2d';
+import {
+  all,
+  chain,
+  createRef,
+  easeOutCubic,
+  sequence,
+  useLogger,
+  Vector2,
+  waitFor,
+} from '@motion-canvas/core';
+
+import { QuickSort } from '../../components/QuickSort';
+import { Solarized } from '../../utilities/color';
+import { PolyTxt } from '../../utilities/text';
+import { createShadow } from '../../utilities/visuals';
+
+export default makeScene2D(function* (view) {
+  view.fill(Solarized.background);
+
+  // Grid configuration
+  const gridRows = 5;
+  const gridCols = 3;
+  const elementCount = 24;
+
+  // Create QuickSort instances arrays for left and right
+  const leftQuickSorts: QuickSort[] = [];
+  const rightQuickSorts: QuickSort[] = [];
+
+  // Create refs for the comparison line visualization
+  const comparisonLine = createRef<Line>();
+  const zeroLabel = createRef<Txt>();
+  const maxLabel = createRef<Txt>();
+  const comparisonLabel = createRef<Txt>();
+  const leftCircles: Array<createRef<Circle>> = [];
+  const rightCircles: Array<createRef<Circle>> = [];
+
+  // Create the main layout with two groups
+  view.add(
+    <Layout layout direction={'row'} gap={400} scale={0.35} y={0}>
+      {/* Left group - Shuffled arrays */}
+      <Layout layout direction={'column'} gap={150}>
+        {Array.from({ length: gridRows }, (_, rowIndex) => (
+          <Layout key={`left-${rowIndex}`} layout direction={'row'} gap={180}>
+            {Array.from({ length: gridCols }, (_, colIndex) => {
+              const quickSort = new QuickSort({
+                elementCount,
+                elementGap: 4,
+                width: 400,
+                height: 200,
+              });
+
+              quickSort.almostSort();
+
+              leftQuickSorts.push(quickSort);
+
+              return quickSort;
+            })}
+          </Layout>
+        ))}
+      </Layout>
+
+      {/* Right group - Almost sorted arrays */}
+      <Layout layout direction={'column'} gap={150}>
+        {Array.from({ length: gridRows }, (_, rowIndex) => (
+          <Layout key={`right-${rowIndex}`} layout direction={'row'} gap={180}>
+            {Array.from({ length: gridCols }, (_, colIndex) => {
+              let quickSort = new QuickSort({
+                elementCount,
+                elementGap: 4,
+                width: 400,
+                height: 200,
+              });
+
+              quickSort.almostSort();
+
+              rightQuickSorts.push(quickSort);
+
+              return quickSort;
+            })}
+          </Layout>
+        ))}
+      </Layout>
+    </Layout>,
+  );
+
+  // Add comparison count line visualization
+  const lineY = 370;
+  const lineStartX = -700;
+  const lineEndX = 700;
+  const lineLength = lineEndX - lineStartX;
+  const maxComparisons = 340;
+
+  const randomizedLabel = createRef<Txt>();
+  const lastLabel = createRef<Txt>();
+
+  // Add the comparison line
+  view.add(
+    <>
+      <Line
+        ref={comparisonLine}
+        points={[
+          [lineStartX, lineY],
+          [lineEndX, lineY],
+        ]}
+        stroke={Solarized.base01}
+        lineWidth={3}
+        opacity={0}
+      />
+
+      {/* Add labels */}
+      <PolyTxt
+        text="Randomized Pivot"
+        position={new Vector2(-330, -380)}
+        fontSize={48}
+        opacity={0}
+        ref={randomizedLabel}
+        fontWeight={700}
+      />
+      <PolyTxt
+        text="Last Index Pivot"
+        position={new Vector2(330, -380)}
+        fontSize={48}
+        opacity={0}
+        ref={lastLabel}
+        fontWeight={700}
+      />
+      <Txt
+        ref={zeroLabel}
+        text="0"
+        position={[lineStartX, lineY + 40]}
+        fontSize={32}
+        fontFamily="monospace"
+        fill={Solarized.base00}
+        opacity={0}
+      />
+      <Txt
+        ref={maxLabel}
+        text={`${maxComparisons}`}
+        position={[lineEndX, lineY + 40]}
+        fontSize={32}
+        fontFamily="monospace"
+        fill={Solarized.base00}
+        opacity={0}
+      />
+      <PolyTxt
+        ref={comparisonLabel}
+        text="Comparisons"
+        position={[0, lineY + 40]}
+        fontSize={32}
+        fontWeight={700}
+        fill={Solarized.base00}
+        opacity={0}
+      />
+    </>,
+  );
+
+  view.add(createShadow(randomizedLabel));
+  view.add(createShadow(lastLabel));
+
+  // Pre-create all circles for left sorts (green)
+  for (let i = 0; i < leftQuickSorts.length; i++) {
+    const circleRef = createRef<Circle>();
+    leftCircles.push(circleRef);
+    view.add(
+      <Circle
+        ref={circleRef}
+        position={[0, lineY]} // Will be positioned later
+        size={16}
+        fill={Solarized.green}
+        opacity={0}
+        stroke={Solarized.green}
+        lineWidth={2}
+        scale={0}
+      />,
+    );
+  }
+
+  // Pre-create all circles for right sorts (red)
+  for (let i = 0; i < rightQuickSorts.length; i++) {
+    const circleRef = createRef<Circle>();
+    rightCircles.push(circleRef);
+    view.add(
+      <Circle
+        ref={circleRef}
+        position={[0, lineY]} // Will be positioned later
+        size={16}
+        fill={Solarized.red}
+        opacity={0}
+        stroke={Solarized.red}
+        lineWidth={2}
+        scale={0}
+      />,
+    );
+  }
+
+  // Initialize all QuickSort visualizations simultaneously
+  yield* all(
+    ...leftQuickSorts.map((qs) => qs.initialize()),
+    ...rightQuickSorts.map((qs) => qs.initialize()),
+    comparisonLine().opacity(1, 0.5),
+    zeroLabel().opacity(1, 0.5),
+    maxLabel().opacity(1, 0.5),
+    comparisonLabel().opacity(1, 0.5),
+    randomizedLabel().opacity(1, 0.5),
+    lastLabel().opacity(1, 0.5),
+  );
+
+  // Helper function to animate a circle appearing at the correct position
+  function* animateComparisonCircle(circle: Circle, from: QuickSort) {
+    const x = (from.comparisonCount / maxComparisons) * lineLength;
+
+    // Position the circle
+    circle.absolutePosition(from.absolutePosition());
+
+    // Animate it appearing
+    yield* chain(
+      circle.opacity(0.25, 0.25),
+      all(
+        circle.opacity(1, 1),
+        circle.scale(5).scale(1, 1),
+        circle.position(new Vector2(comparisonLine().points()[0]).addX(x), 1),
+      ),
+    );
+  }
+
+  // Sort all arrays and animate circles as they complete
+  yield* all(
+    ...leftQuickSorts.map((qs, index) =>
+      chain(
+        qs.sort('random'),
+        all(
+          all(qs.uninitialize(), qs.showComparisonCount(Solarized.green)),
+          animateComparisonCircle(leftCircles[index](), qs),
+        ),
+      ),
+    ),
+    ...rightQuickSorts.map((qs, index) =>
+      chain(
+        qs.sort(),
+        all(
+          all(qs.uninitialize(), qs.showComparisonCount(Solarized.red)),
+          animateComparisonCircle(rightCircles[index](), qs),
+        ),
+      ),
+    ),
+  );
+
+  yield* waitFor(2);
+});

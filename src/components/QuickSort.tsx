@@ -28,7 +28,7 @@ export interface QuickSortProps extends LayoutProps {
   };
 }
 
-export type PivotStrategy = 'last' | 'mo3';
+export type PivotStrategy = 'last' | 'mo3' | 'random';
 
 export class QuickSort extends Layout {
   private readonly rectangles: Array<Reference<Rect>> = [];
@@ -38,7 +38,7 @@ export class QuickSort extends Layout {
   private readonly values: number[] = [];
   private readonly sortedIndices = new Set<number>();
   private readonly random = useRandom();
-  private comparisonCount: number = 0;
+  public comparisonCount: number = 0;
   private pivotStrategy: PivotStrategy = 'last';
 
   private readonly elementCount: number;
@@ -152,15 +152,21 @@ export class QuickSort extends Layout {
       ),
     );
   }
+  /**
+   * Uninitialize the visualization by animating rectangles back to zero height
+   */
+  public *uninitialize(delay = 0.025): ThreadGenerator {
+    yield* sequence(delay, ...this.rectangles.map((ref, i) => ref().height(0, 1)));
+  }
 
   /**
    * Show the comparison count display
    */
-  public *showComparisonCount(): ThreadGenerator {
+  public *showComparisonCount(color: Color | string = Solarized.text): ThreadGenerator {
     yield* all(
-      this.comparisonCounter().opacity(1, 0.5, easeInOutCubic),
-      this.elementsLayout().opacity(0.5, 0.5, easeInOutCubic),
-      this.elementsLayout().filters.blur(6, 0.5),
+      this.comparisonCounter().opacity(1, 0.5),
+      this.comparisonCounter().fill(color, 0.5),
+      this.elementsLayout().opacity(0.5, 0.5),
     );
   }
 
@@ -168,12 +174,12 @@ export class QuickSort extends Layout {
    * Hide the comparison count display
    */
   public *hideComparisonCount(): ThreadGenerator {
-    yield* this.comparisonCounter().opacity(0, 0.5, easeInOutCubic);
+    yield* this.comparisonCounter().opacity(0, 0.5);
   }
 
   /**
    * Run the complete quicksort animation
-   * @param strategy - Pivot selection strategy: 'last' or 'mo3' (median of three)
+   * @param strategy - Pivot selection strategy: 'last', 'mo3' (median of three), or 'random'
    */
   public *sort(strategy: PivotStrategy = 'last'): ThreadGenerator {
     this.sortedIndices.clear();
@@ -185,10 +191,7 @@ export class QuickSort extends Layout {
     // Final animation - show all elements as sorted
     yield* all(
       ...this.rectangles.map((ref) =>
-        all(
-          ref().fill(this.colors.sorted, 1, easeInOutCubic, colorLerp),
-          ref().opacity(1, 1, easeInOutCubic),
-        ),
+        all(ref().fill(this.colors.sorted, 1), ref().opacity(1, 1)),
       ),
     );
   }
@@ -204,8 +207,8 @@ export class QuickSort extends Layout {
     yield* all(
       ...this.rectangles.map((ref, i) =>
         all(
-          ref().fill(this.colors.default, 0.5, easeInOutCubic, colorLerp),
-          ref().opacity(1, 0.5, easeInOutCubic),
+          ref().fill(this.colors.default, 0.5),
+          ref().opacity(1, 0.5),
           ref().height(this.values[i] * this.elementsLayout().height(), 0.5),
         ),
       ),
@@ -335,8 +338,8 @@ export class QuickSort extends Layout {
         }
 
         return all(
-          ref().fill(targetColor, duration, easeInOutCubic, colorLerp),
-          ref().opacity(targetOpacity, duration, easeInOutCubic),
+          ref().fill(targetColor, duration),
+          ref().opacity(targetOpacity, duration),
         );
       }),
     );
@@ -410,6 +413,13 @@ export class QuickSort extends Layout {
     }
   }
 
+  /**
+   * Select a random pivot index between low and high (inclusive)
+   */
+  private getRandomPivot(low: number, high: number): number {
+    return Math.floor(this.random.nextFloat() * (high - low + 1)) + low;
+  }
+
   private *selectAndMovePivot(low: number, high: number): ThreadGenerator {
     if (this.pivotStrategy === 'mo3' && high - low >= 2) {
       // Use median of three for subarrays with at least 3 elements
@@ -469,8 +479,42 @@ export class QuickSort extends Layout {
             ),
           ),
       );
+    } else if (this.pivotStrategy === 'random') {
+      // Select a random pivot
+      const randomIdx = this.getRandomPivot(low, high);
+
+      // Highlight the randomly selected element
+      yield* this.rectangles[randomIdx]().fill(
+        this.colors.active,
+        this.animationSpeed * 0.5,
+        easeInOutCubic,
+        colorLerp,
+      );
+
+      // Show it as the pivot
+      yield* this.rectangles[randomIdx]().fill(
+        this.colors.pivot,
+        this.animationSpeed * 0.3,
+        easeInOutCubic,
+        colorLerp,
+      );
+
+      // If random element is not already at the end, swap it there
+      if (randomIdx !== high) {
+        yield* this.swapElements(randomIdx, high, this.animationSpeed);
+      }
+
+      // Clear the original position highlighting if we moved the element
+      if (randomIdx !== high) {
+        yield* this.rectangles[randomIdx]().fill(
+          this.colors.default,
+          this.animationSpeed * 0.3,
+          easeInOutCubic,
+          colorLerp,
+        );
+      }
     }
-    // Pivot is now at position high (either it was already there or we moved it there)
+    // For 'last' strategy, pivot is already at position high, no action needed
   }
 
   private *partition(
