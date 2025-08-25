@@ -1,8 +1,8 @@
 import { Layout, makeScene2D } from '@motion-canvas/2d';
 import { all, chain } from '@motion-canvas/core';
 
-import { QuickSort } from '../../components/QuickSort';
-import { Solarized } from '../../utilities/color';
+import { QuickSort } from '../../../components/QuickSort';
+import { Solarized } from '../../../utilities/color';
 
 export default makeScene2D(function* (view) {
   view.fill(Solarized.background);

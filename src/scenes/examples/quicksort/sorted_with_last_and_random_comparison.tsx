@@ -10,10 +10,10 @@ import {
   waitFor,
 } from '@motion-canvas/core';
 
-import { QuickSort } from '../../components/QuickSort';
-import { Solarized } from '../../utilities/color';
-import { PolyTxt } from '../../utilities/text';
-import { createShadow } from '../../utilities/visuals';
+import { QuickSort } from '../../../components/QuickSort';
+import { Solarized } from '../../../utilities/color';
+import { PolyTxt } from '../../../utilities/text';
+import { createShadow } from '../../../utilities/visuals';
 
 export default makeScene2D(function* (view) {
   view.fill(Solarized.background);
