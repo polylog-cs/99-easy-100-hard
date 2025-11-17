@@ -1,6 +1,7 @@
 import { makeScene2D, Rect } from '@motion-canvas/2d';
 import {
   all,
+  beginSlide,
   createRef,
   createSignal,
   delay,
@@ -22,13 +23,15 @@ import { createShadow } from '../../utilities/visuals';
 
 export default makeScene2D(function* (view) {
   view.fill(Solarized.background);
+  yield* beginSlide('file checking');
 
   const file = createRef<PolyTxt>();
   view.add(createShadow(file));
-  view.add(<PolyTxt text={'🗂️'} ref={file} fontSize={200} />);
+  view.add(<PolyTxt text={'💿'} ref={file} fontSize={600} />);
 
   // Animations
   yield* appear(file);
+  yield* beginSlide('file checking 2');
 
   const square = createRef<Rect>();
   view.add(
@@ -45,6 +48,7 @@ export default makeScene2D(function* (view) {
   yield* all(
     file().position(file().position().sub(new Vector2(480, 0)), 1),
     square().left(new Vector2(0, 0), 1),
+    file().fontSize(200, 1),
   );
 
   // Use our new UploadLine component
@@ -58,12 +62,14 @@ export default makeScene2D(function* (view) {
     />,
   );
 
+  yield* beginSlide('2');
+
   const uploadedFile = createRef<PolyTxt>();
   const disintegrageSignal = createSignal(1);
   view.add(createShadow(uploadedFile));
   view.add(
     <PolyTxt
-      text={'🗂️'}
+      text={'💿'}
       ref={uploadedFile}
       fontSize={200}
       position={file().position().mul(-1)}
@@ -77,8 +83,9 @@ export default makeScene2D(function* (view) {
   );
 
   yield uploadLine().upload();
-  yield* all(uploadLine().start(1), delay(0.5, appear(uploadedFile)));
+  yield* all(uploadLine().start(3), delay(0.5, appear(uploadedFile)));
 
+  yield* beginSlide('file 3');
   yield* uploadLine().stop(1);
 
   let code = createRef<PolyTxt>();
@@ -116,6 +123,8 @@ export default makeScene2D(function* (view) {
     code().filters.blur(3, 1),
   );
 
+  yield* beginSlide('file 4');
+
   yield* waitFor(1);
 
   yield* all(
@@ -151,6 +160,7 @@ export default makeScene2D(function* (view) {
   yield* hashObject().iterate(38, 0.05);
 
   yield* waitFor(1);
+  yield* beginSlide('file 5');
 
   yield* all(
     uploadedFile().position(
@@ -195,6 +205,7 @@ export default makeScene2D(function* (view) {
   yield* secondHashObject().iterate(38, 0.05, hashObject().getHashText());
 
   yield* waitFor(1);
+  yield* beginSlide('file 6');
 
   let equal = createRef<PolyTxt>();
   view.add(
@@ -212,6 +223,7 @@ export default makeScene2D(function* (view) {
   yield* appear(equal);
 
   yield* waitFor(1);
+  yield* beginSlide('file 7');
 
   yield* all(
     equal().stroke(Solarized.orange, 1, easeInOutCubic, colorLerp),
@@ -236,4 +248,5 @@ export default makeScene2D(function* (view) {
   yield* all(appear(notEqual));
 
   yield* waitFor(1);
+  yield* beginSlide('file end');
 });

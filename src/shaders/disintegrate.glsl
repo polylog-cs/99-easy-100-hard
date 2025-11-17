@@ -81,5 +81,7 @@ void main() {
 
     outColor = vec4(finalColor, finalAlpha);
 
-    outColor.rgb = vec3(1.0) - outColor.rgb;
+    // Invert colors
+    outColor.rgb *= 0.9;
+    // outColor.rgb = vec3(1.0) - outColor.rgb;
 }
