@@ -8,5 +8,9 @@ import './global.css';
 
 export default makeProject({
   experimentalFeatures: true,
-  scenes: [file_checking],
+  scenes: [
+    file_checking,
+    equations,
+    // table,
+  ],
 });
