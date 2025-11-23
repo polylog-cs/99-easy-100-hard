@@ -1,4 +1,4 @@
-import { Layout, Node, View2D } from '@motion-canvas/2d';
+import { Circle, Layout, Node, View2D } from '@motion-canvas/2d';
 import {
   all,
   beginSlide,
@@ -50,6 +50,7 @@ export interface SlideElements {
   header: Reference<PolyTxt>;
   contentLayout: Reference<Layout>;
   bulletRefs: Reference<PolyTxt>[];
+  circBulletRefs: Reference<Circle>[];
 }
 
 export function* beginAnnonymousSlide() {
@@ -165,10 +166,12 @@ export function createSlideWithHeader(
   const headerRef = createRef<PolyTxt>();
   const contentLayoutRef = createRef<Layout>();
   const bulletRefs: Reference<PolyTxt>[] = [];
+  const circBulletRefs: Reference<Circle>[] = [];
 
   // Create refs for each bullet point
   for (let i = 0; i < bulletPoints.length; i++) {
     bulletRefs.push(createRef<PolyTxt>());
+    circBulletRefs.push(createRef<Circle>());
   }
 
   view.add(
@@ -188,7 +191,18 @@ export function createSlideWithHeader(
         topLeft={() => new Vector2(-750, -150)}
       >
         {bulletPoints.map((point, index) => (
-          <PolyTxt ref={bulletRefs[index]} text={point} opacity={0} fontSize={50} />
+          <Layout>
+            <Circle
+              ref={circBulletRefs[index]}
+              width={15}
+              height={15}
+              margin={20}
+              fill={Solarized.text}
+              opacity={0}
+              topLeft={() => new Vector2(-750, -150)}
+            />
+            <PolyTxt ref={bulletRefs[index]} text={point} opacity={0} fontSize={50} />
+          </Layout>
         ))}
       </Layout>
     </>,
@@ -198,6 +212,7 @@ export function createSlideWithHeader(
     header: headerRef,
     contentLayout: contentLayoutRef,
     bulletRefs,
+    circBulletRefs,
   };
 }
 
@@ -228,10 +243,16 @@ export function* showHeader(
  */
 export function* animateBullets(
   bulletRefs: Reference<PolyTxt>[],
+  circBulletRefs: Reference<Circle>[],
   duration: number = 0.5,
 ): ThreadGenerator {
   for (let i = 0; i < bulletRefs.length; i++) {
     yield* beginAnnonymousSlide();
-    yield* showHeader(bulletRefs[i]);
+    yield* all(
+      circBulletRefs[i]()
+        .opacity(0)
+        .opacity(1, duration / 2),
+      showHeader(bulletRefs[i]),
+    );
   }
 }

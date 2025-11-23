@@ -1,6 +1,7 @@
 import { makeScene2D } from '@motion-canvas/2d';
 import { beginSlide, fadeTransition } from '@motion-canvas/core';
 
+import { Solarized } from '../../utilities/color';
 import { createTwoLineSectionHeader, showHeader } from '../../utilities/presentation';
 
 export default makeScene2D(function* (view) {
