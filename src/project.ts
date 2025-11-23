@@ -10,6 +10,7 @@ import equations from './scenes/examples/equations?scene';
 import file_checking from './scenes/examples/file_checking?scene';
 import motion_canvas from './scenes/examples/motion_canvas?scene';
 import phone from './scenes/examples/phone?scene';
+import rock_paper_scissors from './scenes/examples/rock_paper_scissors?scene';
 import title from './scenes/examples/title?scene';
 import what_is_polylog from './scenes/examples/what_is_polylog?scene';
 import youtube_videos from './scenes/examples/youtube_videos?scene';
@@ -31,6 +32,7 @@ export default makeProject({
     youtube_videos,
     file_checking,
     equations,
+    rock_paper_scissors,
     // table,
   ],
 });

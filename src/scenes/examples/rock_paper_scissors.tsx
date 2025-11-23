@@ -4,7 +4,9 @@ import {
   beginSlide,
   createRef,
   createSignal,
+  delay,
   easeOutQuad,
+  linear,
   waitFor,
 } from '@motion-canvas/core';
 
@@ -23,23 +25,37 @@ export default makeScene2D(function* (view) {
   const player2icon = createRef<Txt>();
 
   const shift = 400;
+  const fontSize = 90;
+  const emojiSize = 200;
 
   view.add(
-    <Rect layout direction={'column'} alignItems={'center'} position={[-shift, 0]}>
-      <PolyTxt fontSize={70} fill={Solarized.blue} ref={player1text}>
+    <Rect
+      layout
+      direction={'column'}
+      alignItems={'center'}
+      position={[-shift, 0]}
+      gap={30}
+    >
+      <PolyTxt fontSize={fontSize} fill={Solarized.blue} ref={player1text}>
         {nbsp}
       </PolyTxt>
-      <Txt fontSize={150} ref={player1icon}>
+      <Txt fontSize={emojiSize} ref={player1icon}>
         🙂
       </Txt>
     </Rect>,
   );
   view.add(
-    <Rect layout direction={'column'} alignItems={'center'} position={[shift, 0]}>
-      <PolyTxt fontSize={70} fill={Solarized.blue} ref={player2text}>
+    <Rect
+      layout
+      direction={'column'}
+      alignItems={'center'}
+      position={[shift, 0]}
+      gap={30}
+    >
+      <PolyTxt fontSize={fontSize} fill={Solarized.blue} ref={player2text}>
         {nbsp}
       </PolyTxt>
-      <Txt fontSize={150} ref={player2icon}>
+      <Txt fontSize={emojiSize} ref={player2icon}>
         👀
       </Txt>
     </Rect>,
@@ -53,8 +69,8 @@ export default makeScene2D(function* (view) {
   view.add(
     <Line
       points={[
-        [shift - 100, 0],
-        [-shift + 250, -100],
+        [shift - 130, 0],
+        [-shift + 300, -100],
       ]}
       stroke={Solarized.gray}
       fill={Solarized.gray}
@@ -73,17 +89,29 @@ export default makeScene2D(function* (view) {
   yield* player2text().text("(Ok, I'll play paper)", 1);
 
   yield* beginSlide('reveal moves');
+  const countdown = createSignal(4);
+  view.add(
+    <PolyTxt
+      fontSize={fontSize * 2}
+      position={[0, -300]}
+      fill={Solarized.gray}
+      text={() => ['Go!', '1', '2', '3', ''][Math.floor(countdown())]}
+      opacity={() => (countdown() >= 3 ? Math.min(1, 4 - countdown()) : 1)}
+    />,
+  );
+
   yield* all(
     arrow().opacity(0, 0.5),
     player1text().text(nbsp, 0.5),
     player2text().text(nbsp, 0.5),
   );
 
+  player1text().fill(Solarized.gray);
+  player2text().fill(Solarized.gray);
+
   yield* all(
-    player1text().text('Rock!', 1),
-    player1text().fill(Solarized.gray, 1),
-    player2text().text('Paper!', 1),
-    player2text().fill(Solarized.gray, 1),
+    countdown(0, 2, linear),
+    delay(1, all(player1text().text('Rock!', 1), player2text().text('Paper!', 1))),
   );
   yield* player1icon().text('😭', 1);
   yield* beginSlide('randomness to the rescue');
@@ -96,16 +124,18 @@ export default makeScene2D(function* (view) {
       layout
       direction={'column'}
       alignItems={'center'}
-      position={[-shift - 250, 200]}
+      position={[-shift - 280, 200]}
     >
-      <PolyTxt fontSize={70} fill={Solarized.red} ref={dieText}>
+      <PolyTxt fontSize={fontSize} fill={Solarized.red} ref={dieText}>
         {nbsp}
       </PolyTxt>
-      <Txt fontSize={150} ref={dieIcon} opacity={0}>
+      <Txt fontSize={emojiSize} ref={dieIcon} opacity={0}>
         🎲
       </Txt>
     </Rect>,
   );
+
+  countdown(4);
 
   yield* all(
     player1icon().text('😏', 0.5),
@@ -124,7 +154,7 @@ export default makeScene2D(function* (view) {
   arrow().end(0);
   arrow().opacity(1);
 
-  yield* arrow().end(0.85, 1);
+  yield* arrow().end(0.8, 1);
   yield* player2text().text('(What now?)', 1);
 
   yield* beginSlide('randomness to the rescue 4');
@@ -141,12 +171,19 @@ export default makeScene2D(function* (view) {
   );
 
   yield* all(
-    player1text().text('Paper!', 1),
-    player1text().fill(Solarized.gray, 1),
-    player2text().text('Rock!', 1),
-    player2text().fill(Solarized.gray, 1),
+    countdown(0, 2, linear),
+    delay(
+      1,
+      all(
+        player1text().text('Paper!', 1),
+        player1text().fill(Solarized.gray, 1),
+        player2text().text('Rock!', 1),
+        player2text().fill(Solarized.gray, 1),
+      ),
+    ),
   );
   yield* all(player1icon().text('🥳', 1), player2icon().text('😭', 1));
+  countdown(4);
 
   yield* waitFor(3);
 });
