@@ -19,6 +19,7 @@ import shuffled_vs_sorted_with_last_pivot from './scenes/examples/quicksort/shuf
 import sorted_with_last_and_random_comparison from './scenes/examples/quicksort/sorted_with_last_and_random_comparison?scene';
 import table from './scenes/examples/quicksort/table?scene';
 import worst_to_average from './scenes/examples/quicksort/worst_to_average?scene';
+import randomness_plus_worst_case from './scenes/examples/randomness_plus_worst_case?scene';
 import rock_paper_scissors from './scenes/examples/rock_paper_scissors?scene';
 import thank_you from './scenes/examples/thank_you?scene';
 import title from './scenes/examples/title?scene';
@@ -43,6 +44,7 @@ export default makeProject({
     sorted_with_last_and_random_comparison,
     worst_to_average,
     rock_paper_scissors,
+    randomness_plus_worst_case,
     // === programming ===
     animations_in_videos,
     motion_canvas,
