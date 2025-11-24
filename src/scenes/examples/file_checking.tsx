@@ -12,6 +12,7 @@ import {
 } from '@motion-canvas/core';
 
 import { BEE_MOVIE_SCRIPT } from '../../assets/bee';
+import cdComparisonPng from '../../assets/cd-comparison.png';
 import { Sha256Hash } from '../../components/Sha256Hash';
 import { UploadLine } from '../../components/UploadLine';
 import disintegrateShader from '../../shaders/disintegrate.glsl';
@@ -243,6 +244,16 @@ export default makeScene2D(function* (view) {
   );
 
   yield* all(appear(notEqual));
+
+  yield* beginSlide('comparison table');
+
+  const cdComparison = createRef<Img>();
+  view.add(<Img ref={cdComparison} src={cdComparisonPng} scale={1.3} opacity={0} />);
+  yield* all(
+    cdComparison().opacity(1, 1),
+    uploadedFile().opacity(0, 1),
+    square().opacity(0, 1),
+  );
 
   yield* beginSlide('file end');
 });
