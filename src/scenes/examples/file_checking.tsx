@@ -12,7 +12,6 @@ import {
 } from '@motion-canvas/core';
 
 import { BEE_MOVIE_SCRIPT } from '../../assets/bee';
-import cdEquationsComparisonPng from '../../assets/cd-equations-comparison.png';
 import { Sha256Hash } from '../../components/Sha256Hash';
 import { UploadLine } from '../../components/UploadLine';
 import disintegrateShader from '../../shaders/disintegrate.glsl';
@@ -244,24 +243,6 @@ export default makeScene2D(function* (view) {
   );
 
   yield* all(appear(notEqual));
-
-  yield* waitFor(1);
-  yield* beginSlide('comparison table');
-
-  const cdEquationsComparison = createRef<Img>();
-  view.add(
-    <Img
-      ref={cdEquationsComparison}
-      src={cdEquationsComparisonPng}
-      scale={1}
-      opacity={0}
-    />,
-  );
-  yield* all(
-    cdEquationsComparison().opacity(1, 1),
-    uploadedFile().opacity(0, 1),
-    square().opacity(0, 1),
-  );
 
   yield* beginSlide('file end');
 });
