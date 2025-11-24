@@ -4,6 +4,8 @@ precision highp float;
 // use defaut inputs (called 'uniforms')
 #include "@motion-canvas/core/shaders/common.glsl"
 
+uniform float intensity;
+
 void main() {
     // sample the color at the UV of the current run of the shader
     outColor = texture(sourceTexture, sourceUV);
@@ -11,6 +13,6 @@ void main() {
     // generate a random-ish color to make a nice gradient effect
     vec3 col = 0.5 + 0.5 * cos(time * 3.0 + sourceUV.xyx + vec3(0, 2, 4));
 
-    // write the resulting color to the node
-    outColor.rgb = col;
+    // write the resulting color to the node, mixing based on intensity
+    outColor.rgb = mix(outColor.rgb, col, intensity);
 }
