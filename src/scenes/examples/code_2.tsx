@@ -119,8 +119,8 @@ export default makeScene2D(function* (view) {
     <Rect
       ref={rect}
       size={250}
-      fill={Solarized.red}
-      stroke={Solarized.red}
+      fill={Solarized.blue}
+      stroke={Solarized.blue}
       lineWidth={10}
       x={500}
       y={-200}

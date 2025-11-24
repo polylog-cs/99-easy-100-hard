@@ -160,7 +160,12 @@ void main() {
       x={400}
       fill={'rgb(255,0,0)'}
       stroke={'rgba(200,0,0,0.5)'}
-      shaders={shader}
+      shaders={{
+        fragment: shader,
+        uniforms: {
+          intensity: 0,
+        },
+      }}
     />,
   );
 

@@ -53,6 +53,26 @@ export interface SlideElements {
   circBulletRefs: Reference<Circle>[];
 }
 
+export interface TwoColumnSlideConfig {
+  headerText: string;
+  headerFontSize?: number;
+  headerPosition?: [number, number];
+  columnGap?: number;
+  contentGap?: number;
+  bulletFontSize?: number;
+  columnHeaderFontSize?: number;
+}
+
+export interface TwoColumnSlideElements {
+  header: Reference<PolyTxt>;
+  leftColumnHeader: Reference<PolyTxt>;
+  leftBulletRefs: Reference<PolyTxt>[];
+  leftCircBulletRefs: Reference<Circle>[];
+  rightColumnHeader: Reference<PolyTxt>;
+  rightBulletRefs: Reference<PolyTxt>[];
+  rightCircBulletRefs: Reference<Circle>[];
+}
+
 export function* beginAnnonymousSlide() {
   let random = useRandom();
 
@@ -217,6 +237,144 @@ export function createSlideWithHeader(
 }
 
 /**
+ * Creates a slide with a header and two columns of bullet points
+ * @param view - The scene view to add elements to
+ * @param config - Configuration for the slide
+ * @param leftColumnHeader - Header text for left column
+ * @param leftBulletPoints - Array of bullet point strings for left column
+ * @param rightColumnHeader - Header text for right column
+ * @param rightBulletPoints - Array of bullet point strings for right column
+ * @returns References to the header and bullet point elements for both columns
+ */
+export function createTwoColumnSlideWithHeader(
+  view: View2D,
+  config: TwoColumnSlideConfig,
+  leftColumnHeader: string,
+  leftBulletPoints: string[],
+  rightColumnHeader: string,
+  rightBulletPoints: string[],
+): TwoColumnSlideElements {
+  const {
+    headerText,
+    headerFontSize = 80,
+    columnGap = 100,
+    contentGap = 20,
+    bulletFontSize = 50,
+    columnHeaderFontSize = 60,
+  } = config;
+
+  view.fill(Solarized.background);
+
+  const headerRef = createRef<PolyTxt>();
+  const leftColumnHeaderRef = createRef<PolyTxt>();
+  const rightColumnHeaderRef = createRef<PolyTxt>();
+  const leftBulletRefs: Reference<PolyTxt>[] = [];
+  const leftCircBulletRefs: Reference<Circle>[] = [];
+  const rightBulletRefs: Reference<PolyTxt>[] = [];
+  const rightCircBulletRefs: Reference<Circle>[] = [];
+
+  // Create refs for left column bullets
+  for (let i = 0; i < leftBulletPoints.length; i++) {
+    leftBulletRefs.push(createRef<PolyTxt>());
+    leftCircBulletRefs.push(createRef<Circle>());
+  }
+
+  // Create refs for right column bullets
+  for (let i = 0; i < rightBulletPoints.length; i++) {
+    rightBulletRefs.push(createRef<PolyTxt>());
+    rightCircBulletRefs.push(createRef<Circle>());
+  }
+
+  view.add(
+    <>
+      <PolyTxt
+        ref={headerRef}
+        text={headerText}
+        fontSize={headerFontSize}
+        topLeft={() => new Vector2(-800, -330)}
+        opacity={0}
+      />
+      <Layout
+        layout
+        direction={'row'}
+        gap={columnGap}
+        topLeft={() => new Vector2(-750, -190)}
+      >
+        {/* Left Column */}
+        <Layout layout direction={'column'} gap={contentGap}>
+          <PolyTxt
+            ref={leftColumnHeaderRef}
+            text={leftColumnHeader}
+            fontSize={columnHeaderFontSize}
+            fontWeight={700}
+            opacity={0}
+            marginBottom={10}
+          />
+          {leftBulletPoints.map((point, index) => (
+            <Layout>
+              <Circle
+                ref={leftCircBulletRefs[index]}
+                width={15}
+                height={15}
+                margin={20}
+                fill={Solarized.text}
+                opacity={0}
+              />
+              <PolyTxt
+                ref={leftBulletRefs[index]}
+                text={point}
+                opacity={0}
+                fontSize={bulletFontSize}
+              />
+            </Layout>
+          ))}
+        </Layout>
+
+        {/* Right Column */}
+        <Layout layout direction={'column'} gap={contentGap}>
+          <PolyTxt
+            ref={rightColumnHeaderRef}
+            text={rightColumnHeader}
+            fontSize={columnHeaderFontSize}
+            fontWeight={700}
+            opacity={0}
+            marginBottom={10}
+          />
+          {rightBulletPoints.map((point, index) => (
+            <Layout>
+              <Circle
+                ref={rightCircBulletRefs[index]}
+                width={15}
+                height={15}
+                margin={20}
+                fill={Solarized.text}
+                opacity={0}
+              />
+              <PolyTxt
+                ref={rightBulletRefs[index]}
+                text={point}
+                opacity={0}
+                fontSize={bulletFontSize}
+              />
+            </Layout>
+          ))}
+        </Layout>
+      </Layout>
+    </>,
+  );
+
+  return {
+    header: headerRef,
+    leftColumnHeader: leftColumnHeaderRef,
+    leftBulletRefs,
+    leftCircBulletRefs,
+    rightColumnHeader: rightColumnHeaderRef,
+    rightBulletRefs,
+    rightCircBulletRefs,
+  };
+}
+
+/**
  * Animates a header text appearing
  * @param titleRef - Reference to the title text component
  * @param text - The text to display
@@ -224,13 +382,15 @@ export function createSlideWithHeader(
  */
 export function* showHeader(
   titleRef: Reference<PolyTxt>,
-  duration: number = 1,
+  duration: number = 0.5,
 ): ThreadGenerator {
   const text = titleRef().text();
 
   yield* all(
     titleRef().text('').text(text, duration),
-    titleRef().opacity(0).opacity(1, 0.1),
+    titleRef()
+      .opacity(0)
+      .opacity(1, duration / 5),
   );
 }
 

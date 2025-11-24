@@ -18,8 +18,8 @@ export default makeScene2D(function* (view) {
     { headerText: 'Motion Canvas' },
     [
       'TypeScript-XML framework for creating programmatic animations',
-      'Created by aarthificial for animating devlogs',
-      'Contains an interactive editor (looking at you, Manim)',
+      'Created by aarthificial (YouTube) for animating devlogs',
+      'Core animation library + interactive previewer',
     ],
   );
 
