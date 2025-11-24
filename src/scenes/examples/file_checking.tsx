@@ -1,4 +1,4 @@
-import { Img, makeScene2D, Rect } from '@motion-canvas/2d';
+import { Img, Layout, makeScene2D, Rect } from '@motion-canvas/2d';
 import {
   all,
   beginSlide,
@@ -19,20 +19,44 @@ import disintegrateShader from '../../shaders/disintegrate.glsl';
 import gradientDownShader from '../../shaders/gradientDown.glsl';
 import { colorLerp, Solarized } from '../../utilities/color';
 import { appear } from '../../utilities/creation';
+import { beginAnnonymousSlide } from '../../utilities/presentation';
 import { PolyTxt } from '../../utilities/text';
 import { createShadow } from '../../utilities/visuals';
 
 export default makeScene2D(function* (view) {
   view.fill(Solarized.background);
-  yield* beginSlide('file checking');
+  yield* beginAnnonymousSlide();
+
+  const disintegrageSignal2 = createSignal(1);
 
   const file = createRef<PolyTxt>();
   view.add(createShadow(file));
-  view.add(<PolyTxt text={'💿'} ref={file} fontSize={600} />);
+  view.add(
+    <PolyTxt
+      text={'💿'}
+      ref={file}
+      fontSize={600}
+      offset={new Vector2(0, -0.1)}
+      shaders={{
+        fragment: disintegrateShader,
+        uniforms: { strength: disintegrageSignal2 },
+      }}
+    />,
+  );
 
   // Animations
   yield* appear(file);
-  yield* beginSlide('file checking 2');
+  yield* beginAnnonymousSlide();
+
+  yield* all(file().rotation(360 * 2, 2));
+  yield* beginAnnonymousSlide();
+
+  yield* all(file().rotation(360 * 4, 3));
+  yield* beginAnnonymousSlide();
+
+  yield* all(disintegrageSignal2(0.5, 1));
+
+  yield* beginAnnonymousSlide();
 
   const square = createRef<Rect>();
   view.add(
@@ -47,6 +71,7 @@ export default makeScene2D(function* (view) {
   );
 
   yield* all(
+    disintegrageSignal2(1, 1),
     file().position(file().position().sub(new Vector2(480, 0)), 1),
     square().left(new Vector2(0, 0), 1),
     file().fontSize(200, 1),
@@ -57,13 +82,13 @@ export default makeScene2D(function* (view) {
   view.add(
     <UploadLine
       ref={uploadLine}
-      startPoint={file().position()}
-      endPoint={file().position().mul(-1)}
+      startPoint={file().position().add(new Vector2(30, -10))}
+      endPoint={file().position().mul(-1).add(new Vector2(-30, -10))}
       zIndex={-1}
     />,
   );
 
-  yield* beginSlide('2');
+  yield* beginAnnonymousSlide();
 
   const uploadedFile = createRef<PolyTxt>();
   const disintegrageSignal = createSignal(1);
@@ -86,7 +111,7 @@ export default makeScene2D(function* (view) {
   yield uploadLine().upload();
   yield* all(uploadLine().start(3), delay(0.5, appear(uploadedFile)));
 
-  yield* beginSlide('file 3');
+  yield* beginAnnonymousSlide();
   yield* uploadLine().stop(1);
 
   let code = createRef<PolyTxt>();
@@ -124,7 +149,7 @@ export default makeScene2D(function* (view) {
     code().filters.blur(3, 1),
   );
 
-  yield* beginSlide('file 4');
+  yield* beginAnnonymousSlide();
 
   yield* waitFor(1);
 
@@ -147,7 +172,7 @@ export default makeScene2D(function* (view) {
   view.add(
     <UploadLine
       ref={shaLine}
-      startPoint={file().position()}
+      startPoint={file().position().add(new Vector2(0, 30))}
       endPoint={hashObject().top()}
       zIndex={-1}
     />,
@@ -161,7 +186,7 @@ export default makeScene2D(function* (view) {
   yield* hashObject().iterate(38, 0.05);
 
   yield* waitFor(1);
-  yield* beginSlide('file 5');
+  yield* beginAnnonymousSlide();
 
   yield* all(
     uploadedFile().position(
@@ -192,7 +217,7 @@ export default makeScene2D(function* (view) {
   view.add(
     <UploadLine
       ref={secondShaLine}
-      startPoint={uploadedFile().position()}
+      startPoint={uploadedFile().position().add(new Vector2(0, 30))}
       endPoint={secondHashObject().top()}
       zIndex={-1}
     />,
@@ -206,35 +231,38 @@ export default makeScene2D(function* (view) {
   yield* secondHashObject().iterate(38, 0.05, hashObject().getHashText());
 
   let equal = createRef<PolyTxt>();
+  let probably = createRef<PolyTxt>();
   view.add(
-    <PolyTxt
-      position={new Vector2(0, 270)}
-      text={'='}
-      stroke={Solarized.cyan}
-      lineWidth={10}
-      fontSize={200}
-      ref={equal}
-      textAlign={'center'}
-    />,
+    <Layout layout direction={'column'} gap={-100}>
+      <PolyTxt
+        text={'probably'}
+        fill={Solarized.cyan}
+        fontSize={100}
+        ref={probably}
+        textAlign={'center'}
+      />
+      <PolyTxt
+        text={'='}
+        stroke={Solarized.cyan}
+        lineWidth={10}
+        fontSize={200}
+        ref={equal}
+        textAlign={'center'}
+      />
+      ,
+    </Layout>,
   );
 
   yield* appear(equal);
 
   yield* waitFor(1);
-  yield* beginSlide('file 7');
-
-  yield* all(
-    equal().stroke(Solarized.orange, 1, easeInOutCubic, colorLerp),
-    secondHashObject().getSha().fill(Solarized.orange, 1, easeInOutCubic, colorLerp),
-    disintegrageSignal(0.5, 1),
-    delay(0.5, secondHashObject().iterate(5, 0.05)),
-  );
+  yield* beginAnnonymousSlide();
 
   let notEqual = createRef<PolyTxt>();
   view.add(
     <PolyTxt
-      position={new Vector2(0, 270)}
       text={'/'}
+      y={65}
       stroke={Solarized.orange}
       lineWidth={10}
       fontSize={120}
@@ -243,17 +271,45 @@ export default makeScene2D(function* (view) {
     />,
   );
 
-  yield* all(appear(notEqual));
-
-  yield* beginSlide('comparison table');
-
-  const cdComparison = createRef<Img>();
-  view.add(<Img ref={cdComparison} src={cdComparisonPng} scale={1.3} opacity={0} />);
   yield* all(
-    cdComparison().opacity(1, 1),
-    uploadedFile().opacity(0, 1),
-    square().opacity(0, 1),
+    equal().stroke(Solarized.orange, 1, easeInOutCubic, colorLerp),
+    secondHashObject().getSha().fill(Solarized.orange, 1, easeInOutCubic, colorLerp),
+    disintegrageSignal(0.5, 1),
+    delay(0.5, secondHashObject().iterate(5, 0.05)),
+    appear(notEqual),
+    probably().text('definitely', 1),
+    probably().fill(Solarized.orange, 1, easeInOutCubic, colorLerp),
   );
 
-  yield* beginSlide('file end');
+  yield* beginAnnonymousSlide();
+
+  yield* all(
+    equal().stroke(Solarized.cyan, 1, easeInOutCubic, colorLerp),
+    secondHashObject().getSha().fill(Solarized.cyan, 1, easeInOutCubic, colorLerp),
+    disintegrageSignal(1, 1),
+    delay(0.5, secondHashObject().iterate(5, 0.05, hashObject().getHashText())),
+    notEqual().opacity(0, 1),
+    notEqual().scale(0, 1),
+    probably().text('probably', 1),
+    probably().fill(Solarized.cyan, 1, easeInOutCubic, colorLerp),
+  );
+
+  yield* beginAnnonymousSlide();
+
+  // const cdEquationsComparison = createRef<Img>();
+  // view.add(
+  //   <Img
+  //     ref={cdEquationsComparison}
+  //     src={cdEquationsComparisonPng}
+  //     scale={1}
+  //     opacity={0}
+  //   />,
+  // );
+  // yield* all(
+  //   cdEquationsComparison().opacity(1, 1),
+  //   uploadedFile().opacity(0, 1),
+  //   square().opacity(0, 1),
+  // );
+
+  // yield* beginSlide('file end');
 });
