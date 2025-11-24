@@ -19,9 +19,9 @@ export default makeScene2D(function* (view) {
   view.fill(Solarized.background);
 
   // Grid configuration
-  const gridRows = 5;
-  const gridCols = 3;
-  const elementCount = 24;
+  const gridRows = 2;
+  const gridCols = 2;
+  const elementCount = 16;
 
   // Create QuickSort instances arrays for left and right
   const leftQuickSorts: QuickSort[] = [];
@@ -37,7 +37,7 @@ export default makeScene2D(function* (view) {
 
   // Create the main layout with two groups
   view.add(
-    <Layout layout direction={'row'} gap={400} scale={0.35} y={0}>
+    <Layout layout direction={'row'} gap={400} scale={0.65} y={0}>
       {/* Left group - Shuffled arrays */}
       <Layout layout direction={'column'} gap={150}>
         {Array.from({ length: gridRows }, (_, rowIndex) => (
@@ -50,7 +50,7 @@ export default makeScene2D(function* (view) {
                 height: 200,
               });
 
-              quickSort.almostSort();
+              quickSort.shuffle();
 
               leftQuickSorts.push(quickSort);
 
@@ -89,7 +89,7 @@ export default makeScene2D(function* (view) {
   const lineStartX = -700;
   const lineEndX = 700;
   const lineLength = lineEndX - lineStartX;
-  const maxComparisons = 340;
+  const maxComparisons = 160;
 
   const randomizedLabel = createRef<Txt>();
   const lastLabel = createRef<Txt>();
@@ -110,16 +110,16 @@ export default makeScene2D(function* (view) {
 
       {/* Add labels */}
       <PolyTxt
-        text="Randomized Pivot"
-        position={new Vector2(-330, -380)}
+        text="Randomized"
+        position={new Vector2(-450, -340)}
         fontSize={48}
         opacity={0}
         ref={randomizedLabel}
         fontWeight={700}
       />
       <PolyTxt
-        text="Last Index Pivot"
-        position={new Vector2(330, -380)}
+        text="Almost Sorted"
+        position={new Vector2(450, -340)}
         fontSize={48}
         opacity={0}
         ref={lastLabel}
@@ -196,8 +196,8 @@ export default makeScene2D(function* (view) {
 
   // Initialize all QuickSort visualizations simultaneously
   yield* all(
-    ...leftQuickSorts.map((qs) => qs.initialize()),
-    ...rightQuickSorts.map((qs) => qs.initialize()),
+    ...leftQuickSorts.map((qs) => qs.initialize(0.01, 0.25)),
+    ...rightQuickSorts.map((qs) => qs.initialize(0.01, 0.25)),
     comparisonLine().opacity(1, 0.5),
     zeroLabel().opacity(1, 0.5),
     maxLabel().opacity(1, 0.5),
@@ -217,9 +217,9 @@ export default makeScene2D(function* (view) {
     yield* chain(
       circle.opacity(0.25, 0.25),
       all(
-        circle.opacity(1, 1),
-        circle.scale(5).scale(1, 1),
-        circle.position(new Vector2(comparisonLine().points()[0]).addX(x), 1),
+        circle.opacity(1, 0.5),
+        circle.scale(5).scale(2, 0.5),
+        circle.position(new Vector2(comparisonLine().points()[0]).addX(x), 0.5),
       ),
     );
   }
@@ -228,18 +228,18 @@ export default makeScene2D(function* (view) {
   yield* all(
     ...leftQuickSorts.map((qs, index) =>
       chain(
-        qs.sort('random'),
+        qs.sort('first', 0.1, 0.05),
         all(
-          all(qs.uninitialize(), qs.showComparisonCount(Solarized.green)),
+          all(qs.uninitialize(0.01, 0.25), qs.showComparisonCount(Solarized.green)),
           animateComparisonCircle(leftCircles[index](), qs),
         ),
       ),
     ),
     ...rightQuickSorts.map((qs, index) =>
       chain(
-        qs.sort(),
+        qs.sort('first', 0.1, 0.05),
         all(
-          all(qs.uninitialize(), qs.showComparisonCount(Solarized.red)),
+          all(qs.uninitialize(0.01, 0.25), qs.showComparisonCount(Solarized.red)),
           animateComparisonCircle(rightCircles[index](), qs),
         ),
       ),

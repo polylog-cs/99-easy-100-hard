@@ -143,20 +143,27 @@ export class QuickSort extends Layout {
 
   /**
    * Initialize the visualization with current values
+   * @param delay - Delay between each element animation (default: 0.025)
+   * @param duration - Duration for each element's height animation (default: 1)
    */
-  public *initialize(delay = 0.025): ThreadGenerator {
+  public *initialize(delay = 0.025, duration = 1): ThreadGenerator {
     yield* sequence(
       delay,
       ...this.rectangles.map((ref, i) =>
-        ref().height(this.values[i] * this.height(), 1),
+        ref().height(this.values[i] * this.height(), duration),
       ),
     );
   }
   /**
    * Uninitialize the visualization by animating rectangles back to zero height
+   * @param delay - Delay between each element animation (default: 0.025)
+   * @param duration - Duration for each element's height animation (default: 1)
    */
-  public *uninitialize(delay = 0.025): ThreadGenerator {
-    yield* sequence(delay, ...this.rectangles.map((ref, i) => ref().height(0, 1)));
+  public *uninitialize(delay = 0.025, duration = 1): ThreadGenerator {
+    yield* sequence(
+      delay,
+      ...this.rectangles.map((ref, i) => ref().height(0, duration)),
+    );
   }
 
   /**
@@ -180,18 +187,33 @@ export class QuickSort extends Layout {
   /**
    * Run the complete quicksort animation
    * @param strategy - Pivot selection strategy: 'last', 'mo3' (median of three), or 'random'
+   * @param duration - Duration for the final sorted animation (default: 1)
+   * @param animationSpeed - Speed multiplier for all sorting animations (default: uses constructor value)
    */
-  public *sort(strategy: PivotStrategy = 'last'): ThreadGenerator {
+  public *sort(
+    strategy: PivotStrategy = 'last',
+    duration: number = 1,
+    animationSpeed?: number,
+  ): ThreadGenerator {
     this.sortedIndices.clear();
     this.comparisonCount = 0;
     this.pivotStrategy = strategy;
 
+    // Temporarily override animation speed if provided
+    const originalSpeed = this.animationSpeed;
+    if (animationSpeed !== undefined) {
+      this.animationSpeed = animationSpeed;
+    }
+
     yield* this.quicksort(0, this.elementCount - 1);
+
+    // Restore original animation speed
+    this.animationSpeed = originalSpeed;
 
     // Final animation - show all elements as sorted
     yield* all(
       ...this.rectangles.map((ref) =>
-        all(ref().fill(this.colors.sorted, 1), ref().opacity(1, 1)),
+        all(ref().fill(this.colors.sorted, duration), ref().opacity(1, duration)),
       ),
     );
   }
@@ -454,9 +476,9 @@ export class QuickSort extends Layout {
           (pivotHeight * this.elementsLayout().height()) / 2,
       );
 
-      yield* this.pivotLine().opacity(0.2, 0.25);
+      yield* this.pivotLine().opacity(0.2, this.animationSpeed);
     } else {
-      yield* this.pivotLine().opacity(0, 0.25);
+      yield* this.pivotLine().opacity(0, this.animationSpeed);
     }
   }
 

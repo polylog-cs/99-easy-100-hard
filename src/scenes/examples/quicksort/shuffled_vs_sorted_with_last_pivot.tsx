@@ -10,7 +10,7 @@ export default makeScene2D(function* (view) {
   // Grid configuration
   const gridRows = 5;
   const gridCols = 3;
-  const elementCount = 24;
+  const elementCount = 8;
 
   // Create QuickSort instances arrays for left and right
   const leftQuickSorts: QuickSort[] = [];
