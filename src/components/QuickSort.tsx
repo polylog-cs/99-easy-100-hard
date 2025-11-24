@@ -140,6 +140,14 @@ export class QuickSort extends Layout {
     this.comparisonCount = 0;
   }
 
+  public *shuffleAnimated(time: number = 1): ThreadGenerator {
+    for (let i = this.values.length - 1; i > 0; i--) {
+      const j = Math.floor(this.random.nextFloat() * (i + 1));
+      yield* this.swapElements(i, j, time);
+      // [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+
   /**
    * Initialize the visualization with current values
    * @param delay - Delay between each element animation (default: 0.025)
@@ -285,7 +293,7 @@ export class QuickSort extends Layout {
   public almostSort() {
     const elements = this.getValues();
     const sorted = [...Array(this.elementCount)].map(
-      (_, i) => i / (this.elementCount - 1),
+      (_, i) => (i + 1) / this.elementCount,
     );
 
     const numFlips = 4;
