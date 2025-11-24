@@ -28,7 +28,7 @@ export interface QuickSortProps extends LayoutProps {
   };
 }
 
-export type PivotStrategy = 'last' | 'mo3' | 'random';
+export type PivotStrategy = 'first' | 'last' | 'mo3' | 'random';
 
 export class QuickSort extends Layout {
   private readonly rectangles: Array<Reference<Rect>> = [];
@@ -54,7 +54,7 @@ export class QuickSort extends Layout {
 
   public constructor(props: QuickSortProps = {}) {
     const {
-      elementCount = 20,
+      elementCount = 12,
       elementWidth,
       elementGap = 20,
       animationSpeed = 0.3,
@@ -232,13 +232,22 @@ export class QuickSort extends Layout {
   /**
    * Set custom values (must match element count)
    */
-  public setValues(newValues: number[]): void {
+  public setValues(newValues: number[], normalize: boolean = false): void {
     if (newValues.length !== this.elementCount) {
       throw new Error(
         `Values array length (${newValues.length}) must match element count (${this.elementCount})`,
       );
     }
-    this.values.splice(0, this.values.length, ...newValues);
+    const max = Math.max(...newValues);
+    if (max === 0) {
+      throw new Error('Maximum value in newValues must be greater than 0');
+    }
+    if (normalize) {
+      const normalized = newValues.map((v) => v / max);
+      this.values.splice(0, this.values.length, ...normalized);
+    } else {
+      this.values.splice(0, this.values.length, ...newValues);
+    }
     this.sortedIndices.clear();
     this.comparisonCount = 0;
   }
@@ -580,8 +589,39 @@ export class QuickSort extends Layout {
           colorLerp,
         );
       }
+    } else if (this.pivotStrategy === 'last') {
+      // For 'last' strategy, pivot is already at position high, no action needed}
+    } else if (this.pivotStrategy === 'first') {
+      // For 'first' strategy, swap first element with last to make it pivot
+      if (low !== high) {
+        // Highlight the first element
+        yield* this.rectangles[low]().fill(
+          this.colors.active,
+          this.animationSpeed * 0.5,
+          easeInOutCubic,
+          colorLerp,
+        );
+
+        // Show it as the pivot
+        yield* this.rectangles[low]().fill(
+          this.colors.pivot,
+          this.animationSpeed * 0.3,
+          easeInOutCubic,
+          colorLerp,
+        );
+
+        // Swap it to the end position
+        yield* this.swapElements(low, high, this.animationSpeed);
+
+        // Clear the original position highlighting
+        yield* this.rectangles[low]().fill(
+          this.colors.default,
+          this.animationSpeed * 0.3,
+          easeInOutCubic,
+          colorLerp,
+        );
+      }
     }
-    // For 'last' strategy, pivot is already at position high, no action needed
   }
 
   private *partition(
