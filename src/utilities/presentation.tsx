@@ -3,7 +3,6 @@ import {
   all,
   beginSlide,
   createRef,
-  linear,
   Reference,
   ThreadGenerator,
   useLogger,
@@ -388,8 +387,10 @@ export function* showHeader(
   const text = titleRef().text();
 
   yield* all(
-    titleRef().text('').text(text, duration, linear),
-    titleRef().opacity(0).opacity(1, duration),
+    titleRef().text('').text(text, duration),
+    titleRef()
+      .opacity(0)
+      .opacity(1, duration / 5),
   );
 }
 

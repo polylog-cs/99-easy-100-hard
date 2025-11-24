@@ -3,6 +3,7 @@ import { all, createRef, fadeTransition, waitFor } from '@motion-canvas/core';
 
 import kurtzgesagt from '../../assets/kurtzgesagt.mp4';
 import mario from '../../assets/mario.mp4';
+import { Solarized } from '../../utilities/color';
 import {
   animateBullets,
   beginAnnonymousSlide,
@@ -36,6 +37,8 @@ export default makeScene2D(function* (view) {
   // Show header
   yield* showHeader(header, 1);
 
+  yield* beginAnnonymousSlide();
+
   // Animate left column header
   yield* showHeader(leftColumnHeader);
 
@@ -50,19 +53,42 @@ export default makeScene2D(function* (view) {
     <Video
       ref={leftVideoRef}
       src={kurtzgesagt}
-      scale={0.35}
-      x={-420}
-      y={280}
-      zIndex={-1}
+      lineWidth={50}
+      stroke={Solarized.gray}
+      scale={0.7}
+      x={0}
+      y={0}
+      zIndex={10}
+      opacity={0}
     />,
   );
 
   leftVideoRef().play();
+
+  // Fade in video and reduce visibility of other elements
   yield* all(
-    leftVideoRef().opacity(0).opacity(1, 1),
+    leftVideoRef().opacity(1, 1),
+    header().opacity(0.2, 1),
+    leftColumnHeader().opacity(0.2, 1),
+    ...leftBulletRefs.map((ref) => ref().opacity(0.2, 1)),
+    ...leftCircBulletRefs.map((ref) => ref().opacity(0.2, 1)),
     waitFor(leftVideoRef().getDuration() - 0.5),
   );
+
   leftVideoRef().pause();
+
+  yield* beginAnnonymousSlide();
+
+  // Move video to final position and restore other elements
+  yield* all(
+    leftVideoRef().scale(0.35, 1),
+    leftVideoRef().x(-420, 1),
+    leftVideoRef().y(280, 1),
+    header().opacity(1, 1),
+    leftColumnHeader().opacity(1, 1),
+    ...leftBulletRefs.map((ref) => ref().opacity(1, 1)),
+    ...leftCircBulletRefs.map((ref) => ref().opacity(1, 1)),
+  );
 
   yield* beginAnnonymousSlide();
 
@@ -77,15 +103,53 @@ export default makeScene2D(function* (view) {
   // Add and play right video
   const rightVideoRef = createRef<Video>();
   view.add(
-    <Video ref={rightVideoRef} src={mario} scale={0.35} x={420} y={280} zIndex={-1} />,
+    <Video
+      ref={rightVideoRef}
+      lineWidth={50}
+      stroke={Solarized.gray}
+      src={mario}
+      scale={0.7}
+      x={0}
+      y={0}
+      zIndex={10}
+      opacity={0}
+    />,
   );
 
   rightVideoRef().play();
+
+  // Fade in video and reduce visibility of other elements
   yield* all(
-    rightVideoRef().opacity(0).opacity(1, 1),
+    rightVideoRef().opacity(1, 1),
+    header().opacity(0.2, 1),
+    leftColumnHeader().opacity(0.2, 1),
+    ...leftBulletRefs.map((ref) => ref().opacity(0.2, 1)),
+    ...leftCircBulletRefs.map((ref) => ref().opacity(0.2, 1)),
+    rightColumnHeader().opacity(0.2, 1),
+    ...rightBulletRefs.map((ref) => ref().opacity(0.2, 1)),
+    ...rightCircBulletRefs.map((ref) => ref().opacity(0.2, 1)),
+    leftVideoRef().opacity(0.2, 1),
     waitFor(rightVideoRef().getDuration() - 0.5),
   );
+
   rightVideoRef().pause();
+
+  yield* beginAnnonymousSlide();
+
+  // Move video to final position and restore other elements
+  yield* all(
+    rightVideoRef().scale(0.35, 1),
+    rightVideoRef().x(420, 1),
+    rightVideoRef().y(280, 1),
+    header().opacity(1, 1),
+    leftColumnHeader().opacity(1, 1),
+    ...leftBulletRefs.map((ref) => ref().opacity(1, 1)),
+    ...leftCircBulletRefs.map((ref) => ref().opacity(1, 1)),
+    rightColumnHeader().opacity(1, 1),
+    ...rightBulletRefs.map((ref) => ref().opacity(1, 1)),
+    ...rightCircBulletRefs.map((ref) => ref().opacity(1, 1)),
+    leftVideoRef().opacity(1, 1),
+  );
 
   yield* beginAnnonymousSlide();
 });

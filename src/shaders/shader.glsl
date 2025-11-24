@@ -14,5 +14,5 @@ void main() {
     vec3 col = 0.5 + 0.5 * cos(time * 3.0 + sourceUV.xyx + vec3(0, 2, 4));
 
     // write the resulting color to the node, mixing based on intensity
-    outColor.rgb = mix(outColor.rgb, col, intensity);
+    outColor.rgb = mix(col, outColor.rgb, intensity);
 }

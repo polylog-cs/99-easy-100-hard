@@ -107,7 +107,7 @@ export default makeScene2D(function* (view) {
           height={460}
           shaders={{
             fragment: shader,
-            uniforms: { intensity: 0.15 },
+            uniforms: { intensity: 0.85 },
           }}
         />
         <PolyTxt

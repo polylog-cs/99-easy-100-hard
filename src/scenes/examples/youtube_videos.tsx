@@ -1,5 +1,5 @@
 import { makeScene2D } from '@motion-canvas/2d';
-import { beginSlide, fadeTransition } from '@motion-canvas/core';
+import { beginSlide, fadeTransition, waitFor } from '@motion-canvas/core';
 
 import { Solarized } from '../../utilities/color';
 import { createTwoLineSectionHeader, showHeader } from '../../utilities/presentation';
@@ -11,6 +11,8 @@ export default makeScene2D(function* (view) {
     text1: 'How to make YouTube videos',
     text2: '(according to Polylog)',
   });
+
+  yield* waitFor(0.5);
 
   title2().opacity(0);
 
