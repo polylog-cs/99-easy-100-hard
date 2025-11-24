@@ -172,13 +172,6 @@ export default makeScene2D(function* (view) {
     1,
   );
 
-  yield* beginSlide('complicated equation expanded 3');
-
-  yield* all(
-    complicatedEquation().tex('0 {{=}} 0', 1),
-    complicatedEquation().scale(2, 1),
-  );
-
   yield* beginSlide('exponential growth of equation');
 
   yield* all(
@@ -209,8 +202,6 @@ export default makeScene2D(function* (view) {
   yield* beginSlide('random algorithm example p2');
   yield* all(complicatedText().text('Try x = 2', 1), complicatedText().opacity(1, 1));
 
-  yield* waitFor(1);
-
   yield* complicatedEquation().tex(
     '2{{^4}} {{+ 3}} \\cdot 2 {{- 1}} {{=}} (2{{^2}} + 2 {{+ 1)(}}2{{^2}} {{- 1)}}',
     1,
@@ -236,8 +227,6 @@ export default makeScene2D(function* (view) {
     complicatedText().text('Try x = 3', 1),
     complicatedText().fill(Solarized.blue, 1),
   );
-
-  yield* beginSlide('random algorithm example, plug 3, p2');
 
   yield* all(
     complicatedEquation().tex(
@@ -270,7 +259,7 @@ export default makeScene2D(function* (view) {
   );
   yield* desmosPlot().opacity(1, 1);
 
-  yield* beginSlide('equation algorithm');
+  yield* beginSlide('equation algorithm no code');
 
   yield* all(
     desmosPlot().opacity(0, 1),
@@ -283,15 +272,16 @@ export default makeScene2D(function* (view) {
 
   const algorithmCode = createRef<Code>();
 
-  // Julia code component
   camera.add(
     <Code
       ref={algorithmCode}
       highlighter={juliaHighlighter}
-      fontSize={32}
-      position={[0, 180]}
+      fontSize={45}
+      position={[-100, 180]}
     />,
   );
+
+  yield* beginSlide('equation algorithm with code');
 
   yield* all(
     algorithmCode().code(
@@ -325,6 +315,8 @@ return True`,
     />,
   );
 
+  yield* beginSlide('code running');
+
   yield loop(() => highlightRectangle().lineDashOffset(-30, 0.2, linear).to(0, 0));
 
   const highlightN = createRef<PolyTxt>();
@@ -343,7 +335,7 @@ return True`,
       width={1} // done for right to work
       zIndex={1}
     >
-      <PolyTxt ref={highlightN} fontFamily={'monospace'} text={() => `n = `} />
+      <PolyTxt ref={highlightN} fontFamily={'monospace'} text={() => `i = `} />
       <PolyTxt
         ref={highlightCounter}
         fontFamily={'monospace'}
@@ -385,14 +377,12 @@ return True`,
 
   yield* waitFor(1);
 
+  yield* beginSlide('equations end 0');
+
   yield* all(
     highlightRectangle().opacity(0, 0.5),
     highlightN().opacity(0, 0.5),
     highlightCounter().opacity(0, 0.5),
     highlightLoader().opacity(0, 0.5),
   );
-
-  // === NEW SECTION: Trigonometric Identity ===
-
-  yield* beginSlide('equations end');
 });
