@@ -346,14 +346,81 @@ export class QuickSort extends Layout {
   }
 
   private *swapElements(i: number, j: number, duration: number): ThreadGenerator {
+    const rectI = this.rectangles[i]();
+    const rectJ = this.rectangles[j]();
+
+    // Store original heights before swapping values
+    const heightI = this.values[i] * this.height();
+    const heightJ = this.values[j] * this.height();
+
+    // Set original rectangles to low opacity
+    yield* all(rectI.opacity(0.0, 0), rectJ.opacity(0.0, 0));
+
+    // Create clones at the same positions with the same properties
+    const cloneI = createRef<Rect>();
+    const cloneJ = createRef<Rect>();
+
+    rectI
+      .parent()
+      .parent()
+      .add(
+        <Rect
+          ref={cloneI}
+          width={rectI.width()}
+          height={heightI}
+          fill={rectI.fill()}
+          stroke={rectI.stroke()}
+          opacity={1}
+          zIndex={10}
+        />,
+      );
+
+    rectJ
+      .parent()
+      .parent()
+      .add(
+        <Rect
+          ref={cloneJ}
+          width={rectJ.width()}
+          height={heightJ}
+          fill={rectJ.fill()}
+          stroke={rectJ.stroke()}
+          opacity={1}
+          zIndex={10}
+        />,
+      );
+
+    // Set absolute positions for clones
+    cloneI().absolutePosition(rectI.absolutePosition());
+    cloneJ().absolutePosition(rectJ.absolutePosition());
+
+    // Get the bottom positions of the rectangles
+    const bottomI = rectI.bottom();
+    const bottomJ = rectJ.bottom();
+
+    // Animate clones swapping positions (move to each other's bottom position)
+    yield* all(cloneI().bottom(bottomJ, duration), cloneJ().bottom(bottomI, duration));
+
     // Swap in values array
     [this.values[i], this.values[j]] = [this.values[j], this.values[i]];
 
-    // Visual swap
+    // Store the colors before updating
+    const colorI = rectI.fill();
+    const colorJ = rectJ.fill();
+
+    // Update original rectangles' heights and colors instantly to swapped values and restore opacity
     yield* all(
-      this.rectangles[i]().height(this.values[i] * this.height(), duration),
-      this.rectangles[j]().height(this.values[j] * this.height(), duration),
+      rectI.height(this.values[i] * this.height(), 0),
+      rectJ.height(this.values[j] * this.height(), 0),
+      rectI.fill(colorJ, 0),
+      rectJ.fill(colorI, 0),
+      rectI.opacity(1, 0),
+      rectJ.opacity(1, 0),
     );
+
+    // Remove clones
+    cloneI().remove();
+    cloneJ().remove();
   }
 
   private *setPivotLine(
