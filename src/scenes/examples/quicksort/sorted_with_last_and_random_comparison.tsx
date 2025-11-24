@@ -112,24 +112,22 @@ export default makeScene2D(function* (view) {
       <PolyTxt
         text="Randomized"
         position={new Vector2(-450, -340)}
-        fontSize={48}
+        fontSize={70}
         opacity={0}
         ref={randomizedLabel}
-        fontWeight={700}
       />
       <PolyTxt
-        text="Almost Sorted"
+        text="Almost sorted"
         position={new Vector2(450, -340)}
-        fontSize={48}
+        fontSize={70}
         opacity={0}
         ref={lastLabel}
-        fontWeight={700}
       />
       <Txt
         ref={zeroLabel}
         text="0"
-        position={[lineStartX, lineY + 40]}
-        fontSize={32}
+        position={[lineStartX, lineY + 60]}
+        fontSize={50}
         fontFamily="monospace"
         fill={Solarized.base00}
         opacity={0}
@@ -137,8 +135,8 @@ export default makeScene2D(function* (view) {
       <Txt
         ref={maxLabel}
         text={`${maxComparisons}`}
-        position={[lineEndX, lineY + 40]}
-        fontSize={32}
+        position={[lineEndX, lineY + 60]}
+        fontSize={50}
         fontFamily="monospace"
         fill={Solarized.base00}
         opacity={0}
@@ -146,9 +144,8 @@ export default makeScene2D(function* (view) {
       <PolyTxt
         ref={comparisonLabel}
         text="Comparisons"
-        position={[0, lineY + 40]}
-        fontSize={32}
-        fontWeight={700}
+        position={[0, lineY + 60]}
+        fontSize={50}
         fill={Solarized.base00}
         opacity={0}
       />

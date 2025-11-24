@@ -36,7 +36,12 @@ export default makeScene2D(function* (view) {
       position={[-shift, 0]}
       gap={30}
     >
-      <PolyTxt fontSize={fontSize} fill={Solarized.blue} ref={player1text}>
+      <PolyTxt
+        fontSize={fontSize}
+        fill={Solarized.gray}
+        ref={player1text}
+        fontStyle={'italic'}
+      >
         {nbsp}
       </PolyTxt>
       <Txt fontSize={emojiSize} fontFamily={'Noto Color Emoji'} ref={player1icon}>
@@ -52,7 +57,12 @@ export default makeScene2D(function* (view) {
       position={[shift, 0]}
       gap={30}
     >
-      <PolyTxt fontSize={fontSize} fill={Solarized.blue} ref={player2text}>
+      <PolyTxt
+        fontSize={fontSize}
+        fill={Solarized.gray}
+        fontStyle={'italic'}
+        ref={player2text}
+      >
         {nbsp}
       </PolyTxt>
       <Txt fontSize={emojiSize} fontFamily={'Noto Color Emoji'} ref={player2icon}>
@@ -106,12 +116,12 @@ export default makeScene2D(function* (view) {
     player2text().text(nbsp, 0.5),
   );
 
-  player1text().fill(Solarized.gray);
-  player2text().fill(Solarized.gray);
+  player1text().fontStyle('normal');
+  player2text().fontStyle('normal');
 
   yield* all(
     countdown(0, 2, linear),
-    delay(1, all(player1text().text('Rock!', 1), player2text().text('Paper!', 1))),
+    delay(1.2, all(player1text().text('Rock!', 1), player2text().text('Paper!', 1))),
   );
   yield* player1icon().text('😭', 1);
   yield* beginSlide('randomness to the rescue');
@@ -148,8 +158,8 @@ export default makeScene2D(function* (view) {
     player1text().text(nbsp, 1),
     player2text().text(nbsp, 1),
   );
-  player1text().fill(Solarized.blue);
-  player2text().fill(Solarized.blue);
+  player1text().fontStyle('italic');
+  player2text().fontStyle('italic');
 
   yield* beginSlide('randomness to the rescue 2');
 
@@ -174,18 +184,12 @@ export default makeScene2D(function* (view) {
     dieText().opacity(1, 0.5),
     dieRoll(31, 3.5, easeOutQuad),
   );
+  player1text().fontStyle('normal');
+  player2text().fontStyle('normal');
 
   yield* all(
     countdown(0, 2, linear),
-    delay(
-      1,
-      all(
-        player1text().text('Paper!', 1),
-        player1text().fill(Solarized.gray, 1),
-        player2text().text('Rock!', 1),
-        player2text().fill(Solarized.gray, 1),
-      ),
-    ),
+    delay(1.2, all(player1text().text('Paper!', 1), player2text().text('Rock!', 1))),
   );
   yield* all(player1icon().text('🥳', 1), player2icon().text('😭', 1));
   countdown(4);
