@@ -17,17 +17,55 @@ export default makeScene2D(function* (view) {
       width={1500}
       height={800}
       elementCount={12}
-      animationSpeed={0.25}
+      animationSpeed={0.2}
     />,
   );
 
-  // qs().shuffle();
+  qs().shuffle();
   qs().shuffle();
 
   yield* qs().initialize();
 
+  yield* qs().setQuicksortColors(
+    0,
+    qs().elementCount - 1,
+    0,
+    null,
+    -1,
+    qs().animationSpeed * 0.5,
+  );
+  qs().sortedIndices.clear();
+  qs().comparisonCount = 0;
+  qs().pivotStrategy = 'first';
+
   yield* beginSlide('quicksort part 1 go');
-  yield* qs().sort('first');
+
+  const pivotIdx = yield* qs().partition(0, qs().elementCount - 1);
+  qs().animationSpeed = 0.06;
+
+  yield* beginSlide('quicksort part 1 sort left');
+
+  yield* qs().quicksort(0, pivotIdx - 1);
+  yield* qs().setQuicksortColors(
+    0,
+    qs().elementCount - 1,
+    pivotIdx,
+    pivotIdx,
+    pivotIdx,
+    0.25,
+  );
+
+  yield* beginSlide('quicksort part 1 sort right');
+
+  yield* qs().quicksort(pivotIdx + 1, qs().elementCount - 1);
+  yield* qs().setQuicksortColors(
+    0,
+    qs().elementCount - 1,
+    pivotIdx,
+    pivotIdx,
+    pivotIdx,
+    0.25,
+  );
 
   yield* beginSlide('quicksort part 1 end');
 });

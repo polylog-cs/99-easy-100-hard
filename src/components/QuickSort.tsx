@@ -36,14 +36,13 @@ export class QuickSort extends Layout {
   private readonly elementsLayout = createRef<Layout>();
   private readonly comparisonCounter = createRef<PolyTxt>();
   private readonly values: number[] = [];
-  private readonly sortedIndices = new Set<number>();
+  public readonly sortedIndices = new Set<number>();
   private readonly random = useRandom();
   public comparisonCount: number = 0;
-  private pivotStrategy: PivotStrategy = 'last';
+  public pivotStrategy: PivotStrategy = 'last';
 
-  private readonly elementCount: number;
-  private readonly animationSpeed: number;
-  private readonly elementGap: number;
+  public readonly elementCount: number;
+  public animationSpeed: number;
   private readonly colors: {
     sorted: Color;
     pivot: Color;
@@ -313,7 +312,7 @@ export class QuickSort extends Layout {
     this.setValues(result);
   }
 
-  private *setQuicksortColors(
+  public *setQuicksortColors(
     low: number,
     high: number,
     pivotIdx: number,
@@ -624,7 +623,7 @@ export class QuickSort extends Layout {
     }
   }
 
-  private *partition(
+  public *partition(
     low: number,
     high: number,
   ): Generator<ThreadGenerator, number, any> {
@@ -680,7 +679,7 @@ export class QuickSort extends Layout {
     return i;
   }
 
-  private *quicksort(low: number, high: number): ThreadGenerator {
+  public *quicksort(low: number, high: number): ThreadGenerator {
     if (low < high) {
       yield* this.setQuicksortColors(
         low,
