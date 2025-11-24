@@ -18,6 +18,7 @@ import { PolyTxt } from '../../utilities/text';
 
 export default makeScene2D(function* (view) {
   view.fill(Solarized.background);
+  yield fadeTransition(0.5);
 
   const title = createRef<PolyTxt>();
   const presentLayout = createRef<Layout>();
@@ -119,7 +120,7 @@ export default makeScene2D(function* (view) {
     </>,
   );
 
-  yield* beginAnnonymousSlide();
+  yield* waitFor(0.5);
 
   // Animate title appearance
   yield* title().text('Thank you!', 1);

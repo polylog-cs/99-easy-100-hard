@@ -6,6 +6,7 @@ import {
   createSignal,
   delay,
   easeInOutCubic,
+  fadeTransition,
   useRandom,
   Vector2,
   waitFor,
@@ -24,8 +25,8 @@ import { PolyTxt } from '../../utilities/text';
 import { createShadow } from '../../utilities/visuals';
 
 export default makeScene2D(function* (view) {
+  yield fadeTransition(0.5);
   view.fill(Solarized.background);
-  yield* beginAnnonymousSlide();
 
   const disintegrageSignal2 = createSignal(1);
 
@@ -36,6 +37,8 @@ export default makeScene2D(function* (view) {
       text={'💿'}
       ref={file}
       fontSize={600}
+      opacity={0}
+      scale={0}
       offset={new Vector2(0, -0.1)}
       shaders={{
         fragment: disintegrateShader,
@@ -43,6 +46,8 @@ export default makeScene2D(function* (view) {
       }}
     />,
   );
+
+  yield* waitFor(0.5);
 
   // Animations
   yield* appear(file);

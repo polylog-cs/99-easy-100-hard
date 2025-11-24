@@ -6,6 +6,7 @@ import {
   createSignal,
   delay,
   easeOutQuad,
+  fadeTransition,
   linear,
   waitFor,
 } from '@motion-canvas/core';
@@ -16,8 +17,9 @@ import { PolyTxt } from '../../utilities/text';
 const nbsp = ' ';
 
 export default makeScene2D(function* (view) {
+  yield fadeTransition(0.5);
+
   view.fill(Solarized.background);
-  yield* beginSlide('rock paper scissors');
 
   const player1text = createRef<PolyTxt>();
   const player1icon = createRef<Txt>();
@@ -44,7 +46,13 @@ export default makeScene2D(function* (view) {
       >
         {nbsp}
       </PolyTxt>
-      <Txt fontSize={emojiSize} fontFamily={'Noto Color Emoji'} ref={player1icon}>
+      <Txt
+        fontSize={emojiSize}
+        fontFamily={'Noto Color Emoji'}
+        ref={player1icon}
+        opacity={0}
+        scale={0}
+      >
         🙂
       </Txt>
     </Rect>,
@@ -65,14 +73,27 @@ export default makeScene2D(function* (view) {
       >
         {nbsp}
       </PolyTxt>
-      <Txt fontSize={emojiSize} fontFamily={'Noto Color Emoji'} ref={player2icon}>
+      <Txt
+        fontSize={emojiSize}
+        fontFamily={'Noto Color Emoji'}
+        ref={player2icon}
+        opacity={0}
+        scale={0}
+      >
         👀
       </Txt>
     </Rect>,
   );
 
-  yield* waitFor(1);
-  yield* player1text().text("(I'll play rock)", 1);
+  yield* waitFor(0.5);
+
+  yield* all(
+    player2icon().opacity(1, 1),
+    player2icon().scale(1, 1),
+    player1icon().opacity(1, 1),
+    player1icon().scale(1, 1),
+    player1text().text("(I'll play rock)", 1),
+  );
 
   const arrow = createRef<Line>();
 

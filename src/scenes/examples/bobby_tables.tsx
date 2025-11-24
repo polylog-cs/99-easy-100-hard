@@ -1,22 +1,35 @@
-import { makeScene2D, Rect, Txt } from '@motion-canvas/2d';
+import { Img, makeScene2D, Rect, Txt } from '@motion-canvas/2d';
 import {
   all,
   beginSlide,
   createRef,
   createRefArray,
   easeInCubic,
+  fadeTransition,
   loop,
   useRandom,
   waitFor,
 } from '@motion-canvas/core';
 
+import qsort_cppreference from '../../assets/qsort_cppreference.png';
 import { Solarized } from '../../utilities/color';
 import { beginAnnonymousSlide } from '../../utilities/presentation';
 import { PolyTxt } from '../../utilities/text';
 
 export default makeScene2D(function* (view) {
   view.fill(Solarized.background);
+  yield fadeTransition(0.5);
+
+  const docsScreenshot = createRef<Img>();
+  view.add(
+    <Img ref={docsScreenshot} src={qsort_cppreference} width={view.width() * 0.8} />,
+  );
+  yield* all(
+    docsScreenshot().scale(0.8).scale(1, 1),
+    docsScreenshot().opacity(0).opacity(1, 1),
+  );
   yield* beginSlide('girl and boy');
+  yield* all(docsScreenshot().scale(1, 1), docsScreenshot().opacity(0, 1));
 
   const boyText = createRef<PolyTxt>();
   const boyIcon = createRef<Txt>();
@@ -44,6 +57,8 @@ export default makeScene2D(function* (view) {
       </Txt>
     </Rect>,
   );
+
+  yield* waitFor(0.5);
 
   view.add(
     <PolyTxt
@@ -90,7 +105,7 @@ export default makeScene2D(function* (view) {
   yield* all(
     boyText().scale(1, 1),
     boyText().opacity(1, 1),
-    boyText().text('DROP TABLE Students;--', 1),
+    boyText().text("'); DROP TABLE Students;--", 1),
   );
 
   yield* beginAnnonymousSlide();

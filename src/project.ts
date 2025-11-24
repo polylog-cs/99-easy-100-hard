@@ -31,9 +31,19 @@ export default makeProject({
   experimentalFeatures: true,
   scenes: [
     title,
+    // === intro ===
+    // TODO
     // what_is_polylog,
-    // TODO: tome
     // youtube_videos,
+    // === easy hard ===
+    file_checking,
+    equations,
+    bobby_tables,
+    quicksort_part_1,
+    sorted_with_last_and_random_comparison,
+    worst_to_average,
+    rock_paper_scissors,
+    // === programming ===
     animations_in_videos,
     motion_canvas,
     code_1,
@@ -42,14 +52,8 @@ export default makeProject({
     code_4,
     code_5_wave,
     code_6_blender,
-    file_checking,
-    equations,
-    bobby_tables,
-    quicksort_part_1,
-    sorted_with_last_and_random_comparison,
-    worst_to_average,
-    rock_paper_scissors,
-    // table,
+    // === motivation ===
+    // TODO
     thank_you,
   ],
 });

@@ -1,11 +1,17 @@
 import { makeScene2D } from '@motion-canvas/2d';
-import { all, beginSlide, createRef } from '@motion-canvas/core';
+import {
+  all,
+  beginSlide,
+  createRef,
+  fadeTransition,
+  waitFor,
+} from '@motion-canvas/core';
 
 import { QuickSort } from '../../../components/QuickSort';
 import { Solarized } from '../../../utilities/color';
 
 export default makeScene2D(function* (view) {
-  yield* beginSlide('quicksort part 1');
+  yield fadeTransition(0.5);
   view.fill(Solarized.background);
 
   const qs = createRef<QuickSort>();
@@ -20,6 +26,8 @@ export default makeScene2D(function* (view) {
       animationSpeed={0.2}
     />,
   );
+
+  yield waitFor(0.5);
 
   qs().shuffle();
   qs().shuffle();
