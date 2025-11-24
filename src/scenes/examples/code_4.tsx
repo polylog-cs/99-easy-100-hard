@@ -17,9 +17,12 @@ import { all, loop, sequence, waitFor } from '@motion-canvas/core/lib/flow';
 import { ShikiHighlighter } from '../../components/Shiki';
 import shader from '../../shaders/shader.glsl';
 import { Solarized } from '../../utilities/color';
-import { beginAnnonymousSlide } from '../../utilities/presentation';
-
-// import { appear } from '../../utilities';
+import {
+  beginAnnonymousSlide,
+  createSectionHeader,
+  showHeader,
+} from '../../utilities/presentation';
+import { PolyTxt } from '../../utilities/text';
 
 // Code highlighter for TypeScript
 const tsHighlighter = new ShikiHighlighter({
@@ -46,8 +49,25 @@ export default makeScene2D(function* (view) {
   let glslCode = createRef<Code>();
   let tsCodeBackground = createRef<Rect>();
   let glslCodeBackground = createRef<Rect>();
+  let headerRef = createRef<PolyTxt>();
 
   yield* waitFor(0.5);
+
+  // // Create and show header
+  // createSectionHeader(view, headerRef, {
+  //   text: 'Shaders',
+  //   fontSize: 80,
+  //   position: [0, -530],
+  // });
+
+  // view.scale(0.9);
+  // view.position(view.position().add(new Vector2(0, 70)));
+  // view.fill(Solarized.background);
+  // view.stroke(Solarized.background);
+  // view.lineWidth(1000);
+
+  // yield* showHeader(headerRef, 0.5);
+  // yield* waitFor(0.5);
 
   // TypeScript code on top
   view.add(
