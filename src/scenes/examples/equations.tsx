@@ -263,8 +263,8 @@ export default makeScene2D(function* (view) {
     <Img
       ref={desmosPlot}
       src={desmosPlotWrongEquation}
-      scale={0.75}
-      position={[0, 100]}
+      scale={0.7}
+      position={[50, 0]}
       opacity={0}
     />,
   );
