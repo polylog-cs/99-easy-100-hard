@@ -39,7 +39,7 @@ export default makeScene2D(function* (view) {
       <PolyTxt fontSize={fontSize} fill={Solarized.blue} ref={player1text}>
         {nbsp}
       </PolyTxt>
-      <Txt fontSize={emojiSize} ref={player1icon}>
+      <Txt fontSize={emojiSize} fontFamily={'Noto Color Emoji'} ref={player1icon}>
         🙂
       </Txt>
     </Rect>,
@@ -55,7 +55,7 @@ export default makeScene2D(function* (view) {
       <PolyTxt fontSize={fontSize} fill={Solarized.blue} ref={player2text}>
         {nbsp}
       </PolyTxt>
-      <Txt fontSize={emojiSize} ref={player2icon}>
+      <Txt fontSize={emojiSize} fontFamily={'Noto Color Emoji'} ref={player2icon}>
         👀
       </Txt>
     </Rect>,
@@ -129,7 +129,12 @@ export default makeScene2D(function* (view) {
       <PolyTxt fontSize={fontSize} fill={Solarized.red} ref={dieText}>
         {nbsp}
       </PolyTxt>
-      <Txt fontSize={emojiSize} ref={dieIcon} opacity={0}>
+      <Txt
+        fontSize={emojiSize}
+        fontFamily={'Noto Color Emoji'}
+        ref={dieIcon}
+        opacity={0}
+      >
         🎲
       </Txt>
     </Rect>,
