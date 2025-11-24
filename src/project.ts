@@ -1,6 +1,7 @@
 import { makeProject } from '@motion-canvas/core';
 
 import animations_in_videos from './scenes/examples/animations_in_videos?scene';
+import bobby_tables from './scenes/examples/bobby_tables?scene';
 import code_1 from './scenes/examples/code_1?scene';
 import code_2 from './scenes/examples/code_2?scene';
 import code_3 from './scenes/examples/code_3?scene';
@@ -14,6 +15,7 @@ import phone from './scenes/examples/phone?scene';
 import basic_mo3 from './scenes/examples/quicksort/basic_mo3?scene';
 import quicksort_many from './scenes/examples/quicksort/quicksort_many?scene';
 import quicksort_part_1 from './scenes/examples/quicksort/quicksort_part_1?scene';
+import shuffled_vs_sorted_with_last_pivot from './scenes/examples/quicksort/shuffled_vs_sorted_with_last_pivot?scene';
 import sorted_with_last_and_random_comparison from './scenes/examples/quicksort/sorted_with_last_and_random_comparison?scene';
 import table from './scenes/examples/quicksort/table?scene';
 import worst_to_average from './scenes/examples/quicksort/worst_to_average?scene';
@@ -29,8 +31,9 @@ export default makeProject({
   experimentalFeatures: true,
   scenes: [
     title,
-    what_is_polylog,
-    youtube_videos,
+    // what_is_polylog,
+    // TODO: tome
+    // youtube_videos,
     animations_in_videos,
     motion_canvas,
     code_1,
@@ -41,6 +44,7 @@ export default makeProject({
     code_6_blender,
     file_checking,
     equations,
+    bobby_tables,
     quicksort_part_1,
     sorted_with_last_and_random_comparison,
     worst_to_average,
