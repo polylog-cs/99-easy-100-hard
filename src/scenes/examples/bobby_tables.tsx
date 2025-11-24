@@ -5,6 +5,7 @@ import {
   createRef,
   createRefArray,
   easeInCubic,
+  fadeTransition,
   loop,
   useRandom,
   waitFor,
@@ -17,7 +18,8 @@ import { PolyTxt } from '../../utilities/text';
 
 export default makeScene2D(function* (view) {
   view.fill(Solarized.background);
-  yield* beginSlide('docs');
+  yield fadeTransition(0.5);
+
   const docsScreenshot = createRef<Img>();
   view.add(
     <Img ref={docsScreenshot} src={qsort_cppreference} width={view.width() * 0.8} />,
@@ -55,6 +57,8 @@ export default makeScene2D(function* (view) {
       </Txt>
     </Rect>,
   );
+
+  yield* waitFor(0.5);
 
   view.add(
     <PolyTxt

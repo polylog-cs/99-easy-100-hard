@@ -4,6 +4,7 @@ import {
   chain,
   createRef,
   easeOutCubic,
+  fadeTransition,
   sequence,
   useLogger,
   Vector2,
@@ -12,10 +13,12 @@ import {
 
 import { QuickSort } from '../../../components/QuickSort';
 import { Solarized } from '../../../utilities/color';
+import { beginAnnonymousSlide } from '../../../utilities/presentation';
 import { PolyTxt } from '../../../utilities/text';
 import { createShadow } from '../../../utilities/visuals';
 
 export default makeScene2D(function* (view) {
+  yield fadeTransition(0.5);
   view.fill(Solarized.background);
 
   // Grid configuration
@@ -83,6 +86,8 @@ export default makeScene2D(function* (view) {
       </Layout>
     </Layout>,
   );
+
+  yield* waitFor(0.5);
 
   // Add comparison count line visualization
   const lineY = 370;
@@ -206,6 +211,8 @@ export default makeScene2D(function* (view) {
     lastLabel().opacity(1, 0.5),
   );
 
+  yield* beginAnnonymousSlide();
+
   // Helper function to animate a circle appearing at the correct position
   function* animateComparisonCircle(circle: Circle, from: QuickSort) {
     const x = (from.comparisonCount / maxComparisons) * lineLength;
@@ -246,5 +253,5 @@ export default makeScene2D(function* (view) {
     ),
   );
 
-  yield* waitFor(2);
+  yield* beginAnnonymousSlide();
 });
