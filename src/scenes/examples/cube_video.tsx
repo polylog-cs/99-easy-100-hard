@@ -1,5 +1,11 @@
 import { makeScene2D, Video } from '@motion-canvas/2d';
-import { beginSlide, createRef, fadeTransition, waitFor } from '@motion-canvas/core';
+import {
+  all,
+  beginSlide,
+  createRef,
+  fadeTransition,
+  waitFor,
+} from '@motion-canvas/core';
 
 import cube from '../../assets/cube.mp4';
 import { Solarized } from '../../utilities/color';
