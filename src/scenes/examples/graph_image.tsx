@@ -18,7 +18,7 @@ export default makeScene2D(function* (view) {
   const imageRef = createRef<Img>();
 
   view.add(
-    <Img ref={imageRef} src={graph} scale={1.4} position={[0, 0]} opacity={0} />,
+    <Img ref={imageRef} src={graph} scale={1.6} position={[0, 0]} opacity={0} />,
   );
 
   // Fade in the image

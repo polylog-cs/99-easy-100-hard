@@ -23,8 +23,14 @@ export default makeScene2D(function* (view) {
 
   view.add(
     <>
-      <Img ref={imageRef} src={grant} scale={1} position={[0, 0]} opacity={0} />
-      <Img ref={logoRef} src={grantLogo} scale={1} position={[430, -300]} opacity={0} />
+      <Img ref={imageRef} src={grant} scale={1.3} position={[-300, 0]} opacity={0} />
+      <Img
+        ref={logoRef}
+        src={grantLogo}
+        scale={1.7}
+        position={[430, -200]}
+        opacity={0}
+      />
     </>,
   );
 

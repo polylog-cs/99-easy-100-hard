@@ -23,7 +23,7 @@ export default makeScene2D(function* (view) {
     <Img
       ref={imageRef}
       src={polylogYoutube}
-      scale={1.1}
+      scale={1.4}
       position={[0, 0]}
       opacity={0}
     />,

@@ -34,10 +34,10 @@ export default makeScene2D(function* (view) {
         position={[0, 200]}
         opacity={0}
       >
-        <PolyTxt text={'Richard Hladík'} fontSize={40} />
-        <PolyTxt text={'Tomáš Sláma'} fontSize={40} />
-        <PolyTxt text={'Václav Volhejn'} fontSize={40} />
-        <PolyTxt text={'Polylog @ AvailabilIT'} fill={Solarized.base1} fontSize={50} />
+        <PolyTxt text={'Richard Hladík'} fontSize={60} />
+        <PolyTxt text={'Tomáš Sláma'} fontSize={60} />
+        <PolyTxt text={'Václav Volhejn'} fontSize={60} />
+        <PolyTxt text={'Polylog @ AvailabilIT'} fill={Solarized.base1} fontSize={80} />
       </Layout>
     </>,
   );

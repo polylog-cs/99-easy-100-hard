@@ -20,7 +20,13 @@ export default makeScene2D(function* (view) {
   const imageRef = createRef<Img>();
 
   view.add(
-    <Img ref={imageRef} src={polylogTeam} scale={0.3} position={[0, 0]} opacity={0} />,
+    <Img
+      ref={imageRef}
+      src={polylogTeam}
+      scale={0.5}
+      position={[0, -200]}
+      opacity={0}
+    />,
   );
 
   // Fade in the image
