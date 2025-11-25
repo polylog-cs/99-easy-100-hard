@@ -33,6 +33,7 @@ export default makeScene2D(function* (view) {
 
   yield* qs().initialize();
 
+  yield* beginSlide('quicksort part 1 go');
   yield* qs().setQuicksortColors(
     0,
     qs().elementCount - 1,
@@ -44,8 +45,6 @@ export default makeScene2D(function* (view) {
   qs().sortedIndices.clear();
   qs().comparisonCount = 0;
   qs().pivotStrategy = 'first';
-
-  yield* beginSlide('quicksort part 1 go');
 
   const pivotIdx = yield* qs().partition(0, qs().elementCount - 1);
   qs().animationSpeed = 0.06;
