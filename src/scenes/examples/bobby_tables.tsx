@@ -108,8 +108,6 @@ export default makeScene2D(function* (view) {
     boyText().text("'); DROP TABLE Students;--", 1),
   );
 
-  yield* beginAnnonymousSlide();
-
   // Animate tables falling
   yield* all(...tables.map((table) => table.position.y(1000, 2, easeInCubic)));
 

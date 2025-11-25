@@ -208,8 +208,8 @@ export default makeScene2D(function* (view) {
   yield shaLine().start();
   yield* waitFor(0.65);
 
-  yield all(delay(1, shaLine().stop()));
-  yield* hashObject().iterate(100, 0.05);
+  yield all(delay(6.5, shaLine().stop()));
+  yield* hashObject().iterate(150, 0.05);
 
   yield* waitFor(1);
   yield* beginAnnonymousSlide();
@@ -276,11 +276,13 @@ export default makeScene2D(function* (view) {
         fontSize={200}
         ref={equal}
         textAlign={'center'}
+        opacity={0}
       />
       ,
     </Layout>,
   );
 
+  yield* beginAnnonymousSlide();
   yield* all(appear(equal), probably().text('probably', 1));
 
   yield* waitFor(1);

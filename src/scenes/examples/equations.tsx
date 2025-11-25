@@ -176,9 +176,17 @@ export default makeScene2D(function* (view) {
     1,
   );
 
+  yield* beginSlide('complicated equation check');
+
+  const check = createRef<PolyTxt>();
+  view.add(<PolyTxt ref={check} text={'✅'} fontSize={150} opacity={0} y={100} />);
+  yield* all(check().opacity(0).opacity(1, 1), check().scale(2).scale(1, 1));
+
   yield* beginSlide('exponential growth of equation');
 
   yield* all(
+    check().opacity(0, 1),
+    check().scale(2, 1),
     complicatedEquation().scale(2, 1),
     complicatedEquation().tex('{{(x-2)^7}}', 1),
   );
@@ -224,14 +232,16 @@ export default makeScene2D(function* (view) {
 
   yield* beginSlide('random algorithm example, plug 3');
 
+  yield* complicatedText().opacity(0, 1);
   yield* all(
     complicatedEquation().tex(
       'x{{^4}} {{+ 3}}x {{- 1}} = (x{{^2}}  + x{{ + 1)(}}x{{^2}} {{- 1)}}',
       1,
     ),
-    complicatedText().text('Try x = 3', 1),
-    complicatedText().fill(Solarized.blue, 1),
   );
+  complicatedText().text('Try x = 3');
+  complicatedText().fill(Solarized.blue);
+  yield* complicatedText().opacity(1, 1);
 
   yield* all(
     complicatedEquation().tex(

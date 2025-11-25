@@ -216,4 +216,5 @@ export default makeScene2D(function* (view) {
   countdown(4);
 
   yield* waitFor(3);
+  yield* beginSlide('pause');
 });

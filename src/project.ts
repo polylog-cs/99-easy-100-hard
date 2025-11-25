@@ -17,6 +17,7 @@ import graph_image from './scenes/examples/graph_image?scene';
 import how_to_make_youtube_videos from './scenes/examples/how_to_make_youtube_videos?scene';
 import image_slide from './scenes/examples/image_slide?scene';
 import motion_canvas from './scenes/examples/motion_canvas?scene';
+import outro from './scenes/examples/outro?scene';
 import phone from './scenes/examples/phone?scene';
 import basic_mo3 from './scenes/examples/quicksort/basic_mo3?scene';
 import quicksort_many from './scenes/examples/quicksort/quicksort_many?scene';
@@ -52,25 +53,15 @@ export default makeProject({
 
     // === easy hard ===
     file_checking,
-    // - délka lajny nematchuje
-    // - anonymous slide před eq neq
     a99_vs_100,
-    // - 99 fast 100 easy anonmous pauzy
     equations,
-    // checkmark u 0=0
-    // try 3 pauza (zpět ten equation)
-    // cut the desmos screenshot
     quicksort_part_1,
-    // quicksort zmodral?
     sorted_with_last_and_random_comparison,
     bobby_tables,
-    // drop table stejný slide jako dorp table student
     worst_to_average,
-    // worst case luck (good) x worst-case input (bad)
     randomness_plus_worst_case,
     rock_paper_scissors,
-    // pause at the end
-    // some end slide here (table)
+    outro,
     // === programming ===
     animations_in_videos,
     // - reusable (limited by framework)
