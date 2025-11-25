@@ -1,7 +1,7 @@
 import { makeScene2D, Video } from '@motion-canvas/2d';
 import { all, createRef, fadeTransition, waitFor } from '@motion-canvas/core';
 
-import kurtzgesagt from '../../assets/kurtzgesagt.mp4';
+import kurzgesagt from '../../assets/kurzgesagt.mp4';
 import mario from '../../assets/mario.mp4';
 import { Solarized } from '../../utilities/color';
 import {
@@ -52,7 +52,7 @@ export default makeScene2D(function* (view) {
   view.add(
     <Video
       ref={leftVideoRef}
-      src={kurtzgesagt}
+      src={kurzgesagt}
       lineWidth={50}
       stroke={Solarized.gray}
       scale={0.7}
