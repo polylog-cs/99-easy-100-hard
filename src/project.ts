@@ -11,6 +11,7 @@ import code_5_wave from './scenes/examples/code_5_wave?scene';
 import code_6_blender from './scenes/examples/code_6_blender?scene';
 import equations from './scenes/examples/equations?scene';
 import file_checking from './scenes/examples/file_checking?scene';
+import how_to_make_youtube_videos from './scenes/examples/how_to_make_youtube_videos?scene';
 import motion_canvas from './scenes/examples/motion_canvas?scene';
 import phone from './scenes/examples/phone?scene';
 import basic_mo3 from './scenes/examples/quicksort/basic_mo3?scene';
@@ -25,6 +26,7 @@ import rock_paper_scissors from './scenes/examples/rock_paper_scissors?scene';
 import thank_you from './scenes/examples/thank_you?scene';
 import title from './scenes/examples/title?scene';
 import what_is_polylog from './scenes/examples/what_is_polylog?scene';
+import why_are_you_not_making_videos from './scenes/examples/why_are_you_not_making_videos?scene';
 import youtube_videos from './scenes/examples/youtube_videos?scene';
 
 import './global.css';
@@ -58,6 +60,8 @@ export default makeProject({
     code_6_blender,
     // === motivation ===
     // TODO
+    how_to_make_youtube_videos,
+    why_are_you_not_making_videos,
     thank_you,
   ],
 });
