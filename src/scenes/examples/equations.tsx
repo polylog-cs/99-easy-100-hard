@@ -12,6 +12,7 @@ import {
   fadeTransition,
   linear,
   loop,
+  sequence,
   useRandom,
   waitFor,
 } from '@motion-canvas/core';
@@ -102,8 +103,6 @@ export default makeScene2D(function* (view) {
     </Node>,
   );
 
-  camera.add(equation2Wrong);
-
   yield* all(
     simpleEquation().tex('{{(x - 1)}}^3 = {{x^3}} + 3{{x^2}} - 3{{x}} - {{1}}', 1),
     // simpleText().opacity(0, 1),
@@ -137,7 +136,7 @@ export default makeScene2D(function* (view) {
       />
       <PolyTxt
         ref={complicatedText}
-        text={' '}
+        text={'2'}
         fontSize={80}
         fill={Solarized.blue}
         opacity={0}
@@ -148,6 +147,7 @@ export default makeScene2D(function* (view) {
   // Shift simple equation to the left and bring in the complicated equation
   yield* all(
     equation2Wrong().opacity(0, 0.5),
+    equation2Wrong().position(equation2Wrong().position().addX(-1400), 1),
     simpleLayout().position(simpleLayout().position().addX(-1400), 1),
     simpleLayout().scale(0.5, 1),
     complicatedLayout().position([1600, 0]).position([0, 0], 1),
@@ -185,12 +185,13 @@ export default makeScene2D(function* (view) {
 
   yield* beginSlide('exponential growth of equation p2');
 
-  yield* all(
+  yield* sequence(
+    0.2,
+    complicatedEquation().scale(1, 1),
     complicatedEquation().tex(
       '{{(x-2)^7}} = x^7 - 14 x^6 + 84 x^5 - 280 x^4 + 560 x^3 - 672 x^2 + 448 x - 128',
       1,
     ),
-    complicatedEquation().scale(1, 1),
   );
 
   yield* beginSlide('random algorithm example');

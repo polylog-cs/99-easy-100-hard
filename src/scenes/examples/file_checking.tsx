@@ -7,6 +7,7 @@ import {
   delay,
   easeInOutCubic,
   fadeTransition,
+  sequence,
   useRandom,
   Vector2,
   waitFor,
@@ -93,8 +94,6 @@ export default makeScene2D(function* (view) {
     />,
   );
 
-  yield* beginAnnonymousSlide();
-
   const uploadedFile = createRef<PolyTxt>();
   const disintegrageSignal = createSignal(1);
   view.add(createShadow(uploadedFile));
@@ -113,11 +112,33 @@ export default makeScene2D(function* (view) {
     />,
   );
 
+  const friend = createRef<PolyTxt>();
+  view.add(
+    <PolyTxt
+      text={'👦🏻'}
+      ref={friend}
+      fontSize={200}
+      position={uploadedFile().position()}
+      zIndex={10}
+      opacity={0}
+    />,
+  );
+
+  yield* appear(friend);
+
+  yield* beginAnnonymousSlide();
   yield uploadLine().upload();
-  yield* all(uploadLine().start(3), delay(0.5, appear(uploadedFile)));
+  yield* sequence(
+    0.3,
+    friend().position(friend().position().addY(-300), 1),
+    appear(uploadedFile),
+  );
+  yield* beginAnnonymousSlide();
+  yield* uploadLine().start(3);
 
   yield* beginAnnonymousSlide();
   yield* uploadLine().stop(1);
+  yield* beginAnnonymousSlide();
 
   let code = createRef<PolyTxt>();
   view.add(
@@ -188,7 +209,7 @@ export default makeScene2D(function* (view) {
   yield* waitFor(0.65);
 
   yield all(delay(1, shaLine().stop()));
-  yield* hashObject().iterate(38, 0.05);
+  yield* hashObject().iterate(100, 0.05);
 
   yield* waitFor(1);
   yield* beginAnnonymousSlide();
@@ -198,6 +219,8 @@ export default makeScene2D(function* (view) {
       new Vector2(uploadedFile().position().x, file().position().y),
       1,
     ),
+    friend().opacity(0, 1),
+    friend().position(friend().position().addY(-200), 1),
   );
 
   const secondHashObject = createRef<Sha256Hash>();
@@ -240,7 +263,7 @@ export default makeScene2D(function* (view) {
   view.add(
     <Layout layout direction={'column'} gap={-100}>
       <PolyTxt
-        text={'probably'}
+        text={''}
         fill={Solarized.cyan}
         fontSize={100}
         ref={probably}
@@ -258,7 +281,7 @@ export default makeScene2D(function* (view) {
     </Layout>,
   );
 
-  yield* appear(equal);
+  yield* all(appear(equal), probably().text('probably', 1));
 
   yield* waitFor(1);
   yield* beginAnnonymousSlide();
@@ -278,9 +301,9 @@ export default makeScene2D(function* (view) {
 
   yield* all(
     equal().stroke(Solarized.orange, 1, easeInOutCubic, colorLerp),
-    secondHashObject().getSha().fill(Solarized.orange, 1, easeInOutCubic, colorLerp),
-    disintegrageSignal(0.5, 1),
-    delay(0.5, secondHashObject().iterate(5, 0.05)),
+    hashObject().getSha().fill(Solarized.orange, 1, easeInOutCubic, colorLerp),
+    disintegrageSignal2(0.5, 1),
+    delay(0.5, hashObject().iterate(5, 0.05)),
     appear(notEqual),
     probably().text('definitely', 1),
     probably().fill(Solarized.orange, 1, easeInOutCubic, colorLerp),
@@ -290,9 +313,9 @@ export default makeScene2D(function* (view) {
 
   yield* all(
     equal().stroke(Solarized.cyan, 1, easeInOutCubic, colorLerp),
-    secondHashObject().getSha().fill(Solarized.cyan, 1, easeInOutCubic, colorLerp),
-    disintegrageSignal(1, 1),
-    delay(0.5, secondHashObject().iterate(5, 0.05, hashObject().getHashText())),
+    hashObject().getSha().fill(Solarized.cyan, 1, easeInOutCubic, colorLerp),
+    disintegrageSignal2(1, 1),
+    delay(0.5, hashObject().iterate(5, 0.05, secondHashObject().getHashText())),
     notEqual().opacity(0, 1),
     notEqual().scale(0, 1),
     probably().text('probably', 1),
