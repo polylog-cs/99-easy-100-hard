@@ -12,13 +12,10 @@ import code_6_blender from './scenes/examples/code_6_blender?scene';
 import cube_video from './scenes/examples/cube_video?scene';
 import equations from './scenes/examples/equations?scene';
 import file_checking from './scenes/examples/file_checking?scene';
-<<<<<<< HEAD
-import how_to_make_youtube_videos from './scenes/examples/how_to_make_youtube_videos?scene';
-=======
 import grant_image from './scenes/examples/grant_image?scene';
 import graph_image from './scenes/examples/graph_image?scene';
+import how_to_make_youtube_videos from './scenes/examples/how_to_make_youtube_videos?scene';
 import image_slide from './scenes/examples/image_slide?scene';
->>>>>>> 247e237 (initial part)
 import motion_canvas from './scenes/examples/motion_canvas?scene';
 import phone from './scenes/examples/phone?scene';
 import basic_mo3 from './scenes/examples/quicksort/basic_mo3?scene';
