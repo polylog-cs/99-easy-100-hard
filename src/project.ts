@@ -9,9 +9,16 @@ import code_3 from './scenes/examples/code_3?scene';
 import code_4 from './scenes/examples/code_4?scene';
 import code_5_wave from './scenes/examples/code_5_wave?scene';
 import code_6_blender from './scenes/examples/code_6_blender?scene';
+import cube_video from './scenes/examples/cube_video?scene';
 import equations from './scenes/examples/equations?scene';
 import file_checking from './scenes/examples/file_checking?scene';
+<<<<<<< HEAD
 import how_to_make_youtube_videos from './scenes/examples/how_to_make_youtube_videos?scene';
+=======
+import grant_image from './scenes/examples/grant_image?scene';
+import graph_image from './scenes/examples/graph_image?scene';
+import image_slide from './scenes/examples/image_slide?scene';
+>>>>>>> 247e237 (initial part)
 import motion_canvas from './scenes/examples/motion_canvas?scene';
 import phone from './scenes/examples/phone?scene';
 import basic_mo3 from './scenes/examples/quicksort/basic_mo3?scene';
@@ -23,8 +30,10 @@ import table from './scenes/examples/quicksort/table?scene';
 import worst_to_average from './scenes/examples/quicksort/worst_to_average?scene';
 import randomness_plus_worst_case from './scenes/examples/randomness_plus_worst_case?scene';
 import rock_paper_scissors from './scenes/examples/rock_paper_scissors?scene';
+import team_image from './scenes/examples/team_image?scene';
 import thank_you from './scenes/examples/thank_you?scene';
 import title from './scenes/examples/title?scene';
+import views_after_publishing from './scenes/examples/views_after_publishing?scene';
 import what_is_polylog from './scenes/examples/what_is_polylog?scene';
 import why_are_you_not_making_videos from './scenes/examples/why_are_you_not_making_videos?scene';
 import youtube_videos from './scenes/examples/youtube_videos?scene';
@@ -36,30 +45,48 @@ export default makeProject({
   scenes: [
     title,
     // === intro ===
-    // TODO
-    // what_is_polylog,
-    // youtube_videos,
+    what_is_polylog,
+    image_slide,
+    team_image,
+    grant_image,
+    views_after_publishing,
+    graph_image,
+    cube_video,
+
     // === easy hard ===
     file_checking,
+    // - délka lajny nematchuje
+    // - anonymous slide před eq neq
     a99_vs_100,
+    // - 99 fast 100 easy anonmous pauzy
     equations,
+    // checkmark u 0=0
+    // try 3 pauza (zpět ten equation)
+    // cut the desmos screenshot
     quicksort_part_1,
+    // quicksort zmodral?
     sorted_with_last_and_random_comparison,
     bobby_tables,
+    // drop table stejný slide jako dorp table student
     worst_to_average,
+    // worst case luck (good) x worst-case input (bad)
     randomness_plus_worst_case,
     rock_paper_scissors,
+    // pause at the end
+    // some end slide here (table)
     // === programming ===
     animations_in_videos,
+    // - reusable (limited by framework)
     motion_canvas,
+    // - firendship ended
     code_1,
+    // - makeScene2D
     code_2,
     code_3,
     code_4,
     code_5_wave,
     code_6_blender,
     // === motivation ===
-    // TODO
     how_to_make_youtube_videos,
     why_are_you_not_making_videos,
     thank_you,
