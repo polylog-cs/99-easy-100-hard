@@ -1,5 +1,6 @@
 import { makeProject } from '@motion-canvas/core';
 
+import a99_vs_100 from './scenes/examples/99_vs_100?scene';
 import animations_in_videos from './scenes/examples/animations_in_videos?scene';
 import bobby_tables from './scenes/examples/bobby_tables?scene';
 import code_1 from './scenes/examples/code_1?scene';
@@ -38,13 +39,14 @@ export default makeProject({
     // youtube_videos,
     // === easy hard ===
     file_checking,
+    a99_vs_100,
     equations,
-    bobby_tables,
     quicksort_part_1,
     sorted_with_last_and_random_comparison,
+    bobby_tables,
     worst_to_average,
-    rock_paper_scissors,
     randomness_plus_worst_case,
+    rock_paper_scissors,
     // === programming ===
     animations_in_videos,
     motion_canvas,
