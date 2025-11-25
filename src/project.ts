@@ -29,6 +29,7 @@ import table from './scenes/examples/quicksort/table?scene';
 import worst_to_average from './scenes/examples/quicksort/worst_to_average?scene';
 import randomness_plus_worst_case from './scenes/examples/randomness_plus_worst_case?scene';
 import rock_paper_scissors from './scenes/examples/rock_paper_scissors?scene';
+import subscribe from './scenes/examples/subscribe?scene';
 import team_image from './scenes/examples/team_image?scene';
 import thank_you from './scenes/examples/thank_you?scene';
 import title from './scenes/examples/title?scene';
@@ -64,6 +65,7 @@ export default makeProject({
     rock_paper_scissors,
     conclusion,
     outro,
+    subscribe,
     // === programming ===
     animations_in_videos,
     // - reusable (limited by framework)

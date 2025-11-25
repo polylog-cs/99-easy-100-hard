@@ -24,7 +24,7 @@ export default makeScene2D(function* (view) {
 
   yield* beginAnnonymousSlide();
 
-  yield* text().text('Worst-case luck (good) vs worst-case input (bad)', 1);
+  yield* text().text('Worst-case luck (good) vs\nworst-case input (bad)', 1);
 
   yield* beginAnnonymousSlide();
 });
