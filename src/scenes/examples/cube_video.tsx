@@ -16,7 +16,10 @@ export default makeScene2D(function* (view) {
   view.add(<Video ref={videoRef} src={cube} scale={1} position={[0, 0]} />);
 
   videoRef().play();
-  yield* waitFor(videoRef().getDuration() - 0.5);
+  yield* all(
+    videoRef().opacity(0).opacity(1, 1),
+    waitFor(videoRef().getDuration() - 0.5),
+  );
   videoRef().pause();
 
   yield* beginSlide('cube video end');
