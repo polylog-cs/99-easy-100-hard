@@ -78,7 +78,7 @@ export default makeScene2D(function* (view) {
     circBulletRefs: circBulletRefs2,
   } = createSlideWithHeader(view, { headerText: 'Swept under the carpet' }, [
     'CD checksums: not actually random!\nAdversarial inputs exist, but it’s hard to find them',
-    'Quicksort - we shuffle the array,\nin practice people pick a random pivot instead',
+    'Quicksort – we shuffle the array,\nin practice people pick a random pivot instead',
     'Issues with duplicate values',
   ]);
 

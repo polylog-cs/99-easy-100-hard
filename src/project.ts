@@ -9,6 +9,7 @@ import code_3 from './scenes/examples/code_3?scene';
 import code_4 from './scenes/examples/code_4?scene';
 import code_5_wave from './scenes/examples/code_5_wave?scene';
 import code_6_blender from './scenes/examples/code_6_blender?scene';
+import conclusion from './scenes/examples/conclusion?scene';
 import cube_video from './scenes/examples/cube_video?scene';
 import equations from './scenes/examples/equations?scene';
 import file_checking from './scenes/examples/file_checking?scene';
@@ -61,6 +62,7 @@ export default makeProject({
     worst_to_average,
     randomness_plus_worst_case,
     rock_paper_scissors,
+    conclusion,
     outro,
     // === programming ===
     animations_in_videos,
