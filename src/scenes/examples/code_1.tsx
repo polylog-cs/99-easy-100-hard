@@ -76,29 +76,27 @@ export default makeScene2D(function* (view) {
     codeBackground().padding(0).padding(25, 1),
     code().code(
       `\
-export default makeScene2D(function* (view) {
-    // create square and circle objects
-    const rect = createRef<Rect>();
-    view.add(<Rect ref={rect} size={320}
-      stroke={'red'} lineWidth={10} y={-200}/>);
+// create square and circle objects
+const rect = createRef<Rect>();
+view.add(<Rect ref={rect} size={320}
+    stroke={'red'} lineWidth={10} y={-200}/>);
 
-    const circle = createRef<Circle>();
-    view.add(<Circle ref={circle} size={320}
-      stroke={'blue'} lineWidth={10} y={200}/>);
+const circle = createRef<Circle>();
+view.add(<Circle ref={circle} size={320}
+    stroke={'blue'} lineWidth={10} y={200}/>);
 
-    yield* all(
-        rect().scale(0).scale(1, 1),
-        rect().opacity(0).opacity(1, 1),
-        circle().scale(0).scale(1, 1),
-        circle().opacity(0).opacity(1, 1),
-    );
+yield* all(
+    rect().scale(0).scale(1, 1),
+    rect().opacity(0).opacity(1, 1),
+    circle().scale(0).scale(1, 1),
+    circle().opacity(0).opacity(1, 1),
+);
 
-    yield* sequence(
-        0.25,
-        rect().opacity(0, 1),
-        circle().opacity(0, 1),
-    );
-});`,
+yield* sequence(
+    0.25,
+    rect().opacity(0, 1),
+    circle().opacity(0, 1),
+);`,
       1,
     ),
   );
@@ -159,11 +157,11 @@ export default makeScene2D(function* (view) {
 
   yield* beginAnnonymousSlide();
 
-  yield* all(code().selection(lines(1, 9), 0.5));
+  yield* all(code().selection(lines(0, 8), 0.5));
 
   yield* beginAnnonymousSlide();
 
-  yield* all(code().selection(lines(10, 16), 0.5));
+  yield* all(code().selection(lines(9, 15), 0.5));
 
   yield* all(
     rect().scale(0).scale(1, 1),
@@ -174,7 +172,7 @@ export default makeScene2D(function* (view) {
 
   yield* beginAnnonymousSlide();
 
-  yield* all(code().selection(lines(17, 21), 0.5));
+  yield* all(code().selection(lines(16, 20), 0.5));
 
   yield* sequence(0.25, rect().opacity(0, 1), circle().opacity(0, 1));
 

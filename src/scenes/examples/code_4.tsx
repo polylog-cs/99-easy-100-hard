@@ -74,12 +74,12 @@ export default makeScene2D(function* (view) {
     <Rect
       layout
       ref={tsCodeBackground}
-      topLeft={new Vector2(-400, -200)}
+      topLeft={new Vector2(-400, -130)}
       fill={Solarized.base3}
       lineWidth={2}
       radius={30}
       lineDash={[30, 10]}
-      scale={0.94}
+      scale={1.14}
     >
       <Code highlighter={tsHighlighter} fontSize={24} ref={tsCode} />
     </Rect>,
@@ -95,7 +95,7 @@ export default makeScene2D(function* (view) {
       lineWidth={2}
       radius={30}
       lineDash={[30, 10]}
-      scale={0.84}
+      scale={0.97}
     >
       <Code highlighter={glslHighlighter} fontSize={24} ref={glslCode} />
     </Rect>,
@@ -107,37 +107,28 @@ export default makeScene2D(function* (view) {
     glslCodeBackground().padding(0).padding(25, 1),
     tsCode().code(
       `\
-export default makeScene2D(function* (view) {
-    const circle = createRef<Circle>();
+const circle = createRef<Circle>();
 
-    view.add(
-        <Circle
-            size={400} lineWidth={50}
-            ref={circle} shaders={shader}
-            fill={'rgb(255,0,0)'}
-            stroke={'rgba(200,0,0,0.5)'}
-        />
-    );
+view.add(
+    <Circle
+        size={400} lineWidth={50}
+        ref={circle} shaders={shader}
+        fill={'rgb(255,0,0)'}
+        stroke={'rgba(200,0,0,0.5)'}
+    />
+);
 
-    yield* waitFor(3);
-});`,
+yield* waitFor(3);`,
       1,
     ),
     glslCode().code(
       `\
-#version 300 es
-precision highp float;
+outColor = texture(sourceTexture, sourceUV);
 
-#include "@motion-canvas/core/shaders/common.glsl"
+vec3 col = 0.5 + 0.5 * cos(time * 3.0
+    + sourceUV.xyx + vec3(0, 2, 4));
 
-void main() {
-    outColor = texture(sourceTexture, sourceUV);
-
-    vec3 col = 0.5 + 0.5 * cos(time * 3.0
-      + sourceUV.xyx + vec3(0, 2, 4));
-
-    outColor.rgb = col;
-}`,
+outColor.rgb = col;`,
       1,
     ),
   );

@@ -28,7 +28,7 @@ export default makeScene2D(function* (view) {
     'Hand-crafted',
     ['Beautiful and elegant...', "...if you know what you're doing"],
     'Programmatic',
-    ['More suitable for technical videos', 'Limited by the framework'],
+    ['More suitable for technical videos', 'Re-usable on various inputs'],
   );
 
   // Wait after fade transition

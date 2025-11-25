@@ -70,9 +70,7 @@ export default makeProject({
     animations_in_videos,
     // - reusable (limited by framework)
     motion_canvas,
-    // - firendship ended
     code_1,
-    // - makeScene2D
     code_2,
     code_3,
     code_4,

@@ -78,35 +78,33 @@ export default makeScene2D(function* (view) {
     codeBackground().padding(0).padding(25, 1),
     code().code(
       `\
-export default makeScene2D(function* (view) {
-    const rect = createRef<Rect>();
-    view.add(<Rect ref={rect} size={320} fill={'red'}
-      stroke={'red'} lineWidth={10} x={-300}/>);
+const rect = createRef<Rect>();
+view.add(<Rect ref={rect} size={320} fill={'red'}
+    stroke={'red'} lineWidth={10} x={-300}/>);
 
-    yield* all(rect().scale(0).scale(1, 1),
-        rect().opacity(0).opacity(1, 1));
+yield* all(rect().scale(0).scale(1, 1),
+    rect().opacity(0).opacity(1, 1));
 
-    let n = 5;
+let n = 5;
 
-    yield* all(
-        // change position
-        rect().x(300, n),
+yield* all(
+    // change position
+    rect().x(300, n),
 
-        // at the same time as scale
-        delay(
-            n / 4,
-            rect().scale(1.5, n / 4).to(1, n / 4),
-        ),
+    // at the same time as scale
+    delay(
+        n / 4,
+        rect().scale(1.5, n / 4).to(1, n / 4),
+    ),
 
-        // at the same time as rotation
-        delay(
-            n / 8 * 3,
-            rect().rotation(-90, n / 4).to(90, n / 4),
-        ),
-    );
+    // at the same time as rotation
+    delay(
+        n / 8 * 3,
+        rect().rotation(-90, n / 4).to(90, n / 4),
+    ),
+);
 
-    yield* all(rect().scale(0, 1), rect().opacity(0, 1));
-});`,
+yield* all(rect().scale(0, 1), rect().opacity(0, 1));`,
       1,
     ),
   );
@@ -142,13 +140,13 @@ export default makeScene2D(function* (view) {
   yield* all(
     rect().opacity(0).opacity(1, 1),
     rect().scale(0).scale(1, 1),
-    code().selection(lines(5, 7), 0.5),
+    code().selection(lines(4, 6), 0.5),
   );
 
   yield* all(
     // change position
     rect().y(200, n),
-    code().selection(lines(10, 12), 0.5),
+    code().selection(lines(9, 11), 0.5),
 
     // at the same time as scale
     delay(
@@ -158,7 +156,7 @@ export default makeScene2D(function* (view) {
         rect()
           .scale(1.5, n / 4)
           .to(1, n / 4),
-        code().selection(lines(10, 19), 0.5),
+        code().selection(lines(9, 18), 0.5),
       ),
     ),
 
@@ -169,7 +167,7 @@ export default makeScene2D(function* (view) {
         rect()
           .rotation(-90, n / 4)
           .to(90, n / 4),
-        code().selection(lines(10, 25), 0.5),
+        code().selection(lines(9, 24), 0.5),
       ),
     ),
   );
@@ -177,7 +175,7 @@ export default makeScene2D(function* (view) {
   yield* all(
     rect().opacity(0, 1),
     rect().scale(0, 1),
-    code().selection(lines(26, 27), 0.5),
+    code().selection(lines(25, 26), 0.5),
   );
 
   yield* all(

@@ -78,39 +78,37 @@ export default makeScene2D(function* (view) {
     codeBackground().padding(0).padding(25, 1),
     code().code(
       `\
-export default makeScene2D(function* (view) {
-    const circle = createRef<Circle>();
-    const text = createRef<Latex>();
+const circle = createRef<Circle>();
+const text = createRef<Latex>();
 
-    view.add(<>
-        <Circle ref={circle} lineWidth={5} size={300}/>
-        <Latex ref={text}
-            tex={() => \`p = [\${circle().x().toFixed(0)},
-              \${circle().y().toFixed(0)}]\`}
-            opacity={circle().opacity}
-            scale={circle().scale}
-            bottom={() => circle().top().addY(-30)}
-        />
-    </>);
+view.add(<>
+    <Circle ref={circle} lineWidth={5} size={300}/>
+    <Latex ref={text}
+        tex={() => \`p = [\${circle().x().toFixed(0)},
+            \${circle().y().toFixed(0)}]\`}
+        opacity={circle().opacity}
+        scale={circle().scale}
+        bottom={() => circle().top().addY(-30)}
+    />
+</>);
 
-    yield* all(circle().opacity(1, 1), circle().scale(1, 1));
+yield* all(circle().opacity(1, 1), circle().scale(1, 1));
 
-    yield* all(
-      circle().position(new Vector2(400, 100), 1),
-    );
+yield* all(
+    circle().position(new Vector2(400, 100), 1),
+);
 
-    yield* all(
-      circle().position(new Vector2(700, 300), 1),
-      circle().scale(0.5, 1),
-    )
+yield* all(
+    circle().position(new Vector2(700, 300), 1),
+    circle().scale(0.5, 1),
+)
 
-    yield* all(
-      circle().position(new Vector2(500, -100), 1),
-      circle().scale(1, 1),
-    )
+yield* all(
+    circle().position(new Vector2(500, -100), 1),
+    circle().scale(1, 1),
+)
 
-    yield* all(circle().opacity(0, 1), circle().scale(0, 1));
-});`,
+yield* all(circle().opacity(0, 1), circle().scale(0, 1));`,
       1,
     ),
   );
@@ -155,31 +153,59 @@ export default makeScene2D(function* (view) {
   yield* all(
     circle().opacity(1, 1),
     circle().scale(1, 1),
-    code().selection(lines(14, 15), 0.5),
+    code().selection(lines(13, 14), 0.5),
   );
 
   yield* all(
     circle().position(new Vector2(400, 100), 1),
-    code().selection(lines(17, 19), 0.5),
+    code().selection(lines(16, 18), 0.5),
   );
 
   yield* all(
     circle().position(new Vector2(700, 300), 1),
     circle().scale(0.5, 1),
-    code().selection(lines(21, 25), 0.5),
+    code().selection(lines(20, 24), 0.5),
   );
 
   yield* all(
     circle().position(new Vector2(500, -100), 1),
     circle().scale(1, 1),
-    code().selection(lines(26, 29), 0.5),
+    code().selection(lines(25, 28), 0.5),
   );
 
   yield* all(
     circle().opacity(0, 1),
     circle().scale(0, 1),
-    code().selection(lines(31, 31), 0.5),
+    code().selection(lines(30, 30), 0.5),
   );
+
+  yield* all(
+    codeBackground().lineWidth(0, 0.5),
+    codeBackground().stroke(Solarized.base1, 0.5),
+    code().selection(DEFAULT, 0.5),
+  );
+
+  yield* beginAnnonymousSlide();
+
+  yield* all(code().selection(lines(6, 10), 0.5));
+
+  yield* beginAnnonymousSlide();
+
+  yield* all(
+    codeBackground().lineWidth(0).lineWidth(5, 0.5),
+    codeBackground().stroke(Solarized.gray, 0.5),
+  );
+
+  // Execute the animation
+  yield* all(circle().opacity(1, 1), circle().scale(1, 1));
+
+  yield* all(circle().position(new Vector2(400, 100), 1));
+
+  yield* all(circle().position(new Vector2(700, 300), 1), circle().scale(0.5, 1));
+
+  yield* all(circle().position(new Vector2(500, -100), 1), circle().scale(1, 1));
+
+  yield* all(circle().opacity(0, 1), circle().scale(0, 1));
 
   yield* all(
     codeBackground().lineWidth(0, 0.5),
