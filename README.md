@@ -1,5 +1,9 @@
 # 99% is easy, 100% is hard
 
+Source code to our presentation at the [2025 SNiC conference](https://availabilit.snic.nl/program/).
+
+## Setup
+
 Run `./setup.sh` to set up the project. This script will:
 - Install Motion Canvas from source (needed because audio support is not yet in the npm package)
 - Install other `npm` packages
