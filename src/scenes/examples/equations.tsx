@@ -17,7 +17,6 @@ import {
   waitFor,
 } from '@motion-canvas/core';
 
-import cdEquationsComparisonPng from '../../assets/cd-equations-comparison.png';
 import desmosPlotWrongEquation from '../../assets/desmos-plot-wrong-equation.png';
 import { ShikiHighlighter } from '../../components/Shiki';
 import { Solarized } from '../../utilities/color';
@@ -389,19 +388,6 @@ return True`,
       ),
     ),
   );
-
-  yield* beginSlide('comparison table');
-
-  const cdEquationsComparison = createRef<Img>();
-  view.add(
-    <Img
-      ref={cdEquationsComparison}
-      src={cdEquationsComparisonPng}
-      scale={1}
-      opacity={0}
-    />,
-  );
-  yield* all(cdEquationsComparison().opacity(1, 1));
 
   yield* beginSlide('equations end');
 });

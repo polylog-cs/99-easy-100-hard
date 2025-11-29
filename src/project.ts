@@ -2,6 +2,7 @@ import { makeProject } from '@motion-canvas/core';
 
 import a99_vs_100 from './scenes/examples/99_vs_100?scene';
 import bobby_tables from './scenes/examples/bobby_tables?scene';
+import comparison_table from './scenes/examples/comparison_table?scene';
 import conclusion from './scenes/examples/conclusion?scene';
 import equations from './scenes/examples/equations?scene';
 import file_checking from './scenes/examples/file_checking?scene';
@@ -19,8 +20,8 @@ export default makeProject({
   experimentalFeatures: true,
   scenes: [
     file_checking,
-    a99_vs_100,
     equations,
+    comparison_table,
     quicksort_part_1,
     sorted_with_last_and_random_comparison,
     bobby_tables,
