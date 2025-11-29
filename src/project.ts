@@ -26,8 +26,5 @@ export default makeProject({
     bobby_tables,
     worst_to_average,
     rock_paper_scissors,
-    conclusion,
-    outro,
-    subscribe,
   ],
 });
