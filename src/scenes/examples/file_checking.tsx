@@ -19,6 +19,8 @@ import { Sha256Hash } from '../../components/Sha256Hash';
 import { UploadLine } from '../../components/UploadLine';
 import disintegrateShader from '../../shaders/disintegrate.glsl';
 import gradientDownShader from '../../shaders/gradientDown.glsl';
+import halfNegateShader from '../../shaders/half_negate.glsl';
+import lighten from '../../shaders/lighten.glsl';
 import { colorLerp, Solarized } from '../../utilities/color';
 import { appear } from '../../utilities/creation';
 import { beginAnnonymousSlide } from '../../utilities/presentation';
@@ -230,6 +232,7 @@ export default makeScene2D(function* (view) {
       ref={secondHashObject}
       position={uploadedFile().position()}
       hashProps={{ fill: Solarized.base2 }}
+      shaders={lighten}
     />,
   );
 
@@ -248,6 +251,7 @@ export default makeScene2D(function* (view) {
       startPoint={uploadedFile().position().add(new Vector2(0, 30))}
       endPoint={secondHashObject().top()}
       zIndex={-1}
+      shaders={lighten}
     />,
   );
 
@@ -268,6 +272,7 @@ export default makeScene2D(function* (view) {
         fontSize={100}
         ref={probably}
         textAlign={'center'}
+        shaders={halfNegateShader}
       />
       <PolyTxt
         text={'='}
@@ -277,6 +282,7 @@ export default makeScene2D(function* (view) {
         ref={equal}
         textAlign={'center'}
         opacity={0}
+        shaders={halfNegateShader}
       />
       ,
     </Layout>,
@@ -298,6 +304,7 @@ export default makeScene2D(function* (view) {
       fontSize={120}
       ref={notEqual}
       textAlign={'center'}
+      shaders={halfNegateShader}
     />,
   );
 
