@@ -1,6 +1,6 @@
 # 99% is easy, 100% is hard
 
-Source code to our presentation at the [2025 SNiC conference](https://availabilit.snic.nl/program/).
+Source code to the **[99% is easy, 100% is hard](TODO)** video, and its presentation version presented at the [2025 SNiC conference](https://availabilit.snic.nl/program/) (tag `presentation`).
 
 ## Setup
 
