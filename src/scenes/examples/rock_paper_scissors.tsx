@@ -2,12 +2,18 @@ import { Img, Layout, Line, makeScene2D, Rect, Txt } from '@motion-canvas/2d';
 import {
   all,
   beginSlide,
+  Color,
   createRef,
   createSignal,
   delay,
+  easeInCubic,
+  easeOutCubic,
   easeOutQuad,
   fadeTransition,
   linear,
+  linear,
+  loop,
+  Vector2,
   waitFor,
 } from '@motion-canvas/core';
 
@@ -25,6 +31,7 @@ export default makeScene2D(function* (view) {
   const player1icon = createRef<Txt>();
   const player2text = createRef<PolyTxt>();
   const player2icon = createRef<Txt>();
+  const brainIcon = createRef<Txt>();
 
   const shift = 400;
   const fontSize = 90;
@@ -85,17 +92,23 @@ export default makeScene2D(function* (view) {
     </Rect>,
   );
 
-  yield* waitFor(0.5);
-
-  yield* all(
-    player2icon().opacity(1, 1),
-    player2icon().scale(1, 1),
-    player1icon().opacity(1, 1),
-    player1icon().scale(1, 1),
-    player1text().text("(I'll play rock)", 1),
+  view.add(
+    <Txt
+      fontSize={emojiSize * 0.6}
+      fontFamily={'Noto Color Emoji'}
+      ref={brainIcon}
+      absolutePosition={() => player2icon().absolutePosition()}
+      opacity={0}
+      zIndex={-1}
+      scale={0}
+    >
+      🧠
+    </Txt>,
   );
 
   const arrow = createRef<Line>();
+  const colorSignal = createSignal(0);
+  const directionSignal = createSignal(0);
 
   view.add(
     <Line
@@ -103,21 +116,50 @@ export default makeScene2D(function* (view) {
         [shift - 130, 0],
         [-shift + 300, -100],
       ]}
-      stroke={Solarized.gray}
-      fill={Solarized.gray}
+      stroke={() => new Color('#ea6363').lerp('#ffb3b3', colorSignal())}
       lineWidth={10}
       start={0}
       end={0}
       endArrow
       ref={arrow}
+      lineDash={[20, 10]}
+      lineDashOffset={() => directionSignal() * 30}
     />,
   );
+
+  yield* waitFor(0.5);
+
+  yield loop(() =>
+    all(
+      brainIcon()
+        .offset(new Vector2(0, 1.0), 0.5, easeOutCubic)
+        .to(new Vector2(0, 1.1), 0.5, easeInCubic),
+      brainIcon()
+        .scale(new Vector2(1.0, 1.0), 0.5, easeOutCubic)
+        .to(new Vector2(1.25, 1.25), 0.5, easeInCubic),
+      colorSignal(1, 0.5, easeOutCubic).to(0, 0.5, easeInCubic),
+    ),
+  );
+
+  yield loop(() => directionSignal(1, 0.1, linear).to(0, 0.0, linear));
+
+  yield* all(
+    player2icon().opacity(1, 1),
+    player2icon().scale(1, 1),
+    player1icon().opacity(1, 1),
+    player1icon().scale(1, 1),
+  );
+
+  yield* all(player1text().text("(I'll play rock)", 1));
 
   yield* player1text().text("(I'll play rock)", 1);
 
   yield* beginSlide('telepathy');
-  yield* arrow().end(1, 1);
+  yield* all(arrow().end(1, 1), brainIcon().opacity(1, 1));
+  yield* waitFor(1.5);
   yield* player2text().text("(Ok, I'll play paper)", 1);
+
+  yield* waitFor(3.5);
 
   yield* beginSlide('reveal moves');
   const countdown = createSignal(4);
@@ -133,6 +175,8 @@ export default makeScene2D(function* (view) {
 
   yield* all(
     arrow().opacity(0, 0.5),
+    arrow().end(0, 0.5),
+    brainIcon().opacity(0, 0.5),
     player1text().text(nbsp, 0.5),
     player2text().text(nbsp, 0.5),
   );
@@ -190,8 +234,17 @@ export default makeScene2D(function* (view) {
   arrow().end(0);
   arrow().opacity(1);
 
-  yield* arrow().end(0.8, 1);
-  yield* player2text().text('(What now?)', 1);
+  yield* all(arrow().end(0.8, 1), brainIcon().opacity(1, 1));
+
+  yield* waitFor(3.5);
+
+  yield* all(
+    player2text().text('(What now?)', 1),
+    brainIcon().opacity(0, 0.5),
+    brainIcon().scale(0, 0.5),
+    arrow().end(0.0, 0.5),
+    arrow().opacity(0, 0.5),
+  );
 
   yield* beginSlide('randomness to the rescue 4');
   dieText().opacity(0);
@@ -199,7 +252,6 @@ export default makeScene2D(function* (view) {
   const dieRoll = createSignal(0);
   dieText().text(() => ['Rock', 'Paper', 'Scissors'][Math.round(dieRoll()) % 3]);
   yield* all(
-    arrow().opacity(0, 0.5),
     player1text().text(nbsp, 0.5),
     player2text().text(nbsp, 0.5),
     dieText().opacity(1, 0.5),
