@@ -3,9 +3,12 @@ import {
   all,
   Color,
   createRef,
+  createSignal,
   easeInOutCubic,
   Reference,
   sequence,
+  Signal,
+  SimpleSignal,
   ThreadGenerator,
   useLogger,
   useRandom,
@@ -31,11 +34,12 @@ export interface QuickSortProps extends LayoutProps {
 export type PivotStrategy = 'first' | 'last' | 'mo3' | 'random';
 
 export class QuickSort extends Layout {
-  private readonly rectangles: Array<Reference<Rect>> = [];
+  readonly rectangles: Array<Reference<Rect>> = [];
   private readonly pivotLine = createRef<Rect>();
   private readonly elementsLayout = createRef<Layout>();
   private readonly comparisonCounter = createRef<PolyTxt>();
   private readonly values: number[] = [];
+  private readonly value_signals: SimpleSignal<number>[] = [];
   public readonly sortedIndices = new Set<number>();
   private readonly random = useRandom();
   public comparisonCount: number = 0;
@@ -84,9 +88,9 @@ export class QuickSort extends Layout {
       { length: elementCount },
       (_, i) => (i + 1) / elementCount,
     );
-
-    const calculatedWidth =
-      elementWidth ?? (this.width() - (elementCount - 1) * elementGap) / elementCount;
+    this.value_signals = Array.from({ length: elementCount }, (_, i) =>
+      createSignal(0),
+    );
 
     this.add(
       <Layout layout={false}>
@@ -111,19 +115,22 @@ export class QuickSort extends Layout {
         <Layout
           ref={this.elementsLayout}
           layout
-          gap={elementGap}
-          width={this.width()}
-          height={this.height()}
+          gap={this.elementGap}
+          width={() => this.width()}
+          height={() => this.height()}
           alignItems={'end'}
         >
-          {this.rectangles.map((ref) => (
+          {this.rectangles.map((ref, i) => (
             <Rect
               ref={ref}
               grow={1}
-              width={calculatedWidth}
+              width={() =>
+                elementWidth ??
+                (this.width() - (elementCount - 1) * this.elementGap) / elementCount
+              }
               stroke={this.colors.default}
               fill={this.colors.default}
-              height={0}
+              height={() => this.value_signals[i]() * this.height() * this.values[i]}
             />
           ))}
         </Layout>
@@ -142,9 +149,47 @@ export class QuickSort extends Layout {
 
   public *shuffleAnimated(time: number = 1): ThreadGenerator {
     for (let i = this.values.length - 1; i > 0; i--) {
-      const j = Math.floor(this.random.nextFloat() * (i + 1));
+      let j = Math.floor(this.random.nextFloat() * (i + 1));
+      // Re-roll if we got the same index
+      while (j === i) {
+        j = Math.floor(this.random.nextFloat() * (i + 1));
+      }
       yield* this.swapElements(i, j, time);
-      // [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+
+  /**
+   * Performs animated swaps that ultimately leave the array in its original state
+   * Total swaps performed: (this.values.length - 1), same as shuffleAnimated
+   * @param time - Duration for each swap animation
+   * @param swapCount - Number of swap pairs to perform (default: results in n-1 total swaps)
+   */
+  public *badShuffleAnimated(time: number = 1, swapCount?: number): ThreadGenerator {
+    const numSwaps = swapCount ?? Math.floor((this.values.length - 1) / 2);
+    const swapPairs: Array<[number, number]> = [];
+
+    // Generate random swap pairs
+    for (let k = 0; k < numSwaps; k++) {
+      let i = Math.floor(this.random.nextFloat() * this.values.length);
+      let j = Math.floor(this.random.nextFloat() * this.values.length);
+
+      // Re-roll if we got the same index
+      while (j === i) {
+        j = Math.floor(this.random.nextFloat() * this.values.length);
+      }
+
+      swapPairs.push([i, j]);
+    }
+
+    // Perform all swaps forward
+    for (const [i, j] of swapPairs) {
+      yield* this.swapElements(i, j, time);
+    }
+
+    // Undo all swaps in reverse order
+    for (let k = swapPairs.length - 1; k >= 0; k--) {
+      const [i, j] = swapPairs[k];
+      yield* this.swapElements(i, j, time);
     }
   }
 
@@ -157,7 +202,8 @@ export class QuickSort extends Layout {
     yield* sequence(
       delay,
       ...this.rectangles.map((ref, i) =>
-        ref().height(this.values[i] * this.height(), duration),
+        // ref().height(this.values[i] * this.height(), duration),
+        this.value_signals[i](1, duration),
       ),
     );
   }
@@ -169,7 +215,7 @@ export class QuickSort extends Layout {
   public *uninitialize(delay = 0.025, duration = 1): ThreadGenerator {
     yield* sequence(
       delay,
-      ...this.rectangles.map((ref, i) => ref().height(0, duration)),
+      ...this.rectangles.map((ref, i) => this.value_signals[i](0, duration)),
     );
   }
 
@@ -398,16 +444,20 @@ export class QuickSort extends Layout {
     const cloneI = createRef<Rect>();
     const cloneJ = createRef<Rect>();
 
+    // Store the colors before updating
+    const colorI = rectI.fill();
+    const colorJ = rectJ.fill();
+
     rectI
       .parent()
       .parent()
       .add(
         <Rect
           ref={cloneI}
-          width={rectI.width()}
-          height={heightI}
-          fill={rectI.fill()}
-          stroke={rectI.stroke()}
+          width={rectI.width}
+          height={rectI.height}
+          fill={rectI.fill}
+          stroke={rectI.stroke}
           opacity={1}
           zIndex={10}
         />,
@@ -419,10 +469,10 @@ export class QuickSort extends Layout {
       .add(
         <Rect
           ref={cloneJ}
-          width={rectJ.width()}
-          height={heightJ}
-          fill={rectJ.fill()}
-          stroke={rectJ.stroke()}
+          width={rectJ.width}
+          height={rectJ.height}
+          fill={rectJ.fill}
+          stroke={rectJ.stroke}
           opacity={1}
           zIndex={10}
         />,
@@ -442,10 +492,6 @@ export class QuickSort extends Layout {
     // Swap in values array
     [this.values[i], this.values[j]] = [this.values[j], this.values[i]];
 
-    // Store the colors before updating
-    const colorI = rectI.fill();
-    const colorJ = rectJ.fill();
-
     // Update original rectangles' heights and colors instantly to swapped values and restore opacity
     yield* all(
       rectI.height(this.values[i] * this.height(), 0),
@@ -459,6 +505,10 @@ export class QuickSort extends Layout {
     // Remove clones
     cloneI().remove();
     cloneJ().remove();
+
+    // Put signal dependencies back
+    rectI.height(() => this.value_signals[i]() * this.height() * this.values[i]);
+    rectJ.height(() => this.value_signals[j]() * this.height() * this.values[j]);
   }
 
   private *setPivotLine(

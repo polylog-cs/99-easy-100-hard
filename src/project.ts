@@ -18,7 +18,6 @@ import './global.css';
 export default makeProject({
   experimentalFeatures: true,
   scenes: [
-    // === easy hard ===
     file_checking,
     a99_vs_100,
     equations,
@@ -26,7 +25,6 @@ export default makeProject({
     sorted_with_last_and_random_comparison,
     bobby_tables,
     worst_to_average,
-    randomness_plus_worst_case,
     rock_paper_scissors,
     conclusion,
     outro,
