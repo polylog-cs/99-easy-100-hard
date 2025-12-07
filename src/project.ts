@@ -1,31 +1,87 @@
 import { makeProject } from '@motion-canvas/core';
 
 import a99_vs_100 from './scenes/examples/99_vs_100?scene';
+import animations_in_videos from './scenes/examples/animations_in_videos?scene';
 import bobby_tables from './scenes/examples/bobby_tables?scene';
+import code_1 from './scenes/examples/code_1?scene';
+import code_2 from './scenes/examples/code_2?scene';
+import code_3 from './scenes/examples/code_3?scene';
+import code_4 from './scenes/examples/code_4?scene';
+import code_5_wave from './scenes/examples/code_5_wave?scene';
+import code_6_blender from './scenes/examples/code_6_blender?scene';
 import comparison_table from './scenes/examples/comparison_table?scene';
 import conclusion from './scenes/examples/conclusion?scene';
+import cube_video from './scenes/examples/cube_video?scene';
 import equations from './scenes/examples/equations?scene';
 import file_checking from './scenes/examples/file_checking?scene';
+import grant_image from './scenes/examples/grant_image?scene';
+import graph_image from './scenes/examples/graph_image?scene';
+import how_to_make_youtube_videos from './scenes/examples/how_to_make_youtube_videos?scene';
+import image_slide from './scenes/examples/image_slide?scene';
+import motion_canvas from './scenes/examples/motion_canvas?scene';
 import outro from './scenes/examples/outro?scene';
+import phone from './scenes/examples/phone?scene';
+import basic_mo3 from './scenes/examples/quicksort/basic_mo3?scene';
+import quicksort_many from './scenes/examples/quicksort/quicksort_many?scene';
 import quicksort_part_1 from './scenes/examples/quicksort/quicksort_part_1?scene';
+import shuffled_vs_sorted_with_last_pivot from './scenes/examples/quicksort/shuffled_vs_sorted_with_last_pivot?scene';
 import sorted_with_last_and_random_comparison from './scenes/examples/quicksort/sorted_with_last_and_random_comparison?scene';
+import table from './scenes/examples/quicksort/table?scene';
 import worst_to_average from './scenes/examples/quicksort/worst_to_average?scene';
 import randomness_plus_worst_case from './scenes/examples/randomness_plus_worst_case?scene';
 import rock_paper_scissors from './scenes/examples/rock_paper_scissors?scene';
 import subscribe from './scenes/examples/subscribe?scene';
+import team_image from './scenes/examples/team_image?scene';
+import thank_you from './scenes/examples/thank_you?scene';
+import title from './scenes/examples/title?scene';
+import views_after_publishing from './scenes/examples/views_after_publishing?scene';
+import what_is_polylog from './scenes/examples/what_is_polylog?scene';
+import why_are_you_not_making_videos from './scenes/examples/why_are_you_not_making_videos?scene';
+import youtube_videos from './scenes/examples/youtube_videos?scene';
 
 import './global.css';
 
 export default makeProject({
   experimentalFeatures: true,
   scenes: [
+    // title,
+    // // === intro ===
+    // what_is_polylog,
+    // image_slide,
+    // team_image,
+    // grant_image,
+    // views_after_publishing,
+    // graph_image,
+    // cube_video,
+
+    // === easy hard ===
     file_checking,
+    a99_vs_100,
     equations,
-    comparison_table,
     quicksort_part_1,
     sorted_with_last_and_random_comparison,
     bobby_tables,
     worst_to_average,
+    randomness_plus_worst_case,
     rock_paper_scissors,
+
+    // conclusion,
+    // outro,
+    // subscribe,
+
+    // // === programming ===
+    // animations_in_videos,
+    // // - reusable (limited by framework)
+    // motion_canvas,
+    // code_1,
+    // code_2,
+    // code_3,
+    // code_4,
+    // code_5_wave,
+    // code_6_blender,
+    // // === motivation ===
+    // how_to_make_youtube_videos,
+    // why_are_you_not_making_videos,
+    // thank_you,
   ],
 });
