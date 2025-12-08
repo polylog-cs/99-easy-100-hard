@@ -22,6 +22,7 @@ import { ShikiHighlighter } from '../../components/Shiki';
 import { Solarized } from '../../utilities/color';
 import { appear } from '../../utilities/creation';
 import { PolyLatex } from '../../utilities/latex';
+import { beginAnnonymousSlide } from '../../utilities/presentation';
 import { PolyTxt } from '../../utilities/text';
 import { createShadow } from '../../utilities/visuals';
 
@@ -37,7 +38,7 @@ export default makeScene2D(function* (view) {
   yield fadeTransition(0.5);
 
   view.fill(Solarized.background);
-  yield* beginSlide('simple equation');
+  yield* beginAnnonymousSlide();
   const camera = <Node />;
   view.add(camera);
 
@@ -82,7 +83,7 @@ export default makeScene2D(function* (view) {
 
   yield* waitFor(1);
 
-  yield* beginSlide('equation 2');
+  yield* beginAnnonymousSlide();
 
   // (x - 1)^3 = x^3 + 3x^2 - 3x - 1
   yield* all(
@@ -91,7 +92,7 @@ export default makeScene2D(function* (view) {
     simpleText().text('?', 1),
   );
 
-  yield* beginSlide('equation 2 is wrong');
+  yield* beginAnnonymousSlide();
 
   const equation2Wrong = createRef<Node>();
 
@@ -110,7 +111,7 @@ export default makeScene2D(function* (view) {
     equation2Wrong().opacity(1, 1),
   );
 
-  yield* beginSlide('complicated equation');
+  yield* beginAnnonymousSlide();
 
   const complicatedLayout = createRef<Layout>();
   const complicatedEquation = createRef<PolyLatex>();
@@ -157,13 +158,13 @@ export default makeScene2D(function* (view) {
     ),
   );
 
-  yield* beginSlide('complicated equation expanded');
+  yield* beginAnnonymousSlide();
 
   yield* complicatedEquation().tex(
     'x^8 - {{3}} {{x^6}} + x^4 - 2 {{x^2}} - {{3}} {{= x^2 (x^2 ((x^2 - 3) x^2 + 1) - 2) - 3}}',
     1,
   );
-  yield* beginSlide('complicated equation expanded 2');
+  yield* beginAnnonymousSlide();
 
   // Make the groups only on the right side to make the movement clearer
   complicatedEquation().tex(
@@ -175,13 +176,13 @@ export default makeScene2D(function* (view) {
     1,
   );
 
-  yield* beginSlide('complicated equation check');
+  yield* beginAnnonymousSlide();
 
   const check = createRef<PolyTxt>();
   view.add(<PolyTxt ref={check} text={'✅'} fontSize={150} opacity={0} y={100} />);
   yield* all(check().opacity(0).opacity(1, 1), check().scale(2).scale(1, 1));
 
-  yield* beginSlide('exponential growth of equation');
+  yield* beginAnnonymousSlide();
 
   yield* all(
     check().opacity(0, 1),
@@ -190,7 +191,7 @@ export default makeScene2D(function* (view) {
     complicatedEquation().tex('{{(x-2)^7}}', 1),
   );
 
-  yield* beginSlide('exponential growth of equation p2');
+  yield* beginAnnonymousSlide();
 
   yield* sequence(
     0.2,
@@ -201,7 +202,7 @@ export default makeScene2D(function* (view) {
     ),
   );
 
-  yield* beginSlide('random algorithm example');
+  yield* beginAnnonymousSlide();
 
   yield* all(
     complicatedEquation().tex(
@@ -211,7 +212,7 @@ export default makeScene2D(function* (view) {
     complicatedEquation().scale(1.5, 1),
   );
 
-  yield* beginSlide('random algorithm example p2');
+  yield* beginAnnonymousSlide();
   yield* all(complicatedText().text('Try x = 2', 1), complicatedText().opacity(1, 1));
 
   yield* complicatedEquation().tex(
@@ -229,7 +230,7 @@ export default makeScene2D(function* (view) {
 
   yield* waitFor(1);
 
-  yield* beginSlide('random algorithm example, plug 3');
+  yield* beginAnnonymousSlide();
 
   yield* complicatedText().opacity(0, 1);
   yield* all(
@@ -259,7 +260,7 @@ export default makeScene2D(function* (view) {
     complicatedText().text('Nope', 1),
   );
 
-  yield* beginSlide('picking random is ok');
+  yield* beginAnnonymousSlide();
 
   const desmosPlot = createRef<Img>();
   camera.add(
@@ -273,7 +274,7 @@ export default makeScene2D(function* (view) {
   );
   yield* desmosPlot().opacity(1, 1);
 
-  yield* beginSlide('equation algorithm no code');
+  yield* beginAnnonymousSlide();
 
   yield* all(
     desmosPlot().opacity(0, 1),
@@ -295,7 +296,7 @@ export default makeScene2D(function* (view) {
     />,
   );
 
-  yield* beginSlide('equation algorithm with code');
+  yield* beginAnnonymousSlide();
 
   yield* all(
     algorithmCode().code(
@@ -329,7 +330,7 @@ return True`,
     />,
   );
 
-  yield* beginSlide('code running');
+  yield* beginAnnonymousSlide();
 
   yield loop(() => highlightRectangle().lineDashOffset(-30, 0.2, linear).to(0, 0));
 
@@ -389,5 +390,5 @@ return True`,
     ),
   );
 
-  yield* beginSlide('equations end');
+  yield* beginAnnonymousSlide();
 });

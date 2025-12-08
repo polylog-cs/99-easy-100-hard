@@ -16,12 +16,13 @@ import {
 import { QuickSort } from '../../../components/QuickSort';
 import { Solarized } from '../../../utilities/color';
 import { appear } from '../../../utilities/creation';
+import { beginAnnonymousSlide } from '../../../utilities/presentation';
 import { PolyTxt } from '../../../utilities/text';
 
 export default makeScene2D(function* (view) {
   view.fill(Solarized.background);
 
-  yield* beginSlide('quicksort random pivot');
+  yield* beginAnnonymousSlide();
 
   const random = useRandom();
 
@@ -297,7 +298,7 @@ export default makeScene2D(function* (view) {
     ),
   );
 
-  yield* beginSlide('the time taken is the combination of input + pivot');
+  yield* beginAnnonymousSlide();
 
   // Highlight row 1 and column 2
   yield* highlight([], [6]);
@@ -309,12 +310,12 @@ export default makeScene2D(function* (view) {
 
   yield* waitFor(1);
 
-  yield* beginSlide('the attacker can choose the input');
+  yield* beginAnnonymousSlide();
 
   // Highlight multiple rows and columns
   yield* highlight([3], []);
 
-  yield* beginSlide('but the attacker has no control over the seed');
+  yield* beginAnnonymousSlide();
 
   for (let i = 0; i < numCols; i++) {
     let idx = random.nextInt(0, numCols - 1);
@@ -324,5 +325,5 @@ export default makeScene2D(function* (view) {
   }
 
   yield* waitFor(1);
-  yield* beginSlide('end quicksort');
+  yield* beginAnnonymousSlide();
 });

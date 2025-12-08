@@ -28,7 +28,7 @@ export default makeScene2D(function* (view) {
     docsScreenshot().scale(0.8).scale(1, 1),
     docsScreenshot().opacity(0).opacity(1, 1),
   );
-  yield* beginSlide('girl and boy');
+  yield* beginAnnonymousSlide();
   yield* all(docsScreenshot().scale(1, 1), docsScreenshot().opacity(0, 1));
 
   const boyText = createRef<PolyTxt>();

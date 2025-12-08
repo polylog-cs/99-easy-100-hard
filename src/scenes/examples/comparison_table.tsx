@@ -8,13 +8,14 @@ import {
 } from '@motion-canvas/core';
 
 import { Solarized } from '../../utilities/color';
+import { beginAnnonymousSlide } from '../../utilities/presentation';
 import { PolyTxt } from '../../utilities/text';
 
 export default makeScene2D(function* (view) {
   yield fadeTransition(0.5);
 
   view.fill(Solarized.background);
-  yield* beginSlide('comparison table');
+  yield* beginAnnonymousSlide();
 
   const table = createRef<Layout>();
   const columnWidth = 400;
@@ -93,5 +94,5 @@ export default makeScene2D(function* (view) {
     );
   }
 
-  yield* beginSlide('comparison table end');
+  yield* beginAnnonymousSlide();
 });

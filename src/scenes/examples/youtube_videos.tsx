@@ -2,7 +2,11 @@ import { makeScene2D } from '@motion-canvas/2d';
 import { beginSlide, fadeTransition, waitFor } from '@motion-canvas/core';
 
 import { Solarized } from '../../utilities/color';
-import { createTwoLineSectionHeader, showHeader } from '../../utilities/presentation';
+import {
+  beginAnnonymousSlide,
+  createTwoLineSectionHeader,
+  showHeader,
+} from '../../utilities/presentation';
 
 export default makeScene2D(function* (view) {
   yield fadeTransition(0.5);
@@ -19,10 +23,10 @@ export default makeScene2D(function* (view) {
   // Animate first line appearing
   yield* showHeader(title1);
 
-  yield* beginSlide('youtube-title-2');
+  yield* beginAnnonymousSlide();
 
   // Animate second line appearing
   yield* title2().opacity(1, 0.5);
 
-  yield* beginSlide('youtube-end');
+  yield* beginAnnonymousSlide();
 });

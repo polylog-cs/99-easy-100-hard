@@ -17,6 +17,7 @@ import {
 
 import { QuickSort } from '../../../components/QuickSort';
 import { Solarized } from '../../../utilities/color';
+import { beginAnnonymousSlide } from '../../../utilities/presentation';
 import { PolyTxt } from '../../../utilities/text';
 import { createShadow } from '../../../utilities/visuals';
 
@@ -55,7 +56,7 @@ export default makeScene2D(function* (view) {
   qs1().almostSort();
   qs2().setValues(qs1().getValues());
 
-  yield* beginSlide('quicksort worst to average start');
+  yield* beginAnnonymousSlide();
 
   yield* all(qs1().initialize(), qs2().initialize());
 
@@ -71,7 +72,7 @@ export default makeScene2D(function* (view) {
   );
   yield* worstCaseLabel().text('Worst Case', 1);
 
-  yield* beginSlide('quicksort worst to average');
+  yield* beginAnnonymousSlide();
 
   // Move qs2 to the right
 
@@ -123,7 +124,7 @@ export default makeScene2D(function* (view) {
   );
   yield* averageCaseLabel().text('Average Case', 1);
 
-  yield* beginSlide('quicksort worst to average end');
+  yield* beginAnnonymousSlide();
 
   // Store current absolute positions of qs1 and qs2
   const qs1CurrentPos = qs1().absolutePosition();
@@ -226,7 +227,7 @@ export default makeScene2D(function* (view) {
     ),
   );
 
-  yield* beginSlide('quicksort grids created');
+  yield* beginAnnonymousSlide();
 
   yield* all(
     ...rightQuickSorts.slice(1, rightQuickSorts.length).map((qs, i) => {

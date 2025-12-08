@@ -8,6 +8,7 @@ import {
   useLogger,
   useRandom,
   Vector2,
+  waitFor,
 } from '@motion-canvas/core';
 
 import { Solarized } from './color';
@@ -82,7 +83,9 @@ export function* beginAnnonymousSlide() {
     hex.push(random.nextInt(0, 255).toString(16).padStart(2, '0'));
   }
 
-  yield* beginSlide(hex.join(''));
+  yield* waitFor(1.0);
+
+  // yield* beginSlide(hex.join(''));
 }
 
 /**

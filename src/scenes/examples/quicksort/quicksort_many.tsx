@@ -3,6 +3,7 @@ import { all, beginSlide, chain, useRandom } from '@motion-canvas/core';
 
 import { QuickSort } from '../../../components/QuickSort';
 import { Solarized } from '../../../utilities/color';
+import { beginAnnonymousSlide } from '../../../utilities/presentation';
 
 function generateAlmostSortedArray(size: number, swaps: number): number[] {
   const rng = useRandom();
@@ -39,7 +40,7 @@ function generateTripletsArray(size: number): number[] {
 }
 
 export default makeScene2D(function* (view) {
-  yield* beginSlide('sorting many quicksorts');
+  yield* beginAnnonymousSlide();
   view.fill(Solarized.background);
 
   // Grid configuration
@@ -107,11 +108,11 @@ export default makeScene2D(function* (view) {
   // Initialize all QuickSort visualizations simultaneously
   yield* all(...quickSorts.map((qs) => qs.initialize()));
 
-  yield* beginSlide('sorting many quicksorts go');
+  yield* beginAnnonymousSlide();
 
   // Sort all QuickSorts simultaneously - this creates a mesmerizing effect
   yield* all(...quickSorts.map((qs) => chain(qs.sort(), qs.opacity(0.1, 1))));
 
   // Hold the final state
-  yield* beginSlide('sorting many quicksorts end');
+  yield* beginAnnonymousSlide();
 });

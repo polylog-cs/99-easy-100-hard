@@ -10,6 +10,7 @@ import {
 import grantLogo from '../../assets/grant_logo.png';
 import grant from '../../assets/grant.png';
 import { Solarized } from '../../utilities/color';
+import { beginAnnonymousSlide } from '../../utilities/presentation';
 
 export default makeScene2D(function* (view) {
   yield fadeTransition(0.5);
@@ -37,5 +38,5 @@ export default makeScene2D(function* (view) {
   // Fade in both images at the same time
   yield* all(imageRef().opacity(1, 1), logoRef().opacity(1, 1));
 
-  yield* beginSlide('grant image end');
+  yield* beginAnnonymousSlide();
 });

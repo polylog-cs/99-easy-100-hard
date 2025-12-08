@@ -18,6 +18,7 @@ import {
 } from '@motion-canvas/core';
 
 import { Solarized } from '../../utilities/color';
+import { beginAnnonymousSlide } from '../../utilities/presentation';
 import { PolyTxt } from '../../utilities/text';
 
 const nbsp = ' ';
@@ -154,14 +155,14 @@ export default makeScene2D(function* (view) {
 
   yield* player1text().text("(I'll play rock)", 1);
 
-  yield* beginSlide('telepathy');
+  yield* beginAnnonymousSlide();
   yield* all(arrow().end(1, 1), brainIcon().opacity(1, 1));
   yield* waitFor(1.5);
   yield* player2text().text("(Ok, I'll play paper)", 1);
 
   yield* waitFor(3.5);
 
-  yield* beginSlide('reveal moves');
+  yield* beginAnnonymousSlide();
   const countdown = createSignal(4);
   view.add(
     <PolyTxt
@@ -189,7 +190,7 @@ export default makeScene2D(function* (view) {
     delay(1.2, all(player1text().text('Rock!', 1), player2text().text('Paper!', 1))),
   );
   yield* player1icon().text('😭', 1);
-  yield* beginSlide('randomness to the rescue');
+  yield* beginAnnonymousSlide();
 
   const dieText = createRef<PolyTxt>();
   const dieIcon = createRef<Txt>();
@@ -226,11 +227,11 @@ export default makeScene2D(function* (view) {
   player1text().fontStyle('italic');
   player2text().fontStyle('italic');
 
-  yield* beginSlide('randomness to the rescue 2');
+  yield* beginAnnonymousSlide();
 
   yield* player1text().text("(I'll play randomly)", 1);
 
-  yield* beginSlide('randomness to the rescue 3');
+  yield* beginAnnonymousSlide();
   arrow().end(0);
   arrow().opacity(1);
 
@@ -246,7 +247,7 @@ export default makeScene2D(function* (view) {
     arrow().opacity(0, 0.5),
   );
 
-  yield* beginSlide('randomness to the rescue 4');
+  yield* beginAnnonymousSlide();
   dieText().opacity(0);
 
   const dieRoll = createSignal(0);
@@ -268,5 +269,5 @@ export default makeScene2D(function* (view) {
   countdown(4);
 
   yield* waitFor(3);
-  yield* beginSlide('pause');
+  yield* beginAnnonymousSlide();
 });

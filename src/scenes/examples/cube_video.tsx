@@ -9,6 +9,7 @@ import {
 
 import cube from '../../assets/cube.mp4';
 import { Solarized } from '../../utilities/color';
+import { beginAnnonymousSlide } from '../../utilities/presentation';
 
 export default makeScene2D(function* (view) {
   yield fadeTransition(0.5);
@@ -28,5 +29,5 @@ export default makeScene2D(function* (view) {
   );
   videoRef().pause();
 
-  yield* beginSlide('cube video end');
+  yield* beginAnnonymousSlide();
 });

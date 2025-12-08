@@ -3,6 +3,7 @@ import { all, beginSlide, createRef, Vector2 } from '@motion-canvas/core';
 
 import { QuickSort } from '../../../components/QuickSort';
 import { Solarized } from '../../../utilities/color';
+import { beginAnnonymousSlide } from '../../../utilities/presentation';
 import { PolyTxt } from '../../../utilities/text';
 
 export default makeScene2D(function* (view) {
@@ -27,7 +28,7 @@ export default makeScene2D(function* (view) {
   qs1().almostSort();
   qs2().setValues(qs1().getValues());
 
-  yield* beginSlide('quicksort worst to average start');
+  yield* beginAnnonymousSlide();
 
   yield* all(qs1().initialize(), qs2().initialize());
 
@@ -43,7 +44,7 @@ export default makeScene2D(function* (view) {
   );
   yield* worstCaseLabel().text('Worst case', 1);
 
-  yield* beginSlide('quicksort worst to average');
+  yield* beginAnnonymousSlide();
 
   // Move qs2 to the right
   // Create an arrow between the two QuickSort components
@@ -94,5 +95,5 @@ export default makeScene2D(function* (view) {
   );
   yield* averageCaseLabel().text('Average case', 1);
 
-  yield* beginSlide('quicksort worst to average end');
+  yield* beginAnnonymousSlide();
 });

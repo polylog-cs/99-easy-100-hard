@@ -9,6 +9,7 @@ import {
 
 import polylogTeam from '../../assets/polylog_team.png';
 import { Solarized } from '../../utilities/color';
+import { beginAnnonymousSlide } from '../../utilities/presentation';
 
 export default makeScene2D(function* (view) {
   yield fadeTransition(0.5);
@@ -32,5 +33,5 @@ export default makeScene2D(function* (view) {
   // Fade in the image
   yield* imageRef().opacity(1, 1);
 
-  yield* beginSlide('team image end');
+  yield* beginAnnonymousSlide();
 });

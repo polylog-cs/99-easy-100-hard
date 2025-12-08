@@ -9,6 +9,7 @@ import {
 
 import { QuickSort } from '../../../components/QuickSort';
 import { Solarized } from '../../../utilities/color';
+import { beginAnnonymousSlide } from '../../../utilities/presentation';
 
 export default makeScene2D(function* (view) {
   yield fadeTransition(0.5);
@@ -33,7 +34,7 @@ export default makeScene2D(function* (view) {
 
   yield* qs().initialize();
 
-  yield* beginSlide('quicksort part 1 go');
+  yield* beginAnnonymousSlide();
   yield* qs().setQuicksortColors(
     0,
     qs().elementCount - 1,
@@ -49,7 +50,7 @@ export default makeScene2D(function* (view) {
   const pivotIdx = yield* qs().partition(0, qs().elementCount - 1);
   qs().animationSpeed = 0.06;
 
-  yield* beginSlide('quicksort part 1 sort left');
+  yield* beginAnnonymousSlide();
 
   yield* qs().quicksort(0, pivotIdx - 1);
   yield* qs().setQuicksortColors(
@@ -61,7 +62,7 @@ export default makeScene2D(function* (view) {
     0.25,
   );
 
-  yield* beginSlide('quicksort part 1 sort right');
+  yield* beginAnnonymousSlide();
 
   yield* qs().quicksort(pivotIdx + 1, qs().elementCount - 1);
   yield* qs().setQuicksortColors(
@@ -73,5 +74,5 @@ export default makeScene2D(function* (view) {
     0.25,
   );
 
-  yield* beginSlide('quicksort part 1 end');
+  yield* beginAnnonymousSlide();
 });
