@@ -21,6 +21,7 @@ import image_slide from './scenes/examples/image_slide?scene';
 import motion_canvas from './scenes/examples/motion_canvas?scene';
 import outro from './scenes/examples/outro?scene';
 import phone from './scenes/examples/phone?scene';
+import plot_scene from './scenes/examples/plot_scene?scene';
 import basic_mo3 from './scenes/examples/quicksort/basic_mo3?scene';
 import quicksort_many from './scenes/examples/quicksort/quicksort_many?scene';
 import quicksort_part_1 from './scenes/examples/quicksort/quicksort_part_1?scene';
@@ -55,11 +56,12 @@ export default makeProject({
     // cube_video,
 
     // === easy hard ===
-    file_checking,
-    a99_vs_100,
+    // file_checking,
+    // a99_vs_100,
     //equations,
     // quicksort_part_1,
-    sorted_with_last_and_random_comparison,
+    // sorted_with_last_and_random_comparison,
+    plot_scene,
     //bobby_tables,
     //worst_to_average,
     //randomness_plus_worst_case,

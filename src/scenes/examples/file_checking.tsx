@@ -162,29 +162,29 @@ export default makeScene2D(function* (view) {
 
   yield* waitFor(1);
 
-  let texts = ['Nope.', '🥱'];
+  // let texts = ['Nope.', '🥱'];
 
-  for (let text of texts) {
-    yield* all(
-      videoRef().filters.blur(0, 1),
-      redSquareRef.opacity(0.0, 1),
-      sadRef().opacity(0, 1),
+  // for (let text of texts) {
+  //   yield* all(
+  //     videoRef().filters.blur(0, 1),
+  //     redSquareRef.opacity(0.0, 1),
+  //     sadRef().opacity(0, 1),
 
-      chain(file().x(-300, 1), file().x(0, 1)),
-      file().rotation(360 * (4 + 2 * texts.indexOf(text)), 3),
+  //     chain(file().x(-300, 1), file().x(0, 1)),
+  //     file().rotation(360 * (4 + 2 * texts.indexOf(text)), 3),
 
-      delay(
-        1.5,
-        all(
-          signal(0.75, 0.01, linear).to(0.75, 0.05).to(0, 0.01, linear),
-          sadRef().text(text, 0),
-          videoRef().filters.blur(7, 1),
-          redSquareRef.opacity(0.5, 1),
-          sadRef().opacity(1, 1),
-        ),
-      ),
-    );
-  }
+  //     delay(
+  //       1.5,
+  //       all(
+  //         signal(0.75, 0.01, linear).to(0.75, 0.05).to(0, 0.01, linear),
+  //         sadRef().text(text, 0),
+  //         videoRef().filters.blur(7, 1),
+  //         redSquareRef.opacity(0.5, 1),
+  //         sadRef().opacity(1, 1),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   yield* all(
     sadRef().opacity(0, 1),

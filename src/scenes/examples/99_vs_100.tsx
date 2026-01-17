@@ -51,9 +51,9 @@ export default makeScene2D(function* (view) {
     all(pro100().scale(1, 0.5), pro100().text('100% certain!', 0.7)),
   );
 
-  yield* all(con100().scale(1, 0.5), con100().text('huge (in GB)', 0.7));
+  yield* all(con100().scale(1, 0.5), con100().text('huge (in MBs)', 0.7));
 
-  yield* all(pro99().scale(1, 0.5), pro99().text('tiny (in B)', 0.7));
+  yield* all(pro99().scale(1, 0.5), pro99().text('tiny (in Bs)', 0.7));
 
   yield* beginAnnonymousSlide();
 });
