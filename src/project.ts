@@ -19,6 +19,7 @@ import graph_image from './scenes/examples/graph_image?scene';
 import how_to_make_youtube_videos from './scenes/examples/how_to_make_youtube_videos?scene';
 import image_slide from './scenes/examples/image_slide?scene';
 import motion_canvas from './scenes/examples/motion_canvas?scene';
+import multiply_vs_random from './scenes/examples/multiply_vs_random?scene';
 import outro from './scenes/examples/outro?scene';
 import phone from './scenes/examples/phone?scene';
 import plot_scene from './scenes/examples/plot_scene?scene';
@@ -29,6 +30,7 @@ import shuffled_vs_sorted_with_last_pivot from './scenes/examples/quicksort/shuf
 import sorted_with_last_and_random_comparison from './scenes/examples/quicksort/sorted_with_last_and_random_comparison?scene';
 import table from './scenes/examples/quicksort/table?scene';
 import worst_to_average from './scenes/examples/quicksort/worst_to_average?scene';
+import random_testing from './scenes/examples/random_testing?scene';
 import randomness_plus_worst_case from './scenes/examples/randomness_plus_worst_case?scene';
 import rock_paper_scissors from './scenes/examples/rock_paper_scissors?scene';
 import subscribe from './scenes/examples/subscribe?scene';
@@ -56,19 +58,21 @@ export default makeProject({
     // cube_video,
 
     // === easy hard ===
-    // file_checking,
-    // a99_vs_100,
-    //equations,
-    // quicksort_part_1,
-    // sorted_with_last_and_random_comparison,
+    file_checking,
+    a99_vs_100,
+    equations,
+    quicksort_part_1,
+    sorted_with_last_and_random_comparison,
     plot_scene,
-    //bobby_tables,
-    //worst_to_average,
-    //randomness_plus_worst_case,
-    //rock_paper_scissors,
-    //conclusion,
-    //outro,
-    //subscribe,
+    random_testing,
+    multiply_vs_random,
+    bobby_tables,
+    worst_to_average,
+    randomness_plus_worst_case,
+    rock_paper_scissors,
+    conclusion,
+    outro,
+    subscribe,
 
     //// === programming ===
     //animations_in_videos,

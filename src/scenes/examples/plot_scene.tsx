@@ -2,7 +2,9 @@ import { Circle, Layout, Line, makeScene2D, Rect } from '@motion-canvas/2d';
 import {
   all,
   createRef,
+  createSignal,
   delay,
+  linear,
   Reference,
   sequence,
   ThreadGenerator,
@@ -261,35 +263,93 @@ export default makeScene2D(function* (view) {
     ),
   );
 
-  // yield* beginAnnonymousSlide();
+  yield* beginAnnonymousSlide();
 
-  // // Demonstrate highlighting intersection markers
-  // yield* pulseMarker(markers[0]);
-  // yield* pulseMarker(markers[1]);
-  // yield* pulseMarker(markers[2]);
+  // Create tracer dots and status text
+  const redTracer = createRef<Circle>();
+  const blueTracer = createRef<Circle>();
+  const statusText = createRef<PolyTxt>();
+  const tracerX = createSignal(-3);
 
-  // yield* beginAnnonymousSlide();
+  const threshold = 0.1;
+  const minDistance = () =>
+    Math.min(...intersections.map((p) => Math.abs(tracerX() - p.x)));
+  const isNearIntersection = () => minDistance() < threshold;
 
-  // // Show explanation text
-  // const explanationText = createRef<PolyTxt>();
+  // Per-marker opacity based on distance to that specific intersection
+  const markerOpacity = (i: number) => {
+    const dist = Math.abs(tracerX() - intersections[i].x);
+    const proximity = Math.max(0, 1 - dist / threshold);
+    return 0.3 + 0.7 * proximity;
+  };
 
-  // view.add(
-  //   <PolyTxt
-  //     ref={explanationText}
-  //     text={'x = 2: unlucky guess!'}
-  //     fontSize={50}
-  //     fill={Solarized.magenta}
-  //     position={[0, 400]}
-  //     opacity={0}
-  //   />,
-  // );
+  view.add(
+    <>
+      <Circle
+        ref={redTracer}
+        position={() => plot().getPointFromPlotSpace(tracerX(), f(tracerX()))}
+        size={30}
+        fill={Solarized.red}
+        opacity={0}
+        zIndex={10}
+      />
+      <Circle
+        ref={blueTracer}
+        position={() => plot().getPointFromPlotSpace(tracerX(), g(tracerX()))}
+        size={30}
+        fill={Solarized.blue}
+        opacity={0}
+        zIndex={10}
+      />
+      <PolyTxt
+        ref={statusText}
+        text={() => (isNearIntersection() ? 'Same.' : 'Different!')}
+        fontSize={60}
+        lineWidth={1}
+        stroke={() => (isNearIntersection() ? Solarized.green : Solarized.red)}
+        fill={() => (isNearIntersection() ? Solarized.green : Solarized.red)}
+        position={() => {
+          const redPos = plot().getPointFromPlotSpace(tracerX(), f(tracerX()));
+          const bluePos = plot().getPointFromPlotSpace(tracerX(), g(tracerX()));
+          const midY = (redPos.y + bluePos.y) / 2;
+          return new Vector2(redPos.x, midY + 100);
+        }}
+        opacity={0}
+        zIndex={10}
+      />
+    </>,
+  );
 
-  // yield* all(
-  //   explanationText().opacity(1, 0.5),
-  //   explanationText().text('').text('x = 2: unlucky guess!', 1),
-  //   highlightMarker(markers[2], 0.5),
-  // );
+  // Dim other elements and show tracers
+  yield* all(
+    plot().opacity(0.3, 0.3),
+    legend().opacity(0.3, 0.3),
+    redTracer().opacity(1, 0.3),
+    blueTracer().opacity(1, 0.3),
+    statusText().opacity(1, 0.3),
+    ...markers.map((m) => m().opacity(0.3, 0.3)),
+    ...markerLabels.map((l) => l().opacity(0.3, 0.3)),
+  );
 
-  // yield* waitFor(1);
-  // yield* beginAnnonymousSlide();
+  markers.forEach((m, i) => m().opacity(() => markerOpacity(i)));
+  markerLabels.forEach((l, i) => l().opacity(() => markerOpacity(i)));
+
+  // Animate tracing from x = -3 to x = 3
+  yield* tracerX(3, 4, linear);
+
+  // Reset marker opacities to static and restore all elements
+  markers.forEach((m) => m().opacity(0.3));
+  markerLabels.forEach((l) => l().opacity(0.3));
+
+  yield* all(
+    plot().opacity(1, 0.3),
+    legend().opacity(1, 0.3),
+    redTracer().opacity(0, 0.3),
+    blueTracer().opacity(0, 0.3),
+    statusText().opacity(0, 0.3),
+    ...markers.map((m) => m().opacity(1, 0.3)),
+    ...markerLabels.map((l) => l().opacity(1, 0.3)),
+  );
+
+  yield* beginAnnonymousSlide();
 });
