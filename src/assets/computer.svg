@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 128 128"
+   version="1.1"
+   id="svg43"
+   sodipodi:docname="computer.svg"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   inkscape:export-filename="computer.png"
+   inkscape:export-xdpi="768"
+   inkscape:export-ydpi="768"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview43"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="8.8359375"
+     inkscape:cx="58.058356"
+     inkscape:cy="49.287357"
+     inkscape:window-width="3840"
+     inkscape:window-height="2160"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg43" />
+  <defs
+     id="defs2">
+    <radialGradient
+       id="SVGID_1_"
+       cx="46.4654"
+       cy="-5.1763"
+       gradientUnits="userSpaceOnUse"
+       r="60.9731">
+      <stop
+         offset="0"
+         stop-color="#2F7889"
+         id="stop1" />
+      <stop
+         offset="1"
+         stop-color="#424242"
+         id="stop2" />
+    </radialGradient>
+  </defs>
+  <path
+     d="M71.59,68.58 L65.17,68.58 L58.75,68.58 C58.75,88.94 54.54,97.1 54.54,97.1 L75.8,97.1 C75.8,97.09 71.59,88.93 71.59,68.58 Z"
+     fill="#B7D5E5"
+     id="path2" />
+  <path
+     d="M39.41,98.17 C39.34,97.03 39.51,95.53 39.51,95.53 C39.51,95.53 84.75,93.65 88.34,95.44 C88.34,95.44 88.82,97.1 88.49,98.18 C87.7,100.71 77.5,102.98 63.94,102.98 C50.38,102.98 39.57,100.82 39.41,98.17 Z"
+     fill="#2F7889"
+     id="path3" />
+  <path
+     d="M88.55,95.96 A24.55 4.8 0 1 1 39.45,95.96 A24.55 4.8 0 1 1 88.55,95.96 Z"
+     fill="#B7D5E5"
+     id="path4" />
+  <path
+     d="M71.59,68.58 L65.17,68.58 L58.75,68.58 C58.75,75.22 58.3,80.56 57.7,84.74 L73.01,87.04 C72.23,82.57 71.59,76.5 71.59,68.58 Z"
+     fill="#69A1BA"
+     id="path5" />
+  <path
+     d="M55.49,91.46 C55.49,91.46 51.77,92.98 52.61,94.09 C53.91,95.83 57.54,96.92 66.32,97.51 C72.49,97.92 70.07,99.64 64.27,99.99 C60.2,100.23 40.69,100.39 39.53,96.32 C38.59,93.01 52.71,91.46 55.49,91.46 Z"
+     fill="#EEEEEE"
+     id="path6" />
+  <path
+     d="M113.46,79.66 L14.54,79.66 C12.64,79.66 11.1,78.12 11.1,76.22 L11.1,9.22 C11.1,7.32 12.64,5.78 14.54,5.78 L113.45,5.78 C115.35,5.78 116.89,7.32 116.89,9.22 L116.89,76.22 C116.9,78.12 115.36,79.66 113.46,79.66 Z"
+     fill="#69A1BA"
+     id="path40" />
+  <path
+     d="M113.46,77.89 L14.54,77.89 C12.64,77.89 11.1,76.35 11.1,74.45 L11.1,7.45 C11.1,5.55 12.64,4.01 14.54,4.01 L113.45,4.01 C115.35,4.01 116.89,5.55 116.89,7.45 L116.89,74.45 C116.9,76.34 115.36,77.89 113.46,77.89 Z"
+     fill="#B7D5E5"
+     id="path41" />
+  <path
+     d="m 15.25,9.38 h 97.5 V 72.5 h -97.5 z"
+     fill="url(#SVGID_1_)"
+     id="path42"
+     style="fill:url(#SVGID_1_)" />
+  <path
+     d="M16.39,5.483 L27.58,5.483 Q29.087,5.483 29.087,6.99 Q29.087,8.497 27.58,8.497 L16.39,8.497 Q14.883,8.497 14.883,6.99 Q14.883,5.483 16.39,5.483 Z"
+     fill="#EEEEEE"
+     id="path43" />
+</svg>

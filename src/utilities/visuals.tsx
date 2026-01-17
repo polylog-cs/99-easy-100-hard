@@ -6,6 +6,7 @@ import { Solarized } from './color';
 export function createShadow(
   target: Reference<Shape>,
   options?: {
+    ref?: Reference<Circle>;
     blur?: number;
     opacity?: number;
     offsetY?: number;
@@ -17,6 +18,7 @@ export function createShadow(
 ) {
   const {
     blur = 20,
+    ref = null,
     opacity = 0.15,
     offsetY = 10,
     widthRatio = 5 / 5,
@@ -24,16 +26,16 @@ export function createShadow(
     fill = Solarized.base03,
   } = options || {};
 
-  const shadow = createRef<Circle>();
+  const shadow = ref || createRef<Circle>();
 
   const shadowElement = (
     <Circle
       ref={shadow}
       width={() => target().width() * widthRatio}
       height={() => target().height() * heightRatio}
-      absolutePosition={() =>
+      position={() =>
         target()
-          .absolutePosition()
+          .position()
           .addY(target().height() / 2 + offsetY)
       }
       fill={fill}

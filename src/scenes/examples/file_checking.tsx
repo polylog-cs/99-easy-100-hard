@@ -1,46 +1,64 @@
-import { Img, Layout, makeScene2D, Rect } from '@motion-canvas/2d';
+import {
+  blur,
+  Circle,
+  Img,
+  Layout,
+  makeScene2D,
+  Node,
+  Rect,
+  Video,
+} from '@motion-canvas/2d';
 import {
   all,
   beginSlide,
+  chain,
+  Color,
   createRef,
   createSignal,
   delay,
   easeInOutCubic,
+  linear,
   sequence,
   useRandom,
   Vector2,
   waitFor,
 } from '@motion-canvas/core';
 
+import backgroundVideo from '../../assets/background.mp4';
 import { BEE_MOVIE_SCRIPT } from '../../assets/bee';
-import cdComparisonPng from '../../assets/cd-comparison.png';
+import cdSvg from '../../assets/cd.svg';
+import computerSvg from '../../assets/computer.svg';
+import keyboardSvg from '../../assets/keyboard.svg';
 import { Sha256Hash } from '../../components/Sha256Hash';
 import { UploadLine } from '../../components/UploadLine';
 import disintegrateShader from '../../shaders/disintegrate.glsl';
 import gradientDownShader from '../../shaders/gradientDown.glsl';
+import halfScreenNegateShader from '../../shaders/half_negate_screen.glsl';
 import halfNegateShader from '../../shaders/half_negate.glsl';
 import lighten from '../../shaders/lighten.glsl';
+import negative from '../../shaders/negative.glsl';
 import { colorLerp, Solarized } from '../../utilities/color';
 import { appear } from '../../utilities/creation';
 import { beginAnnonymousSlide } from '../../utilities/presentation';
 import { PolyTxt } from '../../utilities/text';
 import { createShadow } from '../../utilities/visuals';
+import rock_paper_scissors from './rock_paper_scissors';
 
 export default makeScene2D(function* (view) {
   view.fill(Solarized.background);
 
   const disintegrageSignal2 = createSignal(1);
 
-  const file = createRef<PolyTxt>();
-  view.add(createShadow(file));
+  const file = createRef<Img>();
+  const shadow = createRef<Circle>();
+
+  view.add(createShadow(file, { ref: shadow }));
   view.add(
-    <PolyTxt
-      text={'💿'}
+    <Img
       ref={file}
-      fontSize={600}
+      src={cdSvg}
+      width={600}
       opacity={0}
-      scale={0}
-      offset={new Vector2(0, -0.1)}
       shaders={{
         fragment: disintegrateShader,
         uniforms: { strength: disintegrageSignal2 },
@@ -54,11 +72,137 @@ export default makeScene2D(function* (view) {
   yield* appear(file);
   yield* beginAnnonymousSlide();
 
-  yield* all(file().rotation(360 * 2, 2));
-  yield* beginAnnonymousSlide();
+  let computerRef = createRef<Img>();
+  let keyboardRef = createRef<Img>();
 
-  yield* all(file().rotation(360 * 4, 3));
-  yield* beginAnnonymousSlide();
+  view.add(<Img ref={computerRef} src={computerSvg} width={800} x={1300} />);
+  view.add(<Img ref={keyboardRef} src={keyboardSvg} width={800} x={1300} />);
+
+  // yield* all(file().fontSize(200, 1), file().x(-500, 1));
+
+  view.add(
+    createShadow(computerRef, { offsetY: -180, heightRatio: 0.08, widthRatio: 0.9 }),
+  );
+
+  view.add(
+    createShadow(keyboardRef, { offsetY: -50, heightRatio: 0.14, widthRatio: 0.8 }),
+  );
+
+  const videoRef = createRef<Video>();
+  const squareRef = createRef<Rect>();
+  let signal = createSignal(1);
+  view.add(
+    <Node cache>
+      <Rect
+        width={598}
+        ref={squareRef}
+        fill={1}
+        opacity={0}
+        height={384}
+        lineWidth={10}
+        stroke={new Color(0, 0, 0, 0.5)}
+        x={() => computerRef().x()}
+        y={-144}
+      />
+      <Video
+        play={true}
+        ref={videoRef}
+        src={backgroundVideo}
+        height={600}
+        x={() => computerRef().x()}
+        y={-144}
+        zIndex={10}
+        shaders={{ fragment: negative, uniforms: { strength: signal } }}
+        opacity={1}
+        compositeOperation={'source-in'}
+      />
+    </Node>,
+  );
+
+  yield* all(
+    file().y(-140, 1),
+    shadow().opacity(0, 1),
+    file().scale(0.5, 1),
+    file().rotation(360 * 2, 3),
+    delay(0.5, all(computerRef().x(0, 1.5), keyboardRef().x(0, 1.5))),
+    delay(1.5, all(signal(0, 0), squareRef().opacity(1, 1))),
+  );
+
+  const redSquareRef = squareRef().clone();
+  redSquareRef.opacity(0);
+  redSquareRef.fill(Solarized.red);
+
+  view.add(redSquareRef);
+
+  yield* signal(0.75, 0.01, linear).to(0.75, 0.3).to(0, 0.01, linear);
+  yield* waitFor(1);
+
+  const sadRef = createRef<PolyTxt>();
+  view.add(
+    <PolyTxt
+      text={'Borked!'}
+      opacity={0}
+      fill={Solarized.base3}
+      stroke={Solarized.base00}
+      lineWidth={7}
+      strokeFirst={true}
+      ref={sadRef}
+      fontSize={140}
+      y={-130}
+      textAlign={'center'}
+      zIndex={10}
+    />,
+  );
+
+  yield* all(
+    videoRef().filters.blur(7, 1),
+    redSquareRef.opacity(0.5, 1),
+    sadRef().opacity(1, 1),
+  );
+
+  yield* waitFor(1);
+
+  let texts = ['Nope.', '🥱'];
+
+  for (let text of texts) {
+    yield* all(
+      videoRef().filters.blur(0, 1),
+      redSquareRef.opacity(0.0, 1),
+      sadRef().opacity(0, 1),
+
+      chain(file().x(-300, 1), file().x(0, 1)),
+      file().rotation(360 * (4 + 2 * texts.indexOf(text)), 3),
+
+      delay(
+        1.5,
+        all(
+          signal(0.75, 0.01, linear).to(0.75, 0.05).to(0, 0.01, linear),
+          sadRef().text(text, 0),
+          videoRef().filters.blur(7, 1),
+          redSquareRef.opacity(0.5, 1),
+          sadRef().opacity(1, 1),
+        ),
+      ),
+    );
+  }
+
+  yield* all(
+    sadRef().opacity(0, 1),
+    computerRef().opacity(0.0, 1),
+    keyboardRef().opacity(0.0, 1),
+    redSquareRef.opacity(0.0, 1),
+    squareRef().opacity(0.0, 1),
+
+    delay(
+      0.5,
+      all(
+        file().y(0, 1),
+        file().scale(1, 1),
+
+        shadow().opacity(0.15, 1),
+      ),
+    ),
+  );
 
   yield* all(disintegrageSignal2(0.5, 1));
 
@@ -80,7 +224,7 @@ export default makeScene2D(function* (view) {
     disintegrageSignal2(1, 1),
     file().position(file().position().sub(new Vector2(480, 0)), 1),
     square().left(new Vector2(0, 0), 1),
-    file().fontSize(200, 1),
+    file().width(300, 1),
   );
 
   // Use our new UploadLine component
@@ -88,9 +232,10 @@ export default makeScene2D(function* (view) {
   view.add(
     <UploadLine
       ref={uploadLine}
-      startPoint={file().position().add(new Vector2(30, -10))}
-      endPoint={file().position().mul(-1).add(new Vector2(-30, -10))}
+      startPoint={file().position().add(new Vector2(50, 0))}
+      endPoint={file().position().mul(-1).add(new Vector2(-50, 0))}
       zIndex={-1}
+      shaders={halfScreenNegateShader}
     />,
   );
 
@@ -98,12 +243,11 @@ export default makeScene2D(function* (view) {
   const disintegrageSignal = createSignal(1);
   view.add(createShadow(uploadedFile));
   view.add(
-    <PolyTxt
-      text={'💿'}
+    <Img
       ref={uploadedFile}
-      fontSize={200}
+      src={cdSvg}
+      width={300}
       position={file().position().mul(-1)}
-      zIndex={10}
       opacity={0}
       shaders={{
         fragment: disintegrateShader,
@@ -140,50 +284,13 @@ export default makeScene2D(function* (view) {
   yield* uploadLine().stop(1);
   yield* beginAnnonymousSlide();
 
-  let code = createRef<PolyTxt>();
-  view.add(
-    <PolyTxt
-      fontStyle={'italic'}
-      text={''}
-      fill={Solarized.base03}
-      scale={0.35}
-      ref={code}
-      topLeft={() => file().position().add(new Vector2(-350, 200))}
-      shaders={gradientDownShader}
-    />,
-  );
-
   yield* all(
-    code().text(BEE_MOVIE_SCRIPT, 4),
-    file().position(file().position().add(new Vector2(0, -250)), 1),
-  );
-
-  let tooMuchData = createRef<PolyTxt>();
-  view.add(
-    <PolyTxt
-      text={'Too much data\nto fully check!'}
-      position={new Vector2(-480, 150)}
-      fontSize={70}
-      ref={tooMuchData}
-      textAlign={'center'}
-    />,
-  );
-
-  yield* all(
-    tooMuchData().opacity(0).opacity(1, 0.75),
-    code().opacity(0.25, 1),
-    code().filters.blur(3, 1),
-  );
-
-  yield* beginAnnonymousSlide();
-
-  yield* waitFor(1);
-
-  yield* all(
-    tooMuchData().opacity(0, 0.5),
-    tooMuchData().position(tooMuchData().position().add(new Vector2(0, 150)), 1),
-    code().text('', 0.5),
-    file().position(file().position().add(new Vector2(0, 80)), 1),
+    file().position(
+      file()
+        .position()
+        .add(new Vector2(0, -250 + 80)),
+      1,
+    ),
   );
 
   const hashObject = createRef<Sha256Hash>();
@@ -198,7 +305,7 @@ export default makeScene2D(function* (view) {
   view.add(
     <UploadLine
       ref={shaLine}
-      startPoint={file().position().add(new Vector2(0, 30))}
+      startPoint={file().position().add(new Vector2(0, 50))}
       endPoint={hashObject().top()}
       zIndex={-1}
     />,
@@ -208,8 +315,24 @@ export default makeScene2D(function* (view) {
   yield shaLine().start();
   yield* waitFor(0.65);
 
-  yield all(delay(6.5, shaLine().stop()));
-  yield* hashObject().iterate(150, 0.05);
+  yield all(delay(1, shaLine().stop()));
+  yield* hashObject().iterate(40, 0.05);
+
+  yield* waitFor(1);
+
+  const originalHash = hashObject().getHashText();
+
+  yield* all(
+    delay(0.5, hashObject().iterate(7, 0.05)),
+    hashObject().getSha().fill(Solarized.orange, 1, easeInOutCubic, colorLerp),
+    disintegrageSignal2(0.5, 1),
+  );
+
+  yield* all(
+    delay(0.25, hashObject().iterate(7, 0.05, originalHash)),
+    hashObject().getSha().fill(Solarized.cyan, 1, easeInOutCubic, colorLerp),
+    disintegrageSignal2(1, 1),
+  );
 
   yield* waitFor(1);
   yield* beginAnnonymousSlide();
@@ -246,7 +369,7 @@ export default makeScene2D(function* (view) {
   view.add(
     <UploadLine
       ref={secondShaLine}
-      startPoint={uploadedFile().position().add(new Vector2(0, 30))}
+      startPoint={uploadedFile().position().add(new Vector2(0, 50))}
       endPoint={secondHashObject().top()}
       zIndex={-1}
       shaders={lighten}
@@ -289,9 +412,6 @@ export default makeScene2D(function* (view) {
   yield* beginAnnonymousSlide();
   yield* all(appear(equal), probably().text('probably', 1));
 
-  yield* waitFor(1);
-  yield* beginAnnonymousSlide();
-
   let notEqual = createRef<PolyTxt>();
   view.add(
     <PolyTxt
@@ -307,44 +427,13 @@ export default makeScene2D(function* (view) {
   );
 
   yield* all(
-    equal().stroke(Solarized.orange, 1, easeInOutCubic, colorLerp),
+    delay(0.5, hashObject().iterate(7, 0.05, hashObject().getHashText())),
     hashObject().getSha().fill(Solarized.orange, 1, easeInOutCubic, colorLerp),
     disintegrageSignal2(0.5, 1),
-    delay(0.5, hashObject().iterate(5, 0.05)),
+    equal().stroke(Solarized.orange, 1, easeInOutCubic, colorLerp),
     appear(notEqual),
-    probably().text('definitely', 1),
     probably().fill(Solarized.orange, 1, easeInOutCubic, colorLerp),
   );
 
   yield* beginAnnonymousSlide();
-
-  yield* all(
-    equal().stroke(Solarized.cyan, 1, easeInOutCubic, colorLerp),
-    hashObject().getSha().fill(Solarized.cyan, 1, easeInOutCubic, colorLerp),
-    disintegrageSignal2(1, 1),
-    delay(0.5, hashObject().iterate(5, 0.05, secondHashObject().getHashText())),
-    notEqual().opacity(0, 1),
-    notEqual().scale(0, 1),
-    probably().text('probably', 1),
-    probably().fill(Solarized.cyan, 1, easeInOutCubic, colorLerp),
-  );
-
-  yield* beginAnnonymousSlide();
-
-  // const cdEquationsComparison = createRef<Img>();
-  // view.add(
-  //   <Img
-  //     ref={cdEquationsComparison}
-  //     src={cdEquationsComparisonPng}
-  //     scale={1}
-  //     opacity={0}
-  //   />,
-  // );
-  // yield* all(
-  //   cdEquationsComparison().opacity(1, 1),
-  //   uploadedFile().opacity(0, 1),
-  //   square().opacity(0, 1),
-  // );
-
-  // yield* beginSlide('file end');
 });

@@ -285,5 +285,28 @@ export default makeScene2D(function* (view) {
     ),
   );
 
+  yield* all(
+    randomizedLabel().fill(Solarized.green, 1),
+    lastLabel().fill(Solarized.red, 1),
+    ...leftQuickSorts.map((qs, index) => all(all(qs.hideComparisonCount()))),
+    ...leftGhosts.map((qs, index) =>
+      all(
+        all(
+          qs.opacity(1, 1),
+          ...qs.rectangles.map((rect) => all(rect().fill(Solarized.green, 1))),
+        ),
+      ),
+    ),
+    ...rightQuickSorts.map((qs, index) => all(all(qs.hideComparisonCount()))),
+    ...rightGhosts.map((qs, index) =>
+      all(
+        all(
+          qs.opacity(1, 1),
+          ...qs.rectangles.map((rect) => all(rect().fill(Solarized.red, 1))),
+        ),
+      ),
+    ),
+  );
+
   yield* beginAnnonymousSlide();
 });

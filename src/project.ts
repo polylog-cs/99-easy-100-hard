@@ -57,29 +57,30 @@ export default makeProject({
     // === easy hard ===
     file_checking,
     a99_vs_100,
-    equations,
-    quicksort_part_1,
+    //equations,
+    // quicksort_part_1,
     sorted_with_last_and_random_comparison,
-    bobby_tables,
-    worst_to_average,
-    randomness_plus_worst_case,
-    rock_paper_scissors,
-    conclusion,
-    outro,
-    subscribe,
-    // === programming ===
-    animations_in_videos,
-    // - reusable (limited by framework)
-    motion_canvas,
-    code_1,
-    code_2,
-    code_3,
-    code_4,
-    code_5_wave,
-    code_6_blender,
-    // === motivation ===
-    how_to_make_youtube_videos,
-    why_are_you_not_making_videos,
-    thank_you,
+    //bobby_tables,
+    //worst_to_average,
+    //randomness_plus_worst_case,
+    //rock_paper_scissors,
+    //conclusion,
+    //outro,
+    //subscribe,
+
+    //// === programming ===
+    //animations_in_videos,
+    //// - reusable (limited by framework)
+    //motion_canvas,
+    //code_1,
+    //code_2,
+    //code_3,
+    //code_4,
+    //code_5_wave,
+    //code_6_blender,
+    //// === motivation ===
+    //how_to_make_youtube_videos,
+    //why_are_you_not_making_videos,
+    //thank_you,
   ],
 });
