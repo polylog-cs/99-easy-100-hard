@@ -1,5 +1,5 @@
 import { makeScene2D } from '@motion-canvas/2d';
-import { beginSlide, createRef, fadeTransition, waitFor } from '@motion-canvas/core';
+import { beginSlide, createRef, waitFor } from '@motion-canvas/core';
 
 import {
   beginAnnonymousSlide,
@@ -9,8 +9,6 @@ import {
 import { PolyTxt } from '../../utilities/text';
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
-
   const title = createRef<PolyTxt>();
 
   createSectionHeader(view, title, {

@@ -9,8 +9,6 @@ import {
   easeInCubic,
   easeOutCubic,
   easeOutQuad,
-  fadeTransition,
-  linear,
   linear,
   loop,
   Vector2,
@@ -24,8 +22,6 @@ import { PolyTxt } from '../../utilities/text';
 const nbsp = ' ';
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
-
   view.fill(Solarized.background);
 
   const player1text = createRef<PolyTxt>();

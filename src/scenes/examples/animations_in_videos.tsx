@@ -1,5 +1,5 @@
 import { makeScene2D, Video } from '@motion-canvas/2d';
-import { all, createRef, fadeTransition, waitFor } from '@motion-canvas/core';
+import { all, createRef, waitFor } from '@motion-canvas/core';
 
 import kurzgesagt from '../../assets/kurzgesagt.mp4';
 import mario from '../../assets/mario.mp4';
@@ -12,8 +12,6 @@ import {
 } from '../../utilities/presentation';
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
-
   const {
     header,
     leftColumnHeader,

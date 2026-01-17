@@ -1,5 +1,5 @@
 import { Img, makeScene2D } from '@motion-canvas/2d';
-import { all, createRef, delay, fadeTransition, waitFor } from '@motion-canvas/core';
+import { all, createRef, delay, waitFor } from '@motion-canvas/core';
 
 import cubeVideo from '../../assets/cube_video2.png';
 import firstPolylogVideo from '../../assets/first-polylog-video.png';
@@ -12,8 +12,6 @@ import {
 import { PolyTxt } from '../../utilities/text';
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
-
   view.fill(Solarized.background);
 
   const firstVideoImage = createRef<Img>();

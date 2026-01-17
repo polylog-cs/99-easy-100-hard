@@ -1,19 +1,11 @@
 import { Img, makeScene2D } from '@motion-canvas/2d';
-import {
-  all,
-  beginSlide,
-  createRef,
-  fadeTransition,
-  waitFor,
-} from '@motion-canvas/core';
+import { all, beginSlide, createRef, waitFor } from '@motion-canvas/core';
 
 import polylogTeam from '../../assets/polylog_team.png';
 import { Solarized } from '../../utilities/color';
 import { beginAnnonymousSlide } from '../../utilities/presentation';
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
-
   view.fill(Solarized.background);
 
   yield* waitFor(0.5);

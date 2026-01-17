@@ -1,12 +1,11 @@
 import { makeScene2D } from '@motion-canvas/2d';
-import { createRef, fadeTransition } from '@motion-canvas/core';
+import { createRef } from '@motion-canvas/core';
 
 import { Solarized } from '../../utilities/color';
 import { beginAnnonymousSlide } from '../../utilities/presentation';
 import { PolyTxt } from '../../utilities/text';
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
   view.fill(Solarized.background);
 
   const text = createRef<PolyTxt>();

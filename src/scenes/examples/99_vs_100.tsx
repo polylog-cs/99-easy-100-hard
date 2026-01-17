@@ -1,36 +1,57 @@
 import { Layout, makeScene2D } from '@motion-canvas/2d';
-import { all, createRef, fadeTransition, sequence } from '@motion-canvas/core';
+import { all, createRef, sequence } from '@motion-canvas/core';
 
 import { Solarized } from '../../utilities/color';
 import { beginAnnonymousSlide } from '../../utilities/presentation';
 import { PolyTxt } from '../../utilities/text';
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
   view.fill(Solarized.background);
 
-  const text = createRef<PolyTxt>();
-  const texta = createRef<PolyTxt>();
-  const text2 = createRef<PolyTxt>();
-  const text2a = createRef<PolyTxt>();
+  const title99 = createRef<PolyTxt>();
+  const pro99 = createRef<PolyTxt>();
+  const con99 = createRef<PolyTxt>();
+  const title100 = createRef<PolyTxt>();
+  const pro100 = createRef<PolyTxt>();
+  const con100 = createRef<PolyTxt>();
+
   view.add(
     <Layout layout direction={'row'} gap={150}>
-      <Layout direction={'column'} alignItems="center">
-        <PolyTxt ref={text} text="" fontSize={100} fontWeight="bold" />
-        <PolyTxt ref={texta} text="c" fontSize={70} opacity={0} />
+      <Layout direction={'column'} alignItems="center" gap={20}>
+        <PolyTxt
+          ref={title99}
+          text="99% certainty"
+          fontSize={80}
+          fontWeight="bold"
+          opacity={0}
+        />
+        <PolyTxt ref={con99} text="a" fontSize={60} fill={Solarized.red} scale={0} />
+        <PolyTxt ref={pro99} text="a" fontSize={60} fill={Solarized.green} scale={0} />
       </Layout>
-      <Layout direction={'column'} alignItems="center">
-        <PolyTxt ref={text2} text="" fontSize={100} fontWeight="bold" />
-        <PolyTxt ref={text2a} text="" fontSize={70} />
+      <Layout direction={'column'} alignItems="center" gap={20}>
+        <PolyTxt
+          ref={title100}
+          text="100% certainty"
+          fontSize={80}
+          fontWeight="bold"
+          opacity={0}
+        />
+        <PolyTxt ref={pro100} text="a" fontSize={60} fill={Solarized.green} scale={0} />
+        <PolyTxt ref={con100} text="a" fontSize={60} fill={Solarized.red} scale={0} />
       </Layout>
     </Layout>,
   );
 
-  yield* sequence(1, text().text('99% is fast', 1), text2().text('100% is slow', 1));
+  yield* all(title99().opacity(1, 1), title100().opacity(1, 1));
   yield* sequence(
-    0.5,
-    all(texta().opacity(1, 0.3), texta().text('checksums', 1)),
-    text2a().text('full disc copy', 1),
+    0.3,
+    all(con99().scale(1, 0.5), con99().text('not 100%', 0.7)),
+    all(pro100().scale(1, 0.5), pro100().text('fully certain', 0.7)),
   );
+
+  yield* all(con100().scale(1, 0.5), con100().text('hundreds of MBs', 0.7));
+
+  yield* all(pro99().scale(1, 0.5), pro99().text('small data', 0.7));
+
   yield* beginAnnonymousSlide();
 });

@@ -22,6 +22,7 @@ export interface QuickSortProps extends LayoutProps {
   elementWidth?: number;
   elementGap?: number;
   animationSpeed?: number;
+  showPivotLabel?: boolean;
   colors?: {
     sorted?: Color;
     pivot?: Color;
@@ -36,6 +37,7 @@ export type PivotStrategy = 'first' | 'last' | 'mo3' | 'random';
 export class QuickSort extends Layout {
   readonly rectangles: Array<Reference<Rect>> = [];
   private readonly pivotLine = createRef<Rect>();
+  private readonly pivotLabel = createRef<PolyTxt>();
   private readonly elementsLayout = createRef<Layout>();
   private readonly comparisonCounter = createRef<PolyTxt>();
   private readonly values: number[] = [];
@@ -44,6 +46,8 @@ export class QuickSort extends Layout {
   private readonly random = useRandom();
   public comparisonCount: number = 0;
   public pivotStrategy: PivotStrategy = 'last';
+  public showPivotLabel: boolean;
+  private pivotLabelIndex: number = -1;
 
   public readonly elementCount: number;
   public animationSpeed: number;
@@ -61,6 +65,7 @@ export class QuickSort extends Layout {
       elementWidth,
       elementGap = 20,
       animationSpeed = 0.3,
+      showPivotLabel = false,
       colors = {},
       ...layoutProps
     } = props;
@@ -74,11 +79,12 @@ export class QuickSort extends Layout {
     this.elementCount = elementCount;
     this.animationSpeed = animationSpeed;
     this.elementGap = elementGap;
+    this.showPivotLabel = showPivotLabel;
     this.colors = {
       sorted: colors.sorted ?? Solarized.green,
       pivot: colors.pivot ?? Solarized.blue,
       active: colors.active ?? Solarized.yellow,
-      lessThanPivot: colors.lessThanPivot ?? Solarized.blue,
+      lessThanPivot: colors.lessThanPivot ?? Solarized.cyan,
       default: colors.default ?? Solarized.text,
     };
 
@@ -101,6 +107,16 @@ export class QuickSort extends Layout {
           height={0}
           width={0}
           zIndex={-1}
+        />
+        {/* Pivot label display */}
+        <PolyTxt
+          ref={this.pivotLabel}
+          text="PIVOT"
+          fill={'white'}
+          fontSize={50}
+          rotation={-90}
+          opacity={0}
+          zIndex={20}
         />
         {/* Comparison counter display */}
         <PolyTxt
@@ -487,7 +503,23 @@ export class QuickSort extends Layout {
     const bottomJ = rectJ.bottom();
 
     // Animate clones swapping positions (move to each other's bottom position)
-    yield* all(cloneI().bottom(bottomJ, duration), cloneJ().bottom(bottomI, duration));
+    // Also animate pivot label if it's following one of the swapped elements
+    const pivotLabelAnim: ThreadGenerator[] = [];
+    if (this.showPivotLabel && this.pivotLabelIndex !== -1) {
+      if (this.pivotLabelIndex === i) {
+        this.pivotLabelIndex = j;
+        pivotLabelAnim.push(this.pivotLabel().x(rectJ.x(), duration));
+      } else if (this.pivotLabelIndex === j) {
+        this.pivotLabelIndex = i;
+        pivotLabelAnim.push(this.pivotLabel().x(rectI.x(), duration));
+      }
+    }
+
+    yield* all(
+      cloneI().bottom(bottomJ, duration),
+      cloneJ().bottom(bottomI, duration),
+      ...pivotLabelAnim,
+    );
 
     // Swap in values array
     [this.values[i], this.values[j]] = [this.values[j], this.values[i]];
@@ -537,6 +569,40 @@ export class QuickSort extends Layout {
     } else {
       yield* this.pivotLine().opacity(0, this.animationSpeed);
     }
+  }
+
+  private updatePivotLabelPosition(pivotIdx: number): void {
+    if (!this.showPivotLabel) return;
+
+    const pivotRect = this.rectangles[pivotIdx]();
+    this.pivotLabel().x(pivotRect.x());
+    this.pivotLabel().y(pivotRect.y());
+  }
+
+  private *showPivotLabelAt(pivotIdx: number): ThreadGenerator {
+    if (!this.showPivotLabel) return;
+
+    this.pivotLabelIndex = pivotIdx;
+    this.updatePivotLabelPosition(pivotIdx);
+    yield* this.pivotLabel().opacity(1, this.animationSpeed);
+  }
+
+  private *hidePivotLabel(): ThreadGenerator {
+    if (!this.showPivotLabel) return;
+
+    this.pivotLabelIndex = -1;
+    yield* this.pivotLabel().opacity(0, this.animationSpeed);
+  }
+
+  private *animatePivotLabelToIndex(newIdx: number, duration: number): ThreadGenerator {
+    if (!this.showPivotLabel || this.pivotLabelIndex === -1) return;
+
+    this.pivotLabelIndex = newIdx;
+    const pivotRect = this.rectangles[newIdx]();
+    yield* all(
+      this.pivotLabel().x(pivotRect.x(), duration),
+      this.pivotLabel().y(pivotRect.y(), duration),
+    );
   }
 
   /**
@@ -603,12 +669,15 @@ export class QuickSort extends Layout {
         ),
       );
 
-      // Highlight the selected median element
-      yield* this.rectangles[medianIdx]().fill(
-        this.colors.pivot,
-        this.animationSpeed * 0.3,
-        easeInOutCubic,
-        colorLerp,
+      // Highlight the selected median element and show pivot label
+      yield* all(
+        this.rectangles[medianIdx]().fill(
+          this.colors.pivot,
+          this.animationSpeed * 0.3,
+          easeInOutCubic,
+          colorLerp,
+        ),
+        this.showPivotLabelAt(medianIdx),
       );
 
       // If median element is not already at the end, swap it there
@@ -646,12 +715,15 @@ export class QuickSort extends Layout {
         colorLerp,
       );
 
-      // Show it as the pivot
-      yield* this.rectangles[randomIdx]().fill(
-        this.colors.pivot,
-        this.animationSpeed * 0.3,
-        easeInOutCubic,
-        colorLerp,
+      // Show it as the pivot and show pivot label
+      yield* all(
+        this.rectangles[randomIdx]().fill(
+          this.colors.pivot,
+          this.animationSpeed * 0.3,
+          easeInOutCubic,
+          colorLerp,
+        ),
+        this.showPivotLabelAt(randomIdx),
       );
 
       // If random element is not already at the end, swap it there
@@ -669,7 +741,8 @@ export class QuickSort extends Layout {
         );
       }
     } else if (this.pivotStrategy === 'last') {
-      // For 'last' strategy, pivot is already at position high, no action needed}
+      // For 'last' strategy, pivot is already at position high
+      yield* this.showPivotLabelAt(high);
     } else if (this.pivotStrategy === 'first') {
       // For 'first' strategy, swap first element with last to make it pivot
       if (low !== high) {
@@ -681,12 +754,15 @@ export class QuickSort extends Layout {
           colorLerp,
         );
 
-        // Show it as the pivot
-        yield* this.rectangles[low]().fill(
-          this.colors.pivot,
-          this.animationSpeed * 0.3,
-          easeInOutCubic,
-          colorLerp,
+        // Show it as the pivot and show pivot label
+        yield* all(
+          this.rectangles[low]().fill(
+            this.colors.pivot,
+            this.animationSpeed * 0.3,
+            easeInOutCubic,
+            colorLerp,
+          ),
+          this.showPivotLabelAt(low),
         );
 
         // Swap it to the end position
@@ -714,7 +790,7 @@ export class QuickSort extends Layout {
     const pivotIdx = high;
     const pivotValue = this.values[high];
 
-    // Show pivot reference line and highlight pivot
+    // Show pivot reference line and highlight pivot (label already shown in selectAndMovePivot)
     yield all(
       this.setPivotLine(true, pivotValue, low, high),
       this.setQuicksortColors(low, high, pivotIdx, null, -1, this.animationSpeed),
@@ -743,17 +819,18 @@ export class QuickSort extends Layout {
       }
     }
 
-    // Place pivot in correct position
+    // Place pivot in correct position (label follows via swapElements)
     i++;
     if (i !== pivotIdx) {
       yield* this.swapElements(i, pivotIdx, this.animationSpeed);
     }
 
-    // Mark pivot as sorted and hide pivot line
+    // Mark pivot as sorted, hide pivot line and label
     this.sortedIndices.add(i);
     yield* all(
       this.setPivotLine(false, 0, low, high),
       this.setQuicksortColors(low, high, -1, null, -1, this.animationSpeed),
+      this.hidePivotLabel(),
     );
 
     return i;

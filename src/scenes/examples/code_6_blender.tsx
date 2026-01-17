@@ -5,7 +5,6 @@ import {
   createRef,
   createSignal,
   easeInOutExpo,
-  fadeTransition,
   loop,
   sequence,
   Vector2,
@@ -16,8 +15,6 @@ import { Solarized } from '../../utilities/color';
 import { beginAnnonymousSlide } from '../../utilities/presentation';
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
-
   view.fill(Solarized.background);
 
   const circle = createRef<Circle>();

@@ -6,7 +6,6 @@ import {
   createSignal,
   DEFAULT,
   delay,
-  fadeTransition,
   linear,
   SoundBuilder,
   Vector2,
@@ -32,8 +31,6 @@ const tsHighlighter = new ShikiHighlighter({
 });
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
-
   view.fill(Solarized.background);
 
   let code = createRef<Code>();

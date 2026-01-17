@@ -7,7 +7,6 @@ import { beginAnnonymousSlide } from '../../../utilities/presentation';
 import { PolyTxt } from '../../../utilities/text';
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
   view.fill(Solarized.background);
 
   const qs1 = createRef<QuickSort>();

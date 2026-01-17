@@ -1,5 +1,5 @@
 import { makeScene2D, Video } from '@motion-canvas/2d';
-import { all, createRef, fadeTransition, waitFor } from '@motion-canvas/core';
+import { all, createRef, waitFor } from '@motion-canvas/core';
 
 import phone from '../../assets/phone.mp4';
 import polylogo from '../../assets/polylogo.mp4';
@@ -11,8 +11,6 @@ import {
 } from '../../utilities/presentation';
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
-
   const { header, contentLayout, bulletRefs, circBulletRefs } = createSlideWithHeader(
     view,
     { headerText: 'Motion Canvas' },

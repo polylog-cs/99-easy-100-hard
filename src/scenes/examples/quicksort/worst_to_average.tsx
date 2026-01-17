@@ -8,7 +8,6 @@ import {
   createSignal,
   delay,
   easeOutCubic,
-  fadeTransition,
   sequence,
   useLogger,
   Vector2,
@@ -22,7 +21,6 @@ import { PolyTxt } from '../../../utilities/text';
 import { createShadow } from '../../../utilities/visuals';
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
   view.fill(Solarized.background);
 
   const qs1 = createRef<QuickSort>();

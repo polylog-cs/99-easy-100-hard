@@ -4,7 +4,6 @@ import {
   chain,
   createRef,
   easeOutCubic,
-  fadeTransition,
   sequence,
   useLogger,
   Vector2,
@@ -18,7 +17,6 @@ import { PolyTxt } from '../../../utilities/text';
 import { createShadow } from '../../../utilities/visuals';
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
   view.fill(Solarized.background);
 
   // Grid configuration
@@ -29,6 +27,12 @@ export default makeScene2D(function* (view) {
   // Create QuickSort instances arrays for left and right
   const leftQuickSorts: QuickSort[] = [];
   const rightQuickSorts: QuickSort[] = [];
+  // Store initial values for ghost versions
+  const leftInitialValues: number[][] = [];
+  const rightInitialValues: number[][] = [];
+  // Ghost versions showing initial state (created after layout)
+  const leftGhosts: QuickSort[] = [];
+  const rightGhosts: QuickSort[] = [];
 
   // Create refs for the comparison line visualization
   const comparisonLine = createRef<Line>();
@@ -54,7 +58,7 @@ export default makeScene2D(function* (view) {
               });
 
               quickSort.shuffle();
-
+              leftInitialValues.push(quickSort.getValues());
               leftQuickSorts.push(quickSort);
 
               return quickSort;
@@ -76,7 +80,7 @@ export default makeScene2D(function* (view) {
               });
 
               quickSort.almostSort();
-
+              rightInitialValues.push(quickSort.getValues());
               rightQuickSorts.push(quickSort);
 
               return quickSort;
@@ -86,6 +90,35 @@ export default makeScene2D(function* (view) {
       </Layout>
     </Layout>,
   );
+
+  // Create ghost versions as children of the main QuickSorts
+  for (let i = 0; i < leftQuickSorts.length; i++) {
+    const ghost = new QuickSort({
+      elementCount,
+      elementGap: 4,
+      width: 400,
+      height: 200,
+    });
+    ghost.setValues(leftInitialValues[i]);
+    ghost.opacity(0.2);
+    ghost.zIndex(-1);
+    leftGhosts.push(ghost);
+    leftQuickSorts[i].add(ghost);
+  }
+
+  for (let i = 0; i < rightQuickSorts.length; i++) {
+    const ghost = new QuickSort({
+      elementCount,
+      elementGap: 4,
+      width: 400,
+      height: 200,
+    });
+    ghost.setValues(rightInitialValues[i]);
+    ghost.opacity(0.2);
+    ghost.zIndex(-1);
+    rightGhosts.push(ghost);
+    rightQuickSorts[i].add(ghost);
+  }
 
   yield* waitFor(0.5);
 
@@ -196,10 +229,12 @@ export default makeScene2D(function* (view) {
     );
   }
 
-  // Initialize all QuickSort visualizations simultaneously
+  // Initialize all QuickSort visualizations simultaneously (including ghosts)
   yield* all(
     ...leftQuickSorts.map((qs) => qs.initialize(0.01, 0.25)),
     ...rightQuickSorts.map((qs) => qs.initialize(0.01, 0.25)),
+    ...leftGhosts.map((qs) => qs.initialize(0.01, 0.25)),
+    ...rightGhosts.map((qs) => qs.initialize(0.01, 0.25)),
     comparisonLine().opacity(1, 0.5),
     zeroLabel().opacity(1, 0.5),
     maxLabel().opacity(1, 0.5),

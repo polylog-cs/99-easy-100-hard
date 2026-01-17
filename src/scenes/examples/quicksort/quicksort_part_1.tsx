@@ -1,18 +1,11 @@
 import { makeScene2D } from '@motion-canvas/2d';
-import {
-  all,
-  beginSlide,
-  createRef,
-  fadeTransition,
-  waitFor,
-} from '@motion-canvas/core';
+import { all, beginSlide, createRef, waitFor } from '@motion-canvas/core';
 
 import { QuickSort } from '../../../components/QuickSort';
 import { Solarized } from '../../../utilities/color';
 import { beginAnnonymousSlide } from '../../../utilities/presentation';
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
   view.fill(Solarized.background);
 
   const qs = createRef<QuickSort>();
@@ -24,7 +17,8 @@ export default makeScene2D(function* (view) {
       width={1500}
       height={800}
       elementCount={12}
-      animationSpeed={0.2}
+      animationSpeed={0.5}
+      showPivotLabel={true}
     />,
   );
 
@@ -49,6 +43,7 @@ export default makeScene2D(function* (view) {
 
   const pivotIdx = yield* qs().partition(0, qs().elementCount - 1);
   qs().animationSpeed = 0.06;
+  qs().showPivotLabel = false;
 
   yield* beginAnnonymousSlide();
 

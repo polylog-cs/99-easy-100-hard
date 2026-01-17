@@ -1,5 +1,5 @@
 import { Layout, makeScene2D } from '@motion-canvas/2d';
-import { all, createRef, fadeTransition, sequence, waitFor } from '@motion-canvas/core';
+import { all, createRef, sequence, waitFor } from '@motion-canvas/core';
 
 import { Solarized } from '../../utilities/color';
 import {
@@ -11,7 +11,6 @@ import {
 import { PolyTxt } from '../../utilities/text';
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
   view.fill(Solarized.background);
 
   yield* beginAnnonymousSlide();

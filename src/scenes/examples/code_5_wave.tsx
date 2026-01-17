@@ -4,7 +4,6 @@ import {
   Color,
   createRef,
   delay,
-  fadeTransition,
   Reference,
   useRandom,
 } from '@motion-canvas/core';
@@ -35,8 +34,6 @@ function shuffle<T>(array: T[]): T[] {
 }
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
-
   view.fill(Solarized.background);
 
   const inputString = `

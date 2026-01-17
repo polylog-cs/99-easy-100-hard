@@ -4,7 +4,6 @@ import {
   beginSlide,
   createRef,
   Direction,
-  fadeTransition,
   finishScene,
   slideTransition,
   waitFor,

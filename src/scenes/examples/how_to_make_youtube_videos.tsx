@@ -1,5 +1,5 @@
 import { Img, makeScene2D, Video } from '@motion-canvas/2d';
-import { all, createRef, fadeTransition, waitFor } from '@motion-canvas/core';
+import { all, createRef, waitFor } from '@motion-canvas/core';
 
 import phone from '../../assets/phone.mp4';
 import polylogo from '../../assets/polylogo.mp4';
@@ -15,7 +15,6 @@ import {
 import { PolyTxt } from '../../utilities/text';
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
   view.fill(Solarized.background);
 
   // there to make the fade transition not immediately go into the contents

@@ -9,7 +9,6 @@ import {
   createSignal,
   delay,
   easeInOutCubic,
-  fadeTransition,
   linear,
   loop,
   sequence,
@@ -35,8 +34,6 @@ const juliaHighlighter = new ShikiHighlighter({
 });
 
 export default makeScene2D(function* (view) {
-  yield fadeTransition(0.5);
-
   view.fill(Solarized.background);
   yield* beginAnnonymousSlide();
   const camera = <Node />;

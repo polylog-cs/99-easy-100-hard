@@ -4,7 +4,6 @@ import {
   beginSlide,
   createRef,
   Direction,
-  fadeTransition,
   finishScene,
   slideTransition,
   waitFor,
@@ -18,7 +17,6 @@ import { PolyTxt } from '../../utilities/text';
 
 export default makeScene2D(function* (view) {
   view.fill(Solarized.background);
-  yield fadeTransition(0.5);
 
   const title = createRef<PolyTxt>();
   const presentLayout = createRef<Layout>();
