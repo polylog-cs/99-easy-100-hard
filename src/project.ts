@@ -29,6 +29,7 @@ import quicksort_part_1 from './scenes/examples/quicksort/quicksort_part_1?scene
 import shuffled_vs_sorted_with_last_pivot from './scenes/examples/quicksort/shuffled_vs_sorted_with_last_pivot?scene';
 import sorted_with_last_and_random_comparison from './scenes/examples/quicksort/sorted_with_last_and_random_comparison?scene';
 import table from './scenes/examples/quicksort/table?scene';
+import unlucky_shuffle from './scenes/examples/quicksort/unlucky_shuffle?scene';
 import worst_to_average from './scenes/examples/quicksort/worst_to_average?scene';
 import random_testing from './scenes/examples/random_testing?scene';
 import randomness_plus_worst_case from './scenes/examples/randomness_plus_worst_case?scene';
@@ -58,21 +59,22 @@ export default makeProject({
     // cube_video,
 
     // === easy hard ===
-    file_checking,
-    a99_vs_100,
-    equations,
-    quicksort_part_1,
-    sorted_with_last_and_random_comparison,
-    plot_scene,
-    random_testing,
-    multiply_vs_random,
-    bobby_tables,
+    // file_checking,
+    // a99_vs_100,
+    // equations,
+    // quicksort_part_1,
+    // sorted_with_last_and_random_comparison,
+    // plot_scene,
+    // random_testing,
+    // multiply_vs_random,
+    // bobby_tables,
     worst_to_average,
-    randomness_plus_worst_case,
-    rock_paper_scissors,
-    conclusion,
-    outro,
-    subscribe,
+    unlucky_shuffle,
+    // randomness_plus_worst_case,
+    // rock_paper_scissors,
+    // conclusion,
+    // outro,
+    // subscribe,
 
     //// === programming ===
     //animations_in_videos,

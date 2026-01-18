@@ -23,6 +23,9 @@ import { createShadow } from '../../../utilities/visuals';
 export default makeScene2D(function* (view) {
   view.fill(Solarized.background);
 
+  view.scale(view.scale().x * 1.095);
+  view.position(view.position().add(new Vector2(0, -90)));
+
   const qs1 = createRef<QuickSort>();
 
   const width = createSignal(600);
@@ -35,7 +38,10 @@ export default makeScene2D(function* (view) {
     height: height,
     elementCount: 12,
     animationSpeed: 0.2,
-    position: [-450, 0],
+    position: [-420, 0],
+    colors: {
+      default: Solarized.red,
+    },
   };
 
   // Grid configuration for later
@@ -65,7 +71,7 @@ export default makeScene2D(function* (view) {
       text=""
       fill={Solarized.red}
       fontSize={70}
-      position={[-400, 300]}
+      position={[-410, 300]}
     />,
   );
   yield* worstCaseLabel().text('Worst Case', 1);
@@ -98,17 +104,32 @@ export default makeScene2D(function* (view) {
       text=""
       fill={Solarized.base00}
       fontSize={60}
-      position={[0, -80]}
+      left={() => [-80, -80]}
     />,
   );
 
-  yield* all(
-    qs2().position(new Vector2(450, 0), 1),
-    arrow().end(1, 1),
-    shuffleLabel().text('shuffle', 1),
-  );
+  shuffleLabel().opacity(0);
+  arrow().opacity(0);
+  qs1().opacity(0.25);
 
-  yield* qs2().shuffleAnimated(0.15);
+  yield* all(
+    // shuffleLabel().opacity(1, 1.5),
+    // arrow().opacity(1, 1.5),
+
+    delay(1, qs1().opacity(1, 1)),
+    qs2().opacity(1, 1),
+    qs2().position(new Vector2(410, 0), 2),
+    delay(0.25, all(arrow().end(1, 1), shuffleLabel().text('shuffle', 1))),
+    delay(
+      0.5,
+      all(
+        qs2().shuffleAnimated(0.1),
+        ...qs2().rectangles.map((rect) =>
+          rect().fill(Solarized.green, 0.15 * qs2().rectangles.length),
+        ),
+      ),
+    ),
+  );
 
   const averageCaseLabel = createRef<PolyTxt>();
   view.add(
@@ -117,7 +138,7 @@ export default makeScene2D(function* (view) {
       text=""
       fill={Solarized.green}
       fontSize={70}
-      position={[400, 300]}
+      position={[410, 300]}
     />,
   );
   yield* averageCaseLabel().text('Average Case', 1);
@@ -143,9 +164,20 @@ export default makeScene2D(function* (view) {
     height: 100,
   };
 
-  // Fill the left grid with almost sorted arrays (worst case)
-  // First slot is for qs1, so create (gridRows * gridCols - 1) new instances
-  for (let i = 0; i < gridRows * gridCols; i++) {
+  // Placeholders for the first grid positions (qs2 and qs1 will take these spots)
+  const leftPlaceholder = new Layout({
+    width: gridProps.width,
+    height: gridProps.height,
+  });
+  const rightPlaceholder = new Layout({
+    width: gridProps.width,
+    height: gridProps.height,
+  });
+
+  // Fill the left grid with almost sorted arrays (will be shuffled - worst case luck)
+  // First slot uses placeholder since qs2 takes its position
+  leftQuickSorts.push(leftPlaceholder as any);
+  for (let i = 1; i < gridRows * gridCols; i++) {
     const qs = new QuickSort({
       ...gridProps,
       colors: {
@@ -156,9 +188,10 @@ export default makeScene2D(function* (view) {
     leftQuickSorts.push(qs);
   }
 
-  // Fill the right grid with shuffled arrays (average case)
-  // First slot is for qs2, so create (gridRows * gridCols - 1) new instances
-  for (let i = 0; i < gridRows * gridCols; i++) {
+  // Fill the right grid with almost sorted arrays (worst case input)
+  // First slot uses placeholder since qs1 takes its position
+  rightQuickSorts.push(rightPlaceholder as any);
+  for (let i = 1; i < gridRows * gridCols; i++) {
     const qs = new QuickSort({
       ...gridProps,
       colors: {
@@ -174,7 +207,7 @@ export default makeScene2D(function* (view) {
 
   view.add(
     <Layout ref={mainLayout} layout direction={'row'} gap={270} y={-50}>
-      {/* Left grid - Almost sorted (worst case) */}
+      {/* Left grid - Shuffled (worst case luck) */}
       <Layout ref={leftGridLayout} layout direction={'column'} gap={gapX}>
         {Array.from({ length: gridRows }, (_, rowIndex) => (
           <Layout key={`left-${rowIndex}`} layout direction={'row'} gap={gapY}>
@@ -186,7 +219,7 @@ export default makeScene2D(function* (view) {
         ))}
       </Layout>
 
-      {/* Right grid - Shuffled (average case) */}
+      {/* Right grid - Almost sorted (worst case input) */}
       <Layout ref={rightGridLayout} layout direction={'column'} gap={gapX}>
         {Array.from({ length: gridRows }, (_, rowIndex) => (
           <Layout key={`right-${rowIndex}`} layout direction={'row'} gap={gapY}>
@@ -204,14 +237,12 @@ export default makeScene2D(function* (view) {
   yield* all(
     shuffleLabel().opacity(0, 0.5),
     arrow().opacity(0, 0.5),
-    qs1().absolutePosition(leftQuickSorts[0].absolutePosition, 1),
-    qs2().absolutePosition(rightQuickSorts[0].absolutePosition, 1),
+    qs1().absolutePosition(rightQuickSorts[0].absolutePosition, 1),
+    qs2().absolutePosition(leftQuickSorts[0].absolutePosition, 1),
     width(gridProps.width, 1),
     height(gridProps.height, 1),
     elementGap(gridProps.elementGap, 1),
 
-    ...qs1().rectangles.map((rect) => rect().fill(Solarized.red, 1)),
-    ...qs2().rectangles.map((rect) => rect().fill(Solarized.green, 1)),
     delay(
       0.75,
       all(
@@ -228,7 +259,7 @@ export default makeScene2D(function* (view) {
   yield* beginAnnonymousSlide();
 
   yield* all(
-    ...rightQuickSorts.slice(1, rightQuickSorts.length).map((qs, i) => {
+    ...leftQuickSorts.slice(1, leftQuickSorts.length).map((qs, i) => {
       if (i === 3) {
         return all(qs.badShuffleAnimated(0.15));
       } else {
@@ -271,7 +302,7 @@ export default makeScene2D(function* (view) {
     averageCaseLabel().text('Worst Case Luck', 1),
     isBad().text('(these are bad)', 1),
     isGood().text("(this one's fine)", 1),
-    ...rightQuickSorts.slice(1, rightQuickSorts.length).map((qs, i) => {
+    ...leftQuickSorts.slice(1, leftQuickSorts.length).map((qs, i) => {
       if (i === 3) {
         return qs2().opacity(0.25, 0.5);
       } else {
@@ -279,4 +310,53 @@ export default makeScene2D(function* (view) {
       }
     }),
   );
+
+  yield* beginAnnonymousSlide();
+
+  // Uninitialize everything and clear text (skip index 0 which is a placeholder)
+  yield* all(
+    worstCaseLabel().text('', 1),
+    averageCaseLabel().text('', 1),
+    isBad().text('', 1),
+    isGood().text('', 1),
+    qs1().uninitialize(0.01, 0.5),
+    qs2().uninitialize(0.01, 0.5),
+    ...leftQuickSorts
+      .slice(1)
+      .map((qs) => all(qs.opacity(1, 0.5), qs.uninitialize(0.01, 0.5))),
+    ...rightQuickSorts.slice(1).map((qs) => qs.uninitialize(0.01, 0.5)),
+  );
+
+  yield* waitFor(0.3);
+
+  // Reinitialize left grid first (worst case luck)
+  yield* all(
+    worstCaseLabel().text('Worst Case Luck', 1),
+    isBad().text('(unlucky shuffle)', 1),
+    qs2().initialize(0.01, 0.5),
+    ...leftQuickSorts.slice(1).map((qs) => qs.initialize(0.01, 0.5)),
+    delay(
+      0.0,
+      all(
+        ...leftQuickSorts.slice(1).map((qs, i) => {
+          if (i === 3) {
+            return qs2().opacity(0.25, 0.01);
+          } else {
+            return all(qs.opacity(0.25, 0.01));
+          }
+        }),
+      ),
+    ),
+  );
+
+  // Then reinitialize right grid (worst case input)
+  yield* all(
+    averageCaseLabel().text('Worst Case Input', 1),
+    isGood().text('(slow everytime)', 1),
+    qs1().initialize(0.01, 0.5),
+    ...rightQuickSorts.slice(1).map((qs) => qs.initialize(0.01, 0.5)),
+  );
+
+  yield* beginAnnonymousSlide();
+  yield* beginAnnonymousSlide();
 });
