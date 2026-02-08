@@ -18,9 +18,11 @@ import grant_image from './scenes/examples/grant_image?scene';
 import graph_image from './scenes/examples/graph_image?scene';
 import how_to_make_youtube_videos from './scenes/examples/how_to_make_youtube_videos?scene';
 import image_slide from './scenes/examples/image_slide?scene';
+import introsor from './scenes/examples/introsor?scene';
 import motion_canvas from './scenes/examples/motion_canvas?scene';
 import multiply_vs_random from './scenes/examples/multiply_vs_random?scene';
 import outro from './scenes/examples/outro?scene';
+import patrons from './scenes/examples/patrons?scene';
 import phone from './scenes/examples/phone?scene';
 import plot_scene from './scenes/examples/plot_scene?scene';
 import basic_mo3 from './scenes/examples/quicksort/basic_mo3?scene';
@@ -68,8 +70,9 @@ export default makeProject({
     // random_testing,
     // multiply_vs_random,
     // bobby_tables,
-    worst_to_average,
-    unlucky_shuffle,
+    // worst_to_average,
+    // unlucky_shuffle,
+    introsor,
     // randomness_plus_worst_case,
     // rock_paper_scissors,
     // conclusion,
