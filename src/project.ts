@@ -63,7 +63,7 @@ export default makeProject({
     // === easy hard ===
     // file_checking,
     // a99_vs_100,
-    // equations,
+    equations,
     // quicksort_part_1,
     // sorted_with_last_and_random_comparison,
     // plot_scene,

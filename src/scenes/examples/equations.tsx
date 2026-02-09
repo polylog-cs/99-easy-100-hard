@@ -11,7 +11,6 @@ import {
   easeInOutCubic,
   linear,
   loop,
-  sequence,
   useRandom,
   waitFor,
 } from '@motion-canvas/core';
@@ -42,6 +41,7 @@ export default makeScene2D(function* (view) {
   const simpleLayout = createRef<Layout>();
   const simpleEquation = createRef<PolyLatex>();
   const simpleText = createRef<PolyTxt>();
+  const simpleShadow = createRef<Circle>();
 
   // Simple equation layout - starts in center
   camera.add(
@@ -59,7 +59,7 @@ export default makeScene2D(function* (view) {
       />
       <PolyTxt
         ref={simpleText}
-        text={'Simple \\😊/'}
+        text={'Holds ✅'}
         fontSize={80}
         fill={Solarized.green}
         opacity={0}
@@ -67,7 +67,9 @@ export default makeScene2D(function* (view) {
     </Layout>,
   );
 
-  camera.add(createShadow(simpleText));
+  simpleLayout().y(80);
+
+  camera.add(createShadow(simpleText, { ref: simpleShadow }));
 
   // Start with the simple equation in the center
   // First, show the simple equation
@@ -75,8 +77,8 @@ export default makeScene2D(function* (view) {
 
   yield* waitFor(0.5);
 
-  // Show the "Simple :)" text
-  yield* appear(simpleText);
+  // Show the "Holds ✅" text and shift equation up
+  yield* all(simpleLayout().y(0, 1), appear(simpleText));
 
   yield* waitFor(1);
 
@@ -103,7 +105,7 @@ export default makeScene2D(function* (view) {
   yield* all(
     simpleEquation().tex('{{(x - 1)}}^3 = {{x^3}} + 3{{x^2}} - 3{{x}} - {{1}}', 1),
     // simpleText().opacity(0, 1),
-    simpleText().text("Doesn't hold", 1),
+    simpleText().text("Doesn't hold ❌", 1),
     simpleText().fill(Solarized.red, 1),
     equation2Wrong().opacity(1, 1),
   );
@@ -113,6 +115,7 @@ export default makeScene2D(function* (view) {
   const complicatedLayout = createRef<Layout>();
   const complicatedEquation = createRef<PolyLatex>();
   const complicatedText = createRef<PolyTxt>();
+  const complicatedShadow = createRef<Circle>();
 
   // complicated equation layout - starts off-screen to the right
   camera.add(
@@ -141,13 +144,16 @@ export default makeScene2D(function* (view) {
     </Layout>,
   );
 
+  camera.add(createShadow(complicatedText, { ref: complicatedShadow }));
+
   // Shift simple equation to the left and bring in the complicated equation
   yield* all(
     equation2Wrong().opacity(0, 0.5),
     equation2Wrong().position(equation2Wrong().position().addX(-1400), 1),
     simpleLayout().position(simpleLayout().position().addX(-1400), 1),
     simpleLayout().scale(0.5, 1),
-    complicatedLayout().position([1600, 0]).position([0, 0], 1),
+    simpleShadow().opacity(0, 0.5),
+    complicatedLayout().position([1600, 80]).position([0, 80], 1),
     complicatedLayout().scale(0.5).scale(1, 1),
     delay(
       0.5,
@@ -175,27 +181,41 @@ export default makeScene2D(function* (view) {
 
   yield* beginAnnonymousSlide();
 
-  const check = createRef<PolyTxt>();
-  view.add(<PolyTxt ref={check} text={'✅'} fontSize={150} opacity={0} y={100} />);
-  yield* all(check().opacity(0).opacity(1, 1), check().scale(2).scale(1, 1));
+  complicatedText().text('Holds ✅');
+  complicatedText().fill(Solarized.green);
+  complicatedText().fontSize(80);
+  yield* all(complicatedLayout().y(0, 1), appear(complicatedText));
 
   yield* beginAnnonymousSlide();
 
+  // Set "Tiny" label while invisible, then show it
+  complicatedText().text('Tiny');
+  complicatedText().fill(Solarized.green);
+  complicatedText().scale(1);
+
   yield* all(
-    check().opacity(0, 1),
-    check().scale(2, 1),
+    complicatedText().opacity(0, 1),
+    complicatedText().scale(0, 1),
     complicatedEquation().scale(2, 1),
     complicatedEquation().tex('{{(x-2)^7}}', 1),
+    appear(complicatedText),
   );
 
   yield* beginAnnonymousSlide();
 
-  yield* sequence(
-    0.2,
-    complicatedEquation().scale(1, 1),
-    complicatedEquation().tex(
-      '{{(x-2)^7}} = x^7 - 14 x^6 + 84 x^5 - 280 x^4 + 560 x^3 - 672 x^2 + 448 x - 128',
-      1,
+  yield* all(
+    complicatedEquation().scale(1, 0.5),
+    delay(
+      0.3,
+      all(
+        complicatedEquation().tex(
+          '{{(x-2)^7}} {{= x^7 - 14 x^6 + 84 x^5 - 280 x^4 + 560 x^3 - 672 x^2 + 448 x - 128}}',
+          1,
+        ),
+        complicatedText().text('Exponential!', 1),
+        complicatedText().scale(1.25, 1),
+        complicatedText().fill(Solarized.red, 1),
+      ),
     ),
   );
 
@@ -207,7 +227,15 @@ export default makeScene2D(function* (view) {
       1,
     ),
     complicatedEquation().scale(1.5, 1),
+    complicatedText().opacity(0, 0.5),
   );
+
+  // Reset for Part 2 (invisible, no visual impact)
+  complicatedShadow().opacity(0);
+  complicatedText().text('2');
+  complicatedText().fill(Solarized.blue);
+  complicatedText().fontSize(80);
+  complicatedText().scale(1);
 
   yield* beginAnnonymousSlide();
   yield* all(complicatedText().text('Try x = 2', 1), complicatedText().opacity(1, 1));
@@ -219,17 +247,20 @@ export default makeScene2D(function* (view) {
 
   yield* waitFor(1);
 
+  complicatedEquation().height(complicatedEquation().height());
   yield* all(
     complicatedEquation().tex('21 {{=}} 21', 1),
     complicatedText().fill(Solarized.green, 1),
     complicatedText().text('Success', 1),
+    complicatedLayout().scale(1.25, 1),
   );
 
   yield* waitFor(1);
 
   yield* beginAnnonymousSlide();
 
-  yield* complicatedText().opacity(0, 1);
+  complicatedEquation().height(null);
+  yield* all(complicatedText().opacity(0, 1), complicatedLayout().scale(1, 1));
   yield* all(
     complicatedEquation().tex(
       'x{{^4}} {{+ 3}}x {{- 1}} = (x{{^2}}  + x{{ + 1)(}}x{{^2}} {{- 1)}}',
@@ -251,10 +282,12 @@ export default makeScene2D(function* (view) {
 
   yield* waitFor(1);
 
+  complicatedEquation().height(complicatedEquation().height());
   yield* all(
     complicatedEquation().tex('89 {{\\neq}} 104', 1),
     complicatedText().fill(Solarized.red, 1),
-    complicatedText().text('Nope', 1),
+    complicatedText().text('Failure', 1),
+    complicatedLayout().scale(1.25, 1),
   );
 
   yield* beginAnnonymousSlide();
@@ -273,6 +306,7 @@ export default makeScene2D(function* (view) {
 
   yield* beginAnnonymousSlide();
 
+  complicatedEquation().height(null);
   yield* all(
     desmosPlot().opacity(0, 1),
     complicatedEquation().tex(
@@ -280,6 +314,7 @@ export default makeScene2D(function* (view) {
       0.001,
     ),
     complicatedText().opacity(0, 0.001),
+    complicatedLayout().scale(1, 0.001),
   );
 
   const algorithmCode = createRef<Code>();

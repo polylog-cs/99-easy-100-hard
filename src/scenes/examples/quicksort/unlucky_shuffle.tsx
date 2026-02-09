@@ -24,7 +24,7 @@ export default makeScene2D(function* (view) {
   view.fill(Solarized.background);
 
   view.scale(view.scale().x * 1.095);
-  view.position(view.position().add(new Vector2(0, -100)));
+  view.position(view.position().add(new Vector2(0, -90)));
 
   const qs1 = createRef<QuickSort>();
 
@@ -60,15 +60,20 @@ export default makeScene2D(function* (view) {
 
   const worstCaseLabel = createRef<PolyTxt>();
   view.add(
+    <PolyTxt ref={worstCaseLabel} text="" fontSize={70} position={[-410, 300]} />,
+  );
+
+  const weOkayLabel = createRef<PolyTxt>();
+  view.add(
     <PolyTxt
-      ref={worstCaseLabel}
+      ref={weOkayLabel}
       text=""
-      fill={Solarized.red}
-      fontSize={70}
-      position={[-410, 300]}
+      fontSize={45}
+      position={() => worstCaseLabel().position().addY(80)}
     />,
   );
-  yield* worstCaseLabel().text('Worst Case', 1);
+
+  yield* all(worstCaseLabel().text('Worst Case', 1));
 
   yield* beginAnnonymousSlide();
 
@@ -124,7 +129,7 @@ export default makeScene2D(function* (view) {
     <PolyTxt
       ref={stillWorstCaseLabel}
       text=""
-      fill={Solarized.red}
+      fill={Solarized.green}
       fontSize={70}
       position={[410, 300]}
     />,
@@ -140,8 +145,10 @@ export default makeScene2D(function* (view) {
     />,
   );
 
-  yield* stillWorstCaseLabel().text('Unlucky!', 1);
-  yield* lowProbabilityLabel().text('(very low probability)', 1);
+  yield* all(
+    stillWorstCaseLabel().text('Worst Case Luck!', 1),
+    lowProbabilityLabel().text("(we're okay with this)", 1),
+  );
 
   yield* beginAnnonymousSlide();
 });

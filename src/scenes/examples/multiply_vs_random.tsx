@@ -28,17 +28,17 @@ export default makeScene2D(function* (view) {
           opacity={0}
         />
         <PolyTxt
-          ref={conMultiply}
-          text="a"
-          fontSize={60}
-          fill={Solarized.green}
-          scale={0}
-        />
-        <PolyTxt
           ref={conRandom}
           text="a"
           fontSize={60}
           fill={Solarized.red}
+          scale={0}
+        />
+        <PolyTxt
+          ref={conMultiply}
+          text="a"
+          fontSize={60}
+          fill={Solarized.green}
           scale={0}
         />
       </Layout>
@@ -51,17 +51,17 @@ export default makeScene2D(function* (view) {
           opacity={0}
         />
         <PolyTxt
-          ref={proRandom}
-          text="a"
-          fontSize={60}
-          fill={Solarized.red}
-          scale={0}
-        />
-        <PolyTxt
           ref={proMultiply}
           text="a"
           fontSize={60}
           fill={Solarized.green}
+          scale={0}
+        />
+        <PolyTxt
+          ref={proRandom}
+          text="a"
+          fontSize={60}
+          fill={Solarized.red}
           scale={0}
         />
       </Layout>

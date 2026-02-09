@@ -327,6 +327,9 @@ export default makeScene2D(function* (view) {
     ...rightQuickSorts.slice(1).map((qs) => qs.uninitialize(0.01, 0.5)),
   );
 
+  worstCaseLabel().fill(Solarized.green);
+  averageCaseLabel().fill(Solarized.red);
+
   yield* waitFor(0.3);
 
   // Reinitialize left grid first (worst case luck)
