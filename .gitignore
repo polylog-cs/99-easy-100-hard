@@ -19,3 +19,6 @@ dist
 # Motion Canvas build from source + venv stuff
 motion-canvas/
 venv/
+
+# Private
+**/patrons.csv
